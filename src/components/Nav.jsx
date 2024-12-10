@@ -22,7 +22,7 @@ export default function Nav() {
     return (
         <div className="nav">
             <div className="logo-div">
-                <p>LOGO</p>
+                <img src="./public/header-logo.png" alt="" />
             </div>
 
             <div className="nav-container">
@@ -50,8 +50,10 @@ export default function Nav() {
 
                 </div>
 
-                <a href="/">Profile</a>
+                
             </div>
+
+            <a className="profile-link" href="/">Profile</a>
 
 
 

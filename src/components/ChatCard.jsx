@@ -15,9 +15,21 @@ export default function ChatCard() {
         <> 
         {chatCards.map((card, index) => {
             return (
-                <div className="chat-card">
+                <div key={index} className="chat-card">
                     <div className="chat-card-info">
-
+                        <h2>{card.label}</h2>
+                        <div className="card-tags">
+                            {card.tags.split(" ").map((tag, i) => {
+                                return (
+                                    <span key={i} className="tag">{tag}</span>
+                                )
+                            })}
+                        </div>
+                        <h4 className="card-desc">
+                            {card.desc}
+                        </h4>
+                        <p className="card-light-desc">{card.shortDesc}</p>
+                        
                     </div>
 
                     <div className="chat-card-img">

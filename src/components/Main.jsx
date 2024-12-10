@@ -1,3 +1,4 @@
+import ChatCard from "./ChatCard";
 
 
 
@@ -11,12 +12,14 @@ export default function Main() {
                 <button className="mode-nav-btn">Quizes</button>
             </div>
 
-            <div className="chats-options">
+            <br />
 
+            <div className="chats-options">
+                <ChatCard></ChatCard>
             </div>
 
             <div className="quizes-options">
-                
+                {/* <QuizCard></QuizCard> */}
             </div>
         </div>
     )

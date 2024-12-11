@@ -31,7 +31,7 @@ export default function Chat() {
                 <input type="text" placeholder="Enter your message" />
                 <button className="input-btn">
                 <span class="fa-solid fa-microphone"></span>
-                <span class="fa-solid fa-circle-arrow-right"></span>
+                <span class="fa-solid fa-circle-arrow-right" ></span>
                 </button>
             </div>
         </div>

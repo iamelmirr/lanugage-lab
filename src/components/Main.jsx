@@ -1,25 +1,33 @@
-import ChatCard from "./ChatCard";
+
+import ChatCard from "./ChatCard"
+import QuizCard from "./QuizCard"
+import { useState } from "react"
 
 
 
 
-export default function Main() {
+export default function Main(props) {
+
+    const {selectedMode, setSelectedMode, handleSelectedMode, activeTab, setActiveTab, handleTabChange} = props
+
+
+
     return (
         <div className="main-div">
 
             <div className="mode-nav">
-                <button className="mode-nav-btn">Chats</button>
-                <button className="mode-nav-btn">Quizes</button>
+                <button className={`mode-nav-btn ${activeTab === 'chats' ? 'active-btn' : ''}`} onClick={() => handleTabChange('chats')}>Chats</button>
+                <button className={`mode-nav-btn ${activeTab === 'quizzes' ? 'active-btn' : ''}`} onClick={() => handleTabChange('quizzes')}>Quizes</button>
             </div>
 
             <br />
 
-            <div className="chats-options">
+            <div className={`chats-options ${activeTab === 'chats' ? 'active-tab' : ''}`}>
                 <ChatCard></ChatCard>
             </div>
 
-            <div className="quizes-options">
-                {/* <QuizCard></QuizCard> */}
+            <div className={`quizzes-options ${activeTab === 'quizzes' ? 'active-tab' : ''}`}>
+                <QuizCard></QuizCard>
             </div>
         </div>
     )

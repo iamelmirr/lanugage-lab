@@ -21,18 +21,22 @@ a{
 }
 
 html, body, #root {
-    height: 100%;
+    height: auto;
     color: #282828;
 }
 
 body {
     display: flex;
     color: var();
+    justify-content: center;
 }
 
 #root {
+    position: relative;
     display: flex;
     width: 100%;
+    max-width: 1440px;
+    
 }
 
 
@@ -45,9 +49,11 @@ body {
     flex-direction: column;
     padding:  24px;
     gap: 45px;
-    height: 100%;
+    height: 100vh;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15); 
     z-index: 2;
+    position: sticky;
+    top: 0;
 }
 
 .logo-div{
@@ -66,6 +72,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 80px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .main-nav {
@@ -83,8 +91,22 @@ body {
 
 .profile-link {
     margin-top: auto;
+    font-size: 15px;
+    font-weight: 500;
 }
 
+.dashboard-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.dashboard-link span {
+    font-size: 17px;
+    color: #292929;
+}
 
 
 
@@ -101,6 +123,8 @@ body {
     padding: 24px;
     align-items: center;
     gap: 20px;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .mode-nav {
@@ -116,11 +140,15 @@ body {
 }
 
 .chats-options {
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 100%;
     align-items: center;
+    overflow-y: auto;
+    gap: 12px;
+    scrollbar-width: none;
 }
+
 
 .chat-card {
     background: white;
@@ -133,6 +161,41 @@ body {
     padding: 24px 0px 24px 24px;
 }
 
+.chat-card .chat-card-info .card-tags {
+    display: flex;
+    gap: 10px;
+}
+
+.quizzes-options {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    overflow-y: auto;
+    gap: 12px;
+    scrollbar-width: none;
+}
+
+.active-tab {
+    display: flex;
+}
+
+.quiz-card {
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    width: 100%;
+}
+
+.quiz-card .quiz-card-info {
+    padding: 24px 0px 24px 24px;
+}
+
+.quiz-card .quiz-card-info .card-tags {
+    display: flex;
+    gap: 10px;
+}
+
 
 /* DASHBOARD DIV */
 
@@ -142,6 +205,9 @@ body {
     flex-direction: column;
     width: 30%;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
+    position: sticky;
+    top: 0;
+    height: 100vh;
     
 }
 

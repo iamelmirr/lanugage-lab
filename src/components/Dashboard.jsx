@@ -2,7 +2,10 @@
 
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+
+    const {selectedMode, setSelectedMode, handleSelectedMode} = props
+
     return (
         <div className="dashboard-div">
             <div className="dashboard-header">

@@ -23,11 +23,11 @@ export default function Main(props) {
             <br />
 
             <div className={`chats-options ${activeTab === 'chats' ? 'active-tab' : ''}`}>
-                <ChatCard></ChatCard>
+                <ChatCard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ChatCard>
             </div>
 
             <div className={`quizzes-options ${activeTab === 'quizzes' ? 'active-tab' : ''}`}>
-                <QuizCard></QuizCard>
+                <QuizCard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></QuizCard>
             </div>
         </div>
     )

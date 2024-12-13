@@ -3,6 +3,10 @@ import Main from "../components/Main";
 import Dashboard from "../components/Dashboard";
 import { useState } from "react";
 import Chat from "../components/Chat";
+import DialogueModes from "../components/DialogueModes";
+import RoleplayModes from "../components/RoleplayModes";
+import DebateModes from "../components/DebateModes";
+import ScenarioModes from "../components/ScenarioModes";
 
 
 export default function Home() {
@@ -49,7 +53,15 @@ export default function Home() {
 
         {selectedMode === 'main' && <Main selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange}></Main>}
 
-        {chatModes.includes(selectedMode) && <Chat />}
+        {selectedMode === 'dialogue-modes' && <DialogueModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DialogueModes>}
+
+        {selectedMode === 'roleplay-modes' && <RoleplayModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></RoleplayModes>}
+
+        {selectedMode === 'debates-modes' && <DebateModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DebateModes>}
+
+        {selectedMode === 'scenario-modes' && <ScenarioModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ScenarioModes>}
+
+        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}
 
         {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></Dashboard>}
         </>

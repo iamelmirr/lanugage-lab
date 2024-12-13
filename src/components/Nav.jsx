@@ -10,13 +10,13 @@ const mainNavButtons = [
 
 
 const navOptions = [
-    {label: 'Chat', link: '/'},
-    {label: 'Dialogue Mode', link: '/'},
-    {label: 'Roleplay Mode', link: '/'},
-    {label: 'Debate', link: '/'},
-    {label: 'Interview', link: '/'},
-    {label: 'Pronunciation', link: '/'},
-    {label: 'Scenario Mode', link: '/'},
+    {label: 'Chat', link: '/', handleSelectedMode: 'default-chat'},
+    {label: 'Dialogue Mode', link: '/', handleSelectedMode: 'dialogue-modes'},
+    {label: 'Roleplay Mode', link: '/', handleSelectedMode: 'roleplay-modes'},
+    {label: 'Debate', link: '/', handleSelectedMode: 'debates-modes'},
+    {label: 'Interview', link: '/', handleSelectedMode: 'interview'},
+    {label: 'Pronunciation', link: '/', handleSelectedMode: 'pronunciation-practice'},
+    {label: 'Scenario Mode', link: '/', handleSelectedMode: 'scenario-modes'},
 ]
 
 
@@ -49,7 +49,9 @@ export default function Nav(props) {
 
                     {navOptions.map((button, index) => {
                         return (
-                            <a key={index} href={button.link}>
+                            <a key={index} onClick={() => {
+                                handleSelectedMode(button.handleSelectedMode)
+                            }}>
                                 {button.label}
                             </a>
                         )
@@ -60,7 +62,9 @@ export default function Nav(props) {
                 
             </div>
 
-            <a className="profile-link" href="/">Profile</a>
+            <a className="profile-link" onClick={() => {
+                handleSelectedMode('profile-mode')
+            }}>Profile</a>
 
 
 

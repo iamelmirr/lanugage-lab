@@ -51,7 +51,7 @@ export default function ScenarioModes(props) {
 
     return (
         <div> 
-        {allDebateModes.map((card, index) => {
+        {allScenarioModes.map((card, index) => {
             return (
                 <div key={index} onClick={() => {
                     handleSelectedMode(card.handleSelectedMode)

@@ -23,6 +23,7 @@ a{
 html, body, #root {
     height: auto;
     color: #282828;
+    scrollbar-width: none;
 }
 
 body {
@@ -54,6 +55,8 @@ body {
     z-index: 2;
     position: sticky;
     top: 0;
+    flex-shrink: 0;
+    
 }
 
 .logo-div{
@@ -232,3 +235,50 @@ body {
 }
 
 
+
+/* MODES PAGE */
+
+.modes-page {
+    display: flex;
+}
+
+.modes-div {
+    display: flex;
+    flex-direction: column;
+    background: var(--light-blue-background);
+    overflow: hidden;
+    flex: 1;
+}
+
+.modes-title-wrapper {
+    display: flex;
+    position: sticky;
+    align-items: center;
+    padding: 24px;
+    font-size: 16px;
+    gap: 10px;
+    top: 0;
+}
+
+.modes-title-wrapper h2 {
+    font-weight: 500;
+}
+
+.card-mode-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow: hidden;
+    column-gap: clamp(10px, 5vw, 20px);
+    row-gap: 10px;
+    padding: 24px;
+}
+
+.about-modes-div {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}

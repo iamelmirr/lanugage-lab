@@ -24,7 +24,7 @@ const chatCards = [
         desc: 'Engage in roleplay scenarios to practice speaking naturally.', 
         shortDesc: 'Simulate real-life situations with AI characters.', 
         imageSrc: './src/assets/img2',
-        handleSelectedMode: 'roleplay modes'
+        handleSelectedMode: 'roleplay-modes'
     },
     { 
         label: 'Debates', 

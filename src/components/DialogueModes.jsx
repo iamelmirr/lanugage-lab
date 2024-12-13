@@ -50,13 +50,27 @@ const allDialogueModes = [
 ]
 
 
+const dialogueModesInfo = {
+    title: 'Dialogue Mode',
+    infoCardTitle: 'About Dialogue Mode',
+    infoCardTags: 'Pronunciation Speaking',
+    infoCardDesc: 'With Dialogue Mode, immerse yourself in realistic, interactive conversations tailored to everyday scenarios. Sharpen your communication skills, expand your vocabulary, and practice speaking naturally in diverse settings, just like a native speaker.'
+}
+
+
 
 
 export default function DialogueModes(props) {
     const {selectedMode, setSelectedMode, handleSelectedMode} = props
 
     return (
-        <div> 
+        <div className="modes-page">
+        <div className="modes-div">
+        <div className="modes-title-wrapper">
+            <span className="fa-solid fa-arrow-left"></span>
+            <h2>{dialogueModesInfo.title}</h2>
+        </div>
+        <div className="card-mode-list">   
         {allDialogueModes.map((card, index) => {
             return (
                 <div key={index} onClick={() => {
@@ -82,8 +96,26 @@ export default function DialogueModes(props) {
                         <img src={card.imageSrc} alt="" />
                     </div>
                 </div>
+                
             )
         })}
+        </div> 
+        </div>
+        <div className="about-modes-div">
+            <h2>Information</h2>
+            <br />
+            <div className="info-card">
+                <h2>{dialogueModesInfo.infoCardTitle}</h2>
+                <div className="modes-card-tags">
+                    {dialogueModesInfo.infoCardTags.split(" ").map((tag, i) => {
+                        return (
+                            <span key={i} className="tag">{tag}</span>
+                        )
+                    })}
+                </div>
+                <p>{dialogueModesInfo.infoCardDesc}</p>
+            </div>
+        </div>
         </div>
     )
 }

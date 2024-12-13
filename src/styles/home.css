@@ -10,7 +10,12 @@ a{
     color: black;
 }
 
-
+br {
+    display: flex;
+    height: 1px;
+    width: 20px;
+    color: #282828;
+}
 
 
 *{
@@ -21,9 +26,10 @@ a{
 }
 
 html, body, #root {
-    height: auto;
+    height: 100%;
     color: #282828;
     scrollbar-width: none;
+    min-height: 100vh;
 }
 
 body {
@@ -56,6 +62,7 @@ body {
     position: sticky;
     top: 0;
     flex-shrink: 0;
+    overflow-y: auto;
     
 }
 
@@ -127,7 +134,7 @@ body {
     align-items: center;
     gap: 20px;
     height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .mode-nav {
@@ -267,10 +274,11 @@ body {
 .card-mode-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    overflow: hidden;
+    overflow: auto;
     column-gap: clamp(10px, 5vw, 20px);
     row-gap: 10px;
     padding: 24px;
+    scrollbar-width: none;
 }
 
 .about-modes-div {
@@ -282,3 +290,28 @@ body {
     top: 0;
     height: 100vh;
 }
+
+.about-modes-div h2 {
+    display: flex;
+    padding: 24px;
+}
+
+.about-modes-div .info-card {
+    display: flex;
+    flex-direction: column;
+    margin: 24px;
+    padding: 24px;
+    border: 1px solid #e4e4e4;
+    border-radius: 12px;
+}
+
+.about-modes-div .info-card h2 {
+    padding: 0;
+}
+
+.modes-card-tags {
+    display: flex;
+    gap: 16px;
+    padding-block: 24px;
+}
+

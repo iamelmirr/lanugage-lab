@@ -1,3 +1,6 @@
+import React from "react"
+
+
 const allDialogueModes = [
     {
         label: 'Airport',
@@ -67,7 +70,9 @@ export default function DialogueModes(props) {
         <div className="modes-page">
         <div className="modes-div">
         <div className="modes-title-wrapper">
-            <span className="fa-solid fa-arrow-left"></span>
+            <span className="fa-solid fa-arrow-left" onClick={() => {
+                handleSelectedMode('main')
+            }}></span>
             <h2>{dialogueModesInfo.title}</h2>
         </div>
         <div className="card-mode-list">   

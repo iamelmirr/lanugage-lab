@@ -1,4 +1,7 @@
 import { useState } from "react";
+import React from "react"
+
+
 
 
 const chatModes = {
@@ -232,13 +235,13 @@ export default function Chat(props) {
         const userMessage = { sender: "user", text: inputValue }
         setMessages((prev) => [...prev, userMessage])
 
-        const modeContext = chatModes[currentMode]?.context || ""
+        const modeContext = chatModes[selectedMode]?.context || ""
 
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer APIKEY`
+                Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
 
             },
             body: JSON.stringify({
@@ -250,39 +253,52 @@ export default function Chat(props) {
             })
         })
 
-        const data = await response.json()
-        const assistantMessage = { sender: "assistant", text: data.choices[0].message.content }
+        if (!response.ok) {
+            console.error(`Error: ${response.status} - ${response.statusText}`);
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Error: Unable to fetch response from AI." },
+            ]);
+            return;
+        }
 
-        setMessages((prev) => [...prev, assistantMessage])
+        const data = await response.json()
+        const assistantMessage = data?.choices?.[0]?.message?.content || "No response received.";
+        setMessages((prev) => [...prev, { sender: "assistant", text: assistantMessage }])
         setInputValue("")
     }
 
     return (
         <div className="chat-div">
             <div className="chat-label">
-                <span class="fa-solid fa-arrow-left"></span>
+                <span className="fa-solid fa-arrow-left"></span>
                 <h2>Chat</h2>
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
-                <img src="/" alt="teacher-img"/>
-                <h3 className="tacher-name">John</h3>
+                <img src={chatModes[selectedMode]?.details.teacherImage || ""} alt="teacher-img"/>
+                <h3 className="tacher-name">{chatModes[selectedMode]?.details.teacherName || "Unknown"}</h3>
                 </div>
 
                 <div className="chat-settings">
-                    <span class="fa-solid fa-volume-high"></span>
-                    <span class="fa-solid fa-ellipsis-vertical"></span>
+                    <span className="fa-solid fa-volume-high"></span>
+                    <span className="fa-solid fa-ellipsis-vertical"></span>
                 </div>
                 
             </div>
             <div className="chat-msg-wrapper">
-                <div className={`message ${msg.sender}`}></div>
+                {messages.map((msg, index) => (
+                <div key={index} className={`message ${msg.sender}`}>
+                <p>{msg.text}</p>
+                </div>
+                ))}
             </div>
             <div className="chat-input-wrapper">
-                <input type="text" placeholder="Enter your message" />
-                <button className="input-btn">
-                <span class="fa-solid fa-microphone"></span>
-                <span class="fa-solid fa-circle-arrow-right" ></span>
+                <input type="text" placeholder="Enter your message" value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)} />
+                <button className="input-btn" onClick={handleSendMessage}>
+                <span className="fa-solid fa-microphone"></span>
+                <span className="fa-solid fa-circle-arrow-right" ></span>
                 </button>
             </div>
         </div>

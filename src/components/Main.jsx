@@ -1,4 +1,4 @@
-
+import React from "react"
 import ChatCard from "./ChatCard"
 import QuizCard from "./QuizCard"
 import { useState } from "react"

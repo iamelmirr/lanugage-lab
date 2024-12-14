@@ -12,7 +12,14 @@ const chatModes = {
             teacherName: "John",
             teacherImage: "./src/assets/john.png",
         },
-        context: "A versatile chat mode for general conversation, providing a comfortable space for users to interact with an AI tutor for casual dialogue, language practice, or exploring topics of interest."
+        context: 
+        `You are a highly engaging language tutor named John. Your goals are:
+            1. Initiate and maintain ongoing conversations by asking questions. Don't go too much with the same topic. Change topics as needed.
+            2. Provide interesting facts to make interactions engaging.
+            3. Actively ask follow-up questions based on the user's interests.
+            4. Point out grammatical or language mistakes in a polite and encouraging manner.
+            5. Provide a recommended response for the user to continue the conversation.
+            Please end your responses with 'Suggested Response: [your suggestion]'`
     },
     'airport': {
         name: "At the Airport",
@@ -225,48 +232,222 @@ const chatModes = {
 
 
 export default function Chat(props) {
-    const {selectedMode, setSelectedMode, handleSelectedMode} = props
-    const [messages, setMessages] = useState([])
-    const [inputValue, setInputValue] = useState("")
+    const { selectedMode, setSelectedMode, handleSelectedMode } = props;
+    const [messages, setMessages] = useState([
+        { sender: "assistant", text: "Hey! I'm John, your personal AI language teacher. Ask me anything, or click on a topic below:" },
+    ]);
+    const [inputValue, setInputValue] = useState("");
+    const [suggestedAnswer, setSuggestedAnswer] = useState("")
+    const chatContainerRef = useRef(null)
+    const lastMessageRef = useRef(null)
 
     const handleSendMessage = async () => {
-        if (!inputValue.trim()) return
+        if (!inputValue.trim()) return;
 
-        const userMessage = { sender: "user", text: inputValue }
-        setMessages((prev) => [...prev, userMessage])
+        const userMessage = { sender: "user", text: inputValue };
+        setMessages((prev) => [...prev, userMessage]);
 
-        const modeContext = chatModes[selectedMode]?.context || ""
+        const modeContext = chatModes[selectedMode]?.context || "";
 
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: modeContext },
+                        ...messages.map((msg) => ({
+                            role: msg.sender === "assistant" ? "assistant" : "user",
+                            content: msg.text,
+                        })),
+                        { role: "user", content: inputValue },
+                    ],
+                }),
+            });
 
-            },
-            body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [
-                    {role: "system", content: modeContext},
-                    {role: "user", content: inputValue }
-                ]
-            })
-        })
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
 
-        if (!response.ok) {
-            console.error(`Error: ${response.status} - ${response.statusText}`);
+            const data = await response.json();
+            const fullResponse = data.choices[0]?.message?.content || "";
+
+            const match = fullResponse.match(/Suggested Response:?\s*(.*?)(?:\n|$)/i)
+            let suggestedResponse = match ? match[1] : ""
+
+            suggestedResponse = suggestedResponse.replace(/^"(.*)"$/, '$1')
+
             setMessages((prev) => [
                 ...prev,
-                { sender: "assistant", text: "Error: Unable to fetch response from AI." },
+                { sender: "assistant", text: fullResponse.replace(/Suggested Response:\s*.*$/, "").trim() }, 
+            ])
+
+            setSuggestedAnswer(suggestedResponse.trim());
+            setInputValue("");
+
+        } catch (error) {
+            console.error("Error fetching GPT response:", error);
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Sorry, I couldn't process your request." },
             ]);
-            return;
+        }
+    };
+
+    const handleTopicClick = async (topic) => {
+        let userText = "";
+        switch (topic) {
+            case "Daily Chat":
+                userText = "Let's talk about our days.";
+                break;
+            case "Fun Fact":
+                userText = "Share some interesting facts.";
+                break;
+            case "You Decide":
+                userText = "You decide what we will talk about.";
+                break;
+            default:
+                userText = "Let's chat about something!";
+                break;
         }
 
-        const data = await response.json()
-        const assistantMessage = data?.choices?.[0]?.message?.content || "No response received.";
-        setMessages((prev) => [...prev, { sender: "assistant", text: assistantMessage }])
-        setInputValue("")
+        const userMessage = { sender: "user", text: userText };
+        setMessages((prev) => [...prev, userMessage]);
+
+        const modeContext = chatModes[selectedMode]?.context || "";
+
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: modeContext },
+                        { role: "user", content: userText },
+                    ],
+                }),
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                setMessages((prev) => [
+                    ...prev,
+                    { sender: "assistant", text: "Error: Unable to fetch response from AI." },
+                ]);
+                return;
+            }
+
+            const data = await response.json();
+            const assistantMessage = data?.choices?.[0]?.message?.content || "No response received.";
+            setMessages((prev) => [...prev, { sender: "assistant", text: assistantMessage }]);
+        } catch (error) {
+            console.error("Error fetching response:", error);
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Error: Unable to process your request." },
+            ]);
+        }
+    };
+
+    const handleSuggestAnswer = async () => {
+        if (!suggestedAnswer.trim()) return;
+        
+        const userMessage = { sender: "user", text: suggestedAnswer };
+        setMessages((prev) => [...prev, userMessage]);
+    
+        const modeContext = chatModes[selectedMode]?.context || "";
+    
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: modeContext },
+                        ...messages.map((msg) => ({
+                            role: msg.sender === "assistant" ? "assistant" : "user",
+                            content: msg.text,
+                        })),
+                        { role: "user", content: suggestedAnswer },
+                    ],
+                }),
+            });
+    
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+    
+            const data = await response.json();
+            const fullResponse = data.choices[0]?.message?.content || "";
+            
+            // Extract new suggested response
+            const match = fullResponse.match(/Suggested Response:?\s*(.*?)(?:\n|$)/i);
+            let newSuggestedResponse = match ? match[1] : "";
+            newSuggestedResponse = newSuggestedResponse.replace(/^"(.*)"$/, '$1');
+    
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: fullResponse.replace(/Suggested Response:\s*.*$/, "").trim() },
+            ]);
+    
+            setSuggestedAnswer(newSuggestedResponse.trim());
+        } catch (error) {
+            console.error("Error fetching GPT response:", error);
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Sorry, I couldn't process your request." },
+            ]);
+        }
     }
+
+    const handleAnotherQuestion = async () => {
+        setMessages((prev) => prev.slice(0, -1));
+        const modeContext = chatModes[selectedMode]?.context || "";
+
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: modeContext },
+                        ...messages.slice(0, -1).map((msg) => ({
+                            role: msg.sender === "assistant" ? "assistant" : "user",
+                            content: msg.text,
+                        })),
+                    ],
+                }),
+            });
+
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+
+            const data = await response.json();
+            const newQuestion = data.choices[0]?.message?.content || "Let's try another topic!";
+
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: newQuestion },
+            ]);
+        } catch (error) {
+            console.error("Error fetching new question:", error);
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Sorry, I couldn't fetch another question." },
+            ]);
+        }
+    };
 
     return (
         <div className="chat-div">
@@ -276,31 +457,47 @@ export default function Chat(props) {
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
-                <img src={chatModes[selectedMode]?.details.teacherImage || ""} alt="teacher-img"/>
-                <h3 className="tacher-name">{chatModes[selectedMode]?.details.teacherName || "Unknown"}</h3>
+                    <img src={chatModes[selectedMode]?.details.teacherImage || ""} alt="teacher-img" />
+                    <h3 className="teacher-name">{chatModes[selectedMode]?.details.teacherName || "Unknown"}</h3>
                 </div>
 
                 <div className="chat-settings">
                     <span className="fa-solid fa-volume-high"></span>
                     <span className="fa-solid fa-ellipsis-vertical"></span>
                 </div>
-                
             </div>
             <div className="chat-msg-wrapper">
                 {messages.map((msg, index) => (
-                <div key={index} className={`message ${msg.sender}`}>
-                <p>{msg.text}</p>
-                </div>
+                    <div key={index} className={`message ${msg.sender}`}>
+                        <p>{msg.text}</p>
+                    </div>
                 ))}
+                {messages.length === 1 && (
+                    <div className="topics">
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Daily Chat")}>Daily Chat</div>
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Fun Fact")}>Fun Fact</div>
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("You Decide")}>You Decide</div>
+                    </div>
+                )}
             </div>
             <div className="chat-input-wrapper">
-                <input type="text" placeholder="Enter your message" value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)} />
-                <button className="input-btn" onClick={handleSendMessage}>
-                <span className="fa-solid fa-microphone"></span>
-                <span className="fa-solid fa-circle-arrow-right" ></span>
-                </button>
+                <div className="assistant-options">
+                    <span onClick={handleAnotherQuestion}>Another question</span>
+                    <span onClick={handleSuggestAnswer}>Suggest answer</span>
+                </div>
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        placeholder="Enter your message"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                    />
+                    <button className="input-btn" onClick={handleSendMessage}>
+                        <span className="fa-solid fa-microphone"></span>
+                        <span className="fa-solid fa-circle-arrow-right"></span>
+                    </button>
+                </div>
             </div>
         </div>
-    )
+    );
 }

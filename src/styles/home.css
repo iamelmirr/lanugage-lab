@@ -315,3 +315,151 @@ body {
     padding-block: 24px;
 }
 
+
+
+
+/* CHAT */
+
+.chat-div {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 24px;
+    height: 100vh;
+    flex: 1;
+    background: rgb(255, 250, 243);
+}
+
+.chat-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 24px;
+}
+
+.chat-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #282828;
+    border-bottom: 1px solid #282828;
+}
+
+.teacher-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-settings {
+    display: flex;
+    gap: 20px;
+    padding-block: 24px;
+}
+
+.chat-msg-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+    padding-block: 24px;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.chat-msg-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.message{
+    display: flex;
+    border: 1px solid black;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.message.assistant {
+    margin-right: auto;
+    background: white;
+}
+
+.message.user {
+    margin-left: auto;
+    background: var(--primary-color);
+    color: white;
+}
+
+
+
+
+
+.chat-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 24px;
+}
+
+.assistant-options {
+    display: flex;
+    padding-block: 10px;
+    gap: 20px;
+}
+
+.assistant-options span {
+    display: flex;
+    padding-inline: 14px;
+    border: 1px solid black;
+    padding-block: 8px;
+    border-radius: 16px;
+    font-size: 11px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    height: 76px;
+    width: 100%;
+}
+
+.input-wrapper input {
+    width: 100%;
+    border: none;
+    border-radius: 25px;
+    padding-inline: 10px;
+}
+
+.input-wrapper .input-btn {
+    display: flex;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60px;
+    align-items: center;
+    background: var(--light-blue-background);
+    border: none;
+    width: 50px;
+    border-radius: 12px;
+    justify-content: center;
+    color: var(--primary-color);
+
+}
+
+.topics {
+    margin-top: 10px;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+}
+
+.topics .choose-topic-btn {
+    display: flex;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-left: auto;
+}

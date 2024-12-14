@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import React from "react"
 
 
@@ -241,6 +241,15 @@ export default function Chat(props) {
     const chatContainerRef = useRef(null)
     const lastMessageRef = useRef(null)
 
+
+    useEffect(() => {
+        
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages])
+
+
     const handleSendMessage = async () => {
         if (!inputValue.trim()) return;
 
@@ -466,12 +475,13 @@ export default function Chat(props) {
                     <span className="fa-solid fa-ellipsis-vertical"></span>
                 </div>
             </div>
-            <div className="chat-msg-wrapper">
+            <div className="chat-msg-wrapper" ref={chatContainerRef}>
                 {messages.map((msg, index) => (
                     <div key={index} className={`message ${msg.sender}`}>
                         <p>{msg.text}</p>
                     </div>
                 ))}
+                <div ref={lastMessageRef} />
                 {messages.length === 1 && (
                     <div className="topics">
                         <div className="message choose-topic-btn" onClick={() => handleTopicClick("Daily Chat")}>Daily Chat</div>

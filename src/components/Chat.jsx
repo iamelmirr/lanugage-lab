@@ -14,12 +14,32 @@ const chatModes = {
         },
         context: 
         `You are a highly engaging language tutor named John. Your goals are:
-            1. Initiate and maintain ongoing conversations by asking questions. Don't go too much with the same topic. Change topics as needed.
-            2. Provide interesting facts to make interactions engaging.
-            3. Actively ask follow-up questions based on the user's interests.
-            4. Point out grammatical or language mistakes in a polite and encouraging manner.
-            5. Provide a recommended response for the user to continue the conversation.
-            Please end your responses with 'Suggested Response: [your suggestion]'`
+            1. Interactive Conversations:
+
+                Initiate and maintain engaging conversations tailored to the user's language level and interests.
+                Use vocabulary and sentence structures that are slightly above the user's current level to challenge and encourage learning. Simplify or explain as needed.
+                Gradually introduce new topics to expand the user's comfort zone with the language.
+
+            2. Contextual Learning:
+
+                Incorporate practical examples, cultural context, and real-life situations to make learning relatable and memorable.
+                Highlight phrases or idiomatic expressions relevant to the ongoing conversation.
+                Error Correction:
+
+                Gently correct grammatical, vocabulary, or pronunciation mistakes as they occur.
+                Provide clear explanations for corrections and offer additional examples to reinforce learning.
+
+            3. Active Engagement:
+
+                Ask follow-up questions based on the user's responses to keep the conversation natural and dynamic.
+                Offer prompts or exercises to help the user practice forming    sentences, expanding vocabulary, and improving fluency.
+
+            4. Tailored Feedback and Encouragement:
+
+                Adapt your tone and feedback style to the user's preferences and needs. Be supportive and encouraging to build confidence.
+                Provide periodic mini-reviews of key vocabulary, phrases, or grammar points covered during the session.
+            
+        Always, no matter what you write (a question, statement, answer or any other message) end your message with "Suggested Response: [appropriate response or a follow up message to your message - imagine how an average human would answer to your message and set that as an suggested response]"    `
     },
     'airport': {
         name: "At the Airport",
@@ -240,7 +260,12 @@ export default function Chat(props) {
     const [suggestedAnswer, setSuggestedAnswer] = useState("")
     const chatContainerRef = useRef(null)
     const lastMessageRef = useRef(null)
-
+    
+    
+    useEffect(() => {
+        console.log(messages)
+    }, [messages])
+    
 
     useEffect(() => {
         
@@ -250,11 +275,12 @@ export default function Chat(props) {
     }, [messages])
 
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = async (message) => {
+        
         if (!inputValue.trim()) return;
 
-        const userMessage = { sender: "user", text: inputValue };
-        setMessages((prev) => [...prev, userMessage]);
+        const userMessage = message || { sender: "user", text: inputValue };
+        
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
@@ -283,17 +309,24 @@ export default function Chat(props) {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
-            const match = fullResponse.match(/Suggested Response:?\s*(.*?)(?:\n|$)/i)
-            let suggestedResponse = match ? match[1] : ""
+            
 
-            suggestedResponse = suggestedResponse.replace(/^"(.*)"$/, '$1')
+            const match = fullResponse.match(/Suggested Response:?\s*(.+)/is)
+            const suggestedResponse = match ? match[1].trim() : ""
 
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: fullResponse.replace(/Suggested Response:\s*.*$/, "").trim() }, 
+            const cleanedResponse = fullResponse.replace(/Suggested Response:?\s*(.+)/is, "").trim()
+
+            
+
+            setMessages(prev => [
+                ...prev, 
+                userMessage,
+                { sender: "assistant", text: cleanedResponse }
             ])
 
-            setSuggestedAnswer(suggestedResponse.trim());
+            
+
+            setSuggestedAnswer(suggestedResponse);
             setInputValue("");
 
         } catch (error) {
@@ -303,6 +336,8 @@ export default function Chat(props) {
                 { sender: "assistant", text: "Sorry, I couldn't process your request." },
             ]);
         }
+
+        
     };
 
     const handleTopicClick = async (topic) => {
@@ -353,26 +388,44 @@ export default function Chat(props) {
             }
 
             const data = await response.json();
-            const assistantMessage = data?.choices?.[0]?.message?.content || "No response received.";
-            setMessages((prev) => [...prev, { sender: "assistant", text: assistantMessage }]);
+            const fullResponse = data.choices[0]?.message?.content || ""
+
+            const match = fullResponse.match(/Suggested Response:?\s*(.+)/is)
+            const suggestedResponse = match ? match[1].trim() : ""
+
+            console.log(suggestedResponse)
+
+            const cleanedResponse = fullResponse.replace(/Suggested Response:?\s*(.+)/is, "").trim()
+
+            
+
+            setMessages(prev => [
+                ...prev, 
+                { sender: "assistant", text: cleanedResponse }
+            ])
+
+            
+
+            setSuggestedAnswer(suggestedResponse);
+            console.log(suggestedResponse)
+            setInputValue("");
+
+
+
         } catch (error) {
             console.error("Error fetching response:", error);
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: "Error: Unable to process your request." },
-            ]);
+            
         }
     };
 
     const handleSuggestAnswer = async () => {
-        if (!suggestedAnswer.trim()) return;
+
+        const userMessage =  { sender: "user", text: suggestedAnswer };
         
-        const userMessage = { sender: "user", text: suggestedAnswer };
-        setMessages((prev) => [...prev, userMessage]);
-    
+
         const modeContext = chatModes[selectedMode]?.context || "";
-    
-        try {
+
+        
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
@@ -391,37 +444,41 @@ export default function Chat(props) {
                     ],
                 }),
             });
-    
+
             if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-    
+
             const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
+            const fullResponse = data.choices[0]?.message?.content || ""
+
+            const match = fullResponse.match(/Suggested Response:?\s*(.+)/is)
+            const suggestedResponse = match ? match[1].trim() : ""
+
+            const cleanedResponse = fullResponse.replace(/Suggested Response:?\s*(.+)/is, "").trim()
+
             
-            // Extract new suggested response
-            const match = fullResponse.match(/Suggested Response:?\s*(.*?)(?:\n|$)/i);
-            let newSuggestedResponse = match ? match[1] : "";
-            newSuggestedResponse = newSuggestedResponse.replace(/^"(.*)"$/, '$1');
-    
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: fullResponse.replace(/Suggested Response:\s*.*$/, "").trim() },
-            ]);
-    
-            setSuggestedAnswer(newSuggestedResponse.trim());
-        } catch (error) {
-            console.error("Error fetching GPT response:", error);
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: "Sorry, I couldn't process your request." },
-            ]);
-        }
+
+            setMessages(prev => [
+                ...prev, 
+                userMessage,
+                { sender: "assistant", text: cleanedResponse }
+            ])
+
+            
+
+            setSuggestedAnswer(suggestedResponse);
+            setInputValue("");
+
+        
+        
     }
 
     const handleAnotherQuestion = async () => {
-        setMessages((prev) => prev.slice(0, -1));
+        const userMessage = { sender: "user", text: "Give me another question or change the topic without aknowledging this message." };
+        
+
         const modeContext = chatModes[selectedMode]?.context || "";
 
-        try {
+        
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
@@ -432,10 +489,11 @@ export default function Chat(props) {
                     model: "gpt-3.5-turbo",
                     messages: [
                         { role: "system", content: modeContext },
-                        ...messages.slice(0, -1).map((msg) => ({
+                        ...messages.map((msg) => ({
                             role: msg.sender === "assistant" ? "assistant" : "user",
                             content: msg.text,
                         })),
+                        { role: "user", content: userMessage.text },
                     ],
                 }),
             });
@@ -443,20 +501,33 @@ export default function Chat(props) {
             if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
 
             const data = await response.json();
-            const newQuestion = data.choices[0]?.message?.content || "Let's try another topic!";
+            const fullResponse = data.choices[0]?.message?.content || ""
 
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: newQuestion },
-            ]);
-        } catch (error) {
-            console.error("Error fetching new question:", error);
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: "Sorry, I couldn't fetch another question." },
-            ]);
-        }
-    };
+            console.log(fullResponse)
+
+            const match = fullResponse.match(/Suggested Response:?\s*(.+)/is)
+            const suggestedResponse = match ? match[1].trim() : "There is no suggested response"
+
+            const cleanedResponse = fullResponse.replace(/Suggested Response:?\s*(.+)/is, "").trim()
+
+            setMessages((prev) => {
+                return prev.slice(0, -1)
+            })
+
+            setMessages(prev => [
+                ...prev, 
+                { sender: "assistant", text: cleanedResponse }
+            ])
+
+            
+
+            setSuggestedAnswer(suggestedResponse);
+            setInputValue("");
+
+            
+
+        
+    }
 
     return (
         <div className="chat-div">
@@ -502,7 +573,9 @@ export default function Chat(props) {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                     />
-                    <button className="input-btn" onClick={handleSendMessage}>
+                    <button className="input-btn" onClick={() => {
+                        handleSendMessage({ sender: "user", text: inputValue })
+                    }}>
                         <span className="fa-solid fa-microphone"></span>
                         <span className="fa-solid fa-circle-arrow-right"></span>
                     </button>

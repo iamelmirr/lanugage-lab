@@ -255,9 +255,14 @@ export default function Chat(props) {
     const { selectedMode, setSelectedMode, handleSelectedMode } = props;
     const [messages, setMessages] = useState([
         { sender: "assistant", text: "Hey! I'm John, your personal AI language teacher. Ask me anything, or click on a topic below:" },
-    ]);
+    ])
+
+
     const [inputValue, setInputValue] = useState("");
     const [suggestedAnswer, setSuggestedAnswer] = useState("")
+    const [isRecording, setIsRecording] = useState(false)
+    const recognitionRef = useRef(null)
+
     const chatContainerRef = useRef(null)
     const lastMessageRef = useRef(null)
     
@@ -273,6 +278,50 @@ export default function Chat(props) {
             lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages])
+
+
+    useEffect(() => {
+        
+        if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+            const SpeechRecognition =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript
+                handleSendMessage({ sender: "user", text: transcript });
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+            };
+
+            recognitionRef.current = recognition;
+        } else {
+            console.warn("Speech Recognition not supported in this browser.");
+        }
+    }, [])
+
+
+    useEffect(() => {
+        
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage && lastMessage.sender === "assistant") {
+            speakText(lastMessage.text)
+        }
+    }, [messages])
+
+    const speakText = (text) => {
+        if ("speechSynthesis" in window) {
+            const utterance = new SpeechSynthesisUtterance(text)
+            utterance.lang = "en-US"
+            window.speechSynthesis.speak(utterance)
+        } else {
+            console.warn("Text-to-Speech not supported in this browser.")
+        }
+    }
 
 
     const handleSendMessage = async (message) => {
@@ -529,6 +578,20 @@ export default function Chat(props) {
         
     }
 
+
+    const handleMicrophonePress = () => {
+        setIsRecording(true);
+        recognitionRef.current?.start();
+    }
+
+    const handleMicrophoneRelease = () => {
+        setIsRecording(false);
+        recognitionRef.current?.stop();
+    }
+
+
+
+
     return (
         <>
         <div className="chat-div">
@@ -576,7 +639,7 @@ export default function Chat(props) {
                     />
                     <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"}`} onClick={() => {
                         handleSendMessage({ sender: "user", text: inputValue })
-                    }}>
+                    }} onMouseDown={handleMicrophonePress} onMouseUp={handleMicrophoneRelease}>
                         <span className={`fa-solid ${inputValue === "" ? "fa-microphone" : "fa-arrow-right"}`}></span>
                         
                     </button>

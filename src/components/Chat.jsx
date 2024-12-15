@@ -530,6 +530,7 @@ export default function Chat(props) {
     }
 
     return (
+        <>
         <div className="chat-div">
             <div className="chat-label">
                 <span className="fa-solid fa-arrow-left"></span>
@@ -573,14 +574,35 @@ export default function Chat(props) {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                     />
-                    <button className="input-btn" onClick={() => {
+                    <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"}`} onClick={() => {
                         handleSendMessage({ sender: "user", text: inputValue })
                     }}>
-                        <span className="fa-solid fa-microphone"></span>
-                        <span className="fa-solid fa-circle-arrow-right"></span>
+                        <span className={`fa-solid ${inputValue === "" ? "fa-microphone" : "fa-arrow-right"}`}></span>
+                        
                     </button>
                 </div>
             </div>
         </div>
-    );
+        
+        <div className="chat-info-div">
+
+            <div className="chat-info-title">
+                    <h2>Information</h2>
+                    <span className="fa-solid fa-x"></span>
+            </div>
+
+            <div className="chat-info-list">
+                    <div className="default-chat-info-card">
+                        <h2>Get feedback on messages</h2>
+                        <div className="chat-info-card-icons">
+                        <span className="check"><i className="fa-solid fa-check"></i></span>
+                        <span className="user-circle"><i className="fa-solid fa-circle-user"></i></span>
+                        </div>
+                        <p>AI will assess your messages and give you personalized feedback.</p>
+                    </div>
+            </div>
+
+        </div>
+        </>
+    )
 }

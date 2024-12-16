@@ -1,5 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import React from "react"
+window.global = window;
+window.process = {
+    env: { DEBUG: undefined },
+}
+import { Buffer } from 'buffer'
+window.Buffer = Buffer
+import AWS from 'aws-sdk'
+import AWSConfig from "../utils/aws-config.js"
+
 
 
 
@@ -251,6 +260,30 @@ const chatModes = {
 };
 
 
+const polly = new AWS.Polly(AWSConfig)
+
+const synthesizeSpeech = (text, voice = "Joanna") => {
+    return new Promise((resolve, reject) => {
+        const params = {
+            OutputFormat: "mp3",
+            Text: text,
+            VoiceId: voice
+        }
+        polly.synthesizeSpeech(params, (err, data) => {
+            if (err) {
+                console.log("polly error:", err)
+                reject(err)
+            } else if (data && data.AudioStream) {
+                const audioBlob = new Blob([data.AudioStream], {  type: "audio/mpeg"  })
+                const audioUrl = URL.createObjectURL(audioBlob)
+                resolve(audioUrl)
+            
+            }
+        })
+    })
+}
+
+
 export default function Chat(props) {
     const { selectedMode, setSelectedMode, handleSelectedMode } = props;
     const [messages, setMessages] = useState([
@@ -265,6 +298,51 @@ export default function Chat(props) {
 
     const chatContainerRef = useRef(null)
     const lastMessageRef = useRef(null)
+
+
+    useEffect(() => {
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new window.webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log("Recognized transcript:", transcript)
+                handleSendMessage({ sender: "user", text: transcript });
+
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                setIsRecording(false);
+            };
+
+            recognition.onend = () => {
+                setIsRecording(false);
+            };
+
+            recognitionRef.current = recognition;
+        } else {
+            console.warn('Speech recognition not supported in this browser.');
+        }
+    }, [])
+    
+
+    useEffect(() => {
+        if (messages.length > 0) {
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage.sender === "assistant") {
+                synthesizeSpeech(lastMessage.text).then((audioUrl) => {
+                    const audio = new Audio(audioUrl)
+                    audio.play()
+                    
+                })
+                .catch((err) => console.error("Error playing Polly audio:", err))
+            }
+        }
+    }, [messages])
     
     
     useEffect(() => {
@@ -280,53 +358,44 @@ export default function Chat(props) {
     }, [messages])
 
 
-    useEffect(() => {
-        
-        if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-            const SpeechRecognition =
-                window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = "en-US";
-            recognition.interimResults = false;
 
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript
-                handleSendMessage({ sender: "user", text: transcript });
-            };
 
-            recognition.onerror = (event) => {
-                console.error("Speech recognition error:", event.error);
-            };
 
-            recognitionRef.current = recognition;
-        } else {
-            console.warn("Speech Recognition not supported in this browser.");
+    
+
+    
+    const handleMicrophonePress = () => {
+        if (!isRecording && recognitionRef.current) {
+            setIsRecording(true);
+            recognitionRef.current.start();
         }
-    }, [])
+    };
 
-
-    useEffect(() => {
-        
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage && lastMessage.sender === "assistant") {
-            speakText(lastMessage.text)
+    const handleMicrophoneRelease = () => {
+        if (isRecording && recognitionRef.current) {
+            recognitionRef.current.stop();
+            setIsRecording(false)
         }
-    }, [messages])
+    };
 
-    const speakText = (text) => {
-        if ("speechSynthesis" in window) {
-            const utterance = new SpeechSynthesisUtterance(text)
-            utterance.lang = "en-US"
-            window.speechSynthesis.speak(utterance)
-        } else {
-            console.warn("Text-to-Speech not supported in this browser.")
-        }
+
+
+
+    const handleRepeatMessage = (messageText) => {
+        synthesizeSpeech(messageText).then((audioUrl) => {
+            const audio = new Audio(audioUrl)
+            audio.play()
+        })
+        .catch((err) => console.error("error playing polly audio:", err))
     }
+
+
+    
 
 
     const handleSendMessage = async (message) => {
         
-        if (!inputValue.trim()) return;
+        if (!message?.text?.trim() && !inputValue.trim()) return;
 
         const userMessage = message || { sender: "user", text: inputValue };
         
@@ -579,15 +648,7 @@ export default function Chat(props) {
     }
 
 
-    const handleMicrophonePress = () => {
-        setIsRecording(true);
-        recognitionRef.current?.start();
-    }
-
-    const handleMicrophoneRelease = () => {
-        setIsRecording(false);
-        recognitionRef.current?.stop();
-    }
+    
 
 
 
@@ -614,6 +675,10 @@ export default function Chat(props) {
                 {messages.map((msg, index) => (
                     <div key={index} className={`message ${msg.sender}`}>
                         <p>{msg.text}</p>
+                        <span className="repeat-msg" onClick={() => handleRepeatMessage(msg.text)}>
+                            <span className="fa-solid fa-rotate-right"></span>
+                            <p>Repeat</p>
+                        </span>
                     </div>
                 ))}
                 <div ref={lastMessageRef} />
@@ -639,7 +704,8 @@ export default function Chat(props) {
                     />
                     <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"}`} onClick={() => {
                         handleSendMessage({ sender: "user", text: inputValue })
-                    }} onMouseDown={handleMicrophonePress} onMouseUp={handleMicrophoneRelease}>
+                    }} onMouseDown={inputValue === "" ? handleMicrophonePress : undefined} 
+                    onMouseUp={inputValue === "" ? handleMicrophoneRelease : undefined}>
                         <span className={`fa-solid ${inputValue === "" ? "fa-microphone" : "fa-arrow-right"}`}></span>
                         
                     </button>

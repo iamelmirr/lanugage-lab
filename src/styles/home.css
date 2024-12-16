@@ -378,6 +378,8 @@ body {
     padding: 10px;
     border-radius: 20px;
     max-width: 80%;
+    flex-direction: column;
+    gap: 7px;
 }
 
 .message.assistant {
@@ -389,6 +391,33 @@ body {
     margin-left: auto;
     background: var(--primary-color);
     color: white;
+}
+
+.message.user .repeat-msg {
+    display: none;
+}
+
+.message .repeat-msg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgb(224, 224, 224);
+    margin-right: auto;
+    padding: 3px 6px;
+    border-radius: 10px;
+}
+
+.repeat-msg .fa-rotate-right {
+    display: grid;
+    aspect-ratio: 1/1;
+    place-self: center;
+    vertical-align: middle;
+    font-size: 14px;
+    height: 13px;
+}
+
+.message .repeat-msg p {
+    font-size: 13px;
 }
 
 

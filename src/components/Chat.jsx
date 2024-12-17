@@ -8,6 +8,7 @@ import { Buffer } from 'buffer'
 window.Buffer = Buffer
 import AWS from 'aws-sdk'
 import AWSConfig from "../utils/aws-config.js"
+import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 
@@ -262,7 +263,7 @@ const chatModes = {
 
 const polly = new AWS.Polly(AWSConfig)
 
-const synthesizeSpeech = (text, voice = "Joanna") => {
+const synthesizeSpeech = (text, voice = "Matthew") => {
     return new Promise((resolve, reject) => {
         const params = {
             OutputFormat: "mp3",
@@ -301,32 +302,42 @@ export default function Chat(props) {
 
 
     useEffect(() => {
-        if ('webkitSpeechRecognition' in window) {
-            const recognition = new window.webkitSpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'en-US';
+        const speechKey = import.meta.env.VITE_AZURE_SPEECH_KEY;
+        const serviceRegion = import.meta.env.VITE_AZURE_REGION;
 
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                console.log("Recognized transcript:", transcript)
-                handleSendMessage({ sender: "user", text: transcript });
-
-            };
-
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                setIsRecording(false);
-            };
-
-            recognition.onend = () => {
-                setIsRecording(false);
-            };
-
-            recognitionRef.current = recognition;
-        } else {
-            console.warn('Speech recognition not supported in this browser.');
+        if (!speechKey || !serviceRegion) {
+            console.error("Azure Speech key or region missing.");
+            return;
         }
+
+        const speechConfig = speechSdk.SpeechConfig.fromSubscription(speechKey, serviceRegion);
+        speechConfig.speechRecognitionLanguage = "en-US";
+
+        const audioConfig = speechSdk.AudioConfig.fromDefaultMicrophoneInput();
+
+        const recognizer = new speechSdk.SpeechRecognizer(speechConfig, audioConfig);
+
+        recognizer.recognized = (s, e) => {
+            if (e.result.reason === speechSdk.ResultReason.RecognizedSpeech) {
+                const recognizedText = e.result.text;
+                console.log(recognizedText)
+                if (recognizedText.trim()) {  
+                    handleSendMessage({ sender: "user", text: recognizedText.trim() });
+                }
+                setIsRecording(false);
+            }
+        }
+
+        recognizer.canceled = (s, e) => {
+            console.error(`Recognition canceled: ${e.errorDetails}`);
+            setIsRecording(false);
+        };
+
+        recognitionRef.current = recognizer;
+
+        return () => {
+            recognizer.close();
+        };
     }, [])
     
 
@@ -365,18 +376,19 @@ export default function Chat(props) {
 
     
     const handleMicrophonePress = () => {
-        if (!isRecording && recognitionRef.current) {
+        if (recognitionRef.current) {
             setIsRecording(true);
-            recognitionRef.current.start();
+            recognitionRef.current.startContinuousRecognitionAsync();
         }
     };
 
     const handleMicrophoneRelease = () => {
-        if (isRecording && recognitionRef.current) {
-            recognitionRef.current.stop();
-            setIsRecording(false)
+        if (recognitionRef.current) {
+            setIsRecording(false);
+            recognitionRef.current.stopContinuousRecognitionAsync();
         }
     };
+    
 
 
 
@@ -402,6 +414,11 @@ export default function Chat(props) {
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
+        setMessages(prev => [
+            ...prev, 
+            userMessage
+        ])
+
         try {
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
@@ -417,7 +434,7 @@ export default function Chat(props) {
                             role: msg.sender === "assistant" ? "assistant" : "user",
                             content: msg.text,
                         })),
-                        { role: "user", content: inputValue },
+                        { role: "user", content: message.text || inputValue },
                     ],
                 }),
             });
@@ -438,7 +455,6 @@ export default function Chat(props) {
 
             setMessages(prev => [
                 ...prev, 
-                userMessage,
                 { sender: "assistant", text: cleanedResponse }
             ])
 
@@ -673,12 +689,15 @@ export default function Chat(props) {
             </div>
             <div className="chat-msg-wrapper" ref={chatContainerRef}>
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.sender}`}>
+                    <div key={index} className={`message-wrapper wrapper-${msg.sender}`}>
+                    {msg.sender === "user" ? <span class="fa-solid fa-circle-info"></span> : ""}
+                    <div key={index} className={`message ${msg.sender}`}>  
                         <p>{msg.text}</p>
                         <span className="repeat-msg" onClick={() => handleRepeatMessage(msg.text)}>
                             <span className="fa-solid fa-rotate-right"></span>
                             <p>Repeat</p>
                         </span>
+                    </div>
                     </div>
                 ))}
                 <div ref={lastMessageRef} />

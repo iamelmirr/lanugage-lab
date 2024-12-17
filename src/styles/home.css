@@ -367,6 +367,23 @@ body {
     scrollbar-width: none;
 }
 
+.message-wrapper {
+    display: flex;
+    max-width: 83%;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-wrapper .fa-circle-info {
+    font-size: 17px;
+    color: #acacac;
+}
+
+.wrapper-user {
+    display: flex;
+    margin-left: auto;
+}
+
 .chat-msg-wrapper::-webkit-scrollbar {
     display: none;
 }
@@ -377,7 +394,7 @@ body {
     width: fit-content;
     padding: 10px;
     border-radius: 20px;
-    max-width: 80%;
+    
     flex-direction: column;
     gap: 7px;
 }

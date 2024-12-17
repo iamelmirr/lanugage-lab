@@ -17,6 +17,7 @@
     "buffer": "^6.0.3",
     "dotenv": "^16.4.7",
     "global": "^4.4.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.42.0",
     "openai": "^4.76.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

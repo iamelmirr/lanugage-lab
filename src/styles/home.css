@@ -327,11 +327,11 @@ body {
     height: 100vh;
     flex: 1;
     background: rgb(255, 250, 243);
-    transition: flex-grow 0.3s ease-in-out;
+    transition: flex 0.3s ease-in-out;
 }
 
 .chat-div.expanded {
-    flex-grow: 2;
+    flex: 1.3
 }
 
 .chat-label {
@@ -547,6 +547,7 @@ body {
 .chat-info-div.hidden {
     transform: translateX(200%);
     opacity: 0;
+    width: 0;
     
 }
 

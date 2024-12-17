@@ -48,6 +48,9 @@ const chatModes = {
 
                 Adapt your tone and feedback style to the user's preferences and needs. Be supportive and encouraging to build confidence.
                 Provide periodic mini-reviews of key vocabulary, phrases, or grammar points covered during the session.
+
+            
+        Then take a look at the user's last message. If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. After you answer to the user's message, always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it.] even if there are no mistakes and severity is green"        
             
         Always, no matter what you write (a question, statement, answer or any other message) end your message with "Suggested Response: [appropriate response or a follow up message to your message - imagine how an average human would answer to your message and set that as an suggested response]"    `
     },
@@ -296,9 +299,11 @@ export default function Chat(props) {
     const [suggestedAnswer, setSuggestedAnswer] = useState("")
     const [isRecording, setIsRecording] = useState(false)
     const recognitionRef = useRef(null)
-
     const chatContainerRef = useRef(null)
     const lastMessageRef = useRef(null)
+    const [selectedMessage, setSelectedMessage] = useState(null)
+    const [feedback, setFeedback] = useState({severity: "", explanation: ""})
+    const [isChatInfoVisible, setIsChatInfoVisible] = useState(true)
 
 
     useEffect(() => {
@@ -402,6 +407,10 @@ export default function Chat(props) {
     }
 
 
+    const handleShowFeedback = (message) => {
+        setSelectedMessage(message)
+        setIsChatInfoVisible(true)
+    }
     
 
 
@@ -444,19 +453,45 @@ export default function Chat(props) {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
+
+            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
+            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
+            
+            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
+            const explanation = explanationMatch ? explanationMatch[1] : "";
+
             
 
             const match = fullResponse.match(/Suggested Response:?\s*(.+)/is)
             const suggestedResponse = match ? match[1].trim() : ""
 
-            const cleanedResponse = fullResponse.replace(/Suggested Response:?\s*(.+)/is, "").trim()
+            const cleanedResponse = fullResponse
+            .replace(/Severity:\s*(green|yellow|red)/i, "")
+            .replace(/Explanation:\s*[^\n]+/i, "")
+            .replace(/Suggested Response:?\s*(.+)/is, "")
+            .trim()
 
+
+            
+
+            console.log("Full response:", fullResponse)
+            console.log("Severity:", severity)
+            console.log("Explanation:", explanation)
+            console.log("Cleaned response:", cleanedResponse)
             
 
             setMessages(prev => [
                 ...prev, 
                 { sender: "assistant", text: cleanedResponse }
             ])
+
+            setMessages((prev) =>
+                prev.map((msg, index) =>
+                    index === prev.length - 2
+                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
+                        : msg
+                )
+            )
 
             
 
@@ -671,7 +706,7 @@ export default function Chat(props) {
 
     return (
         <>
-        <div className="chat-div">
+        <div className={`chat-div ${!isChatInfoVisible ? 'expanded' : ''}`}>
             <div className="chat-label">
                 <span className="fa-solid fa-arrow-left"></span>
                 <h2>Chat</h2>
@@ -690,7 +725,7 @@ export default function Chat(props) {
             <div className="chat-msg-wrapper" ref={chatContainerRef}>
                 {messages.map((msg, index) => (
                     <div key={index} className={`message-wrapper wrapper-${msg.sender}`}>
-                    {msg.sender === "user" ? <span class="fa-solid fa-circle-info"></span> : ""}
+                    {msg.sender === "user" ? <span className="fa-solid fa-circle-info" onClick={() => handleShowFeedback(msg)}></span> : ""}
                     <div key={index} className={`message ${msg.sender}`}>  
                         <p>{msg.text}</p>
                         <span className="repeat-msg" onClick={() => handleRepeatMessage(msg.text)}>
@@ -732,24 +767,47 @@ export default function Chat(props) {
             </div>
         </div>
         
-        <div className="chat-info-div">
-
-            <div className="chat-info-title">
-                    <h2>Information</h2>
-                    <span className="fa-solid fa-x"></span>
+        
+        <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`}>
+    <div className="chat-info-title">
+        <h2>{selectedMessage ? 'Feedback' : 'Information'}</h2>
+        <span className="fa-solid fa-xmark" onClick={() => {
+    setIsChatInfoVisible(false);
+}}></span>
+    </div>
+    
+    <div className="chat-info-list">
+        {selectedMessage ? (
+            <>
+                <div className="severity-indicator">
+                    <span className={`circle ${selectedMessage.feedback.severity}`}></span>
+                </div>
+                
+                <div className="message-content">
+                    <h3>Your message</h3>
+                    <p>{selectedMessage.text}</p>
+                </div>
+                
+                <div className={`feedback-card ${selectedMessage.feedback.severity}`}>
+                    <h3>{selectedMessage.feedback.severity === 'green' ? 'Good job!' : 'Mistake'}</h3>
+                    <p>{selectedMessage.feedback.severity === 'green' ? 
+                        'Your message looks good!' : 
+                        selectedMessage.feedback.explanation}
+                    </p>
+                </div>
+            </>
+        ) : (
+            <div className="default-chat-info-card">                          <h2>Get feedback on messages</h2>
+                            <div className="chat-info-card-icons">
+                            <span className="check"><i className="fa-solid fa-check"></i></span>
+                            <span className="user-circle"><i className="fa-solid fa-circle-user"></i></span>
+                            </div>
+                            <p>AI will assess your messages and give you personalized feedback.</p>
+                    
+            
             </div>
-
-            <div className="chat-info-list">
-                    <div className="default-chat-info-card">
-                        <h2>Get feedback on messages</h2>
-                        <div className="chat-info-card-icons">
-                        <span className="check"><i className="fa-solid fa-check"></i></span>
-                        <span className="user-circle"><i className="fa-solid fa-circle-user"></i></span>
-                        </div>
-                        <p>AI will assess your messages and give you personalized feedback.</p>
-                    </div>
-            </div>
-
+        )}
+        </div>
         </div>
         </>
     )

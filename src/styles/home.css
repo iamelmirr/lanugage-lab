@@ -327,6 +327,11 @@ body {
     height: 100vh;
     flex: 1;
     background: rgb(255, 250, 243);
+    transition: flex-grow 0.3s ease-in-out;
+}
+
+.chat-div.expanded {
+    flex-grow: 2;
 }
 
 .chat-label {
@@ -528,11 +533,21 @@ body {
 /* CHAT INFO */
 
 .chat-info-div {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 30%;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     padding-inline: 24px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform-origin: right;
+    opacity: 1;
+}
+
+.chat-info-div.hidden {
+    transform: translateX(200%);
+    opacity: 0;
+    
 }
 
 .chat-info-div .chat-info-title {
@@ -586,4 +601,49 @@ body {
 
 .user-circle {
     background: blue;
+}
+
+.severity-indicator{
+    display: flex;
+    justify-content: start;
+    padding-bottom: 24px;
+    border-bottom: 1px black solid;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid black;
+}
+
+.severity-indicator .circle {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    
+}
+
+.circle.green { background: #4CAF50; }
+.circle.yellow { background: #FFC107; }
+.circle.red { background: #F44336; }
+
+.feedback-card {
+    padding: 15px;
+    border-radius: 22px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feedback-card.green { background: #E8F5E9; }
+.feedback-card.yellow { background: #ffde71; }
+.feedback-card.red { background: #FFEBEE; }
+
+.chat-info-div .fa-xmark {
+    cursor: pointer;
 }

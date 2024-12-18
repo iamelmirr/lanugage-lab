@@ -4,7 +4,7 @@ import React from "react"
 const mainNavButtons = [
     {label: 'Dashboard', link: '/', icon: <span className="fa-solid fa-house"></span>, handleMode: 'main'},
     {label: 'Chat', link: '/', icon: <span className="fa-solid fa-comment-dots"></span>, handleMode: 'default-chat'},
-    {label: 'Challenge', link: '/', icon: <span className="fa-solid fa-trophy"></span>, handleMode: 'quizes'},
+    {label: 'Challenge', link: '/', icon: <span className="fa-solid fa-trophy"></span>, handleMode: 'main'},
     {label: 'Progress', link: '/', icon: <span className="fa-solid fa-bolt"></span>, handleMode: 'progress'},
 ]
 
@@ -37,7 +37,10 @@ export default function Nav(props) {
                         const isChallengeBtn = button.handleMode === 'quizes'
 
                         return (
-                        <a key={index} onClick= {() => {isChallengeBtn ? handleTabChange('quizzes') : handleSelectedMode(button.handleMode)}} className="dashboard-link" >{button.icon}  
+                        <a key={index} onClick= {() => {isChallengeBtn ? () => {
+                            handleTabChange('quizzes')
+                            handleSelectedMode(button.handleMode)
+                        } : handleSelectedMode(button.handleMode)}} className="dashboard-link" >{button.icon}  
                            {button.label}
                         </a>
                         )

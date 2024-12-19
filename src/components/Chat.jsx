@@ -48,10 +48,7 @@ const chatModes = {
             4. Tailored Feedback and Encouragement:
 
                 Adapt your tone and feedback style to the user's preferences and needs. Be supportive and encouraging to build confidence.
-                Provide periodic mini-reviews of key vocabulary, phrases, or grammar points covered during the session.
-
-            
-        Then take a look at the user's last message. If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. After you answer to the user's message, always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation like you are talking to the user.] even if there are no mistakes and severity is green"`
+                Provide periodic mini-reviews of key vocabulary, phrases, or grammar points covered during the session.`
     },
     'airport': {
         name: "At the Airport",
@@ -753,6 +750,65 @@ export default function Chat(props) {
 
 
 
+    const handleGetMessageFeedback = async (message) => {
+        if (message.sender !== "user") {return}
+
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: `Take a look at the user's last message and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation like you are talking to the user.] even if there are no mistakes and severity is green provide severity and explanation"` },
+                        ...messages.map((msg) => ({
+                            role: msg.sender === "assistant" ? "assistant" : "user",
+                            content: msg.text,
+                        })),
+                        { role: "user", content: message.text},
+                    ],
+                }),
+            });
+
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+
+            const data = await response.json();
+            const fullResponse = data.choices[0]?.message?.content || "";
+
+            console.log(data.choices[0]?.message?.content)
+
+
+            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
+            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
+            
+            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
+            const explanation = explanationMatch ? explanationMatch[1] : "";         
+            
+            console.log("Severity:", severity)
+            console.log("Explanation:", explanation)
+
+            await setMessages((prev) =>
+                prev.map((msg) =>
+                    msg === message
+                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
+                        : msg
+                )
+            )
+
+
+        } catch (error) {
+            console.error("Error fetching GPT response:", error);
+            
+        }
+
+    }
+
+
+
+
     const handleSendMessage = async (message) => {
         
         if (!message?.text?.trim() && !inputValue.trim()) return;
@@ -768,6 +824,8 @@ export default function Chat(props) {
             ...prev, 
             userMessage
         ])
+
+        handleGetMessageFeedback(userMessage)
 
         setInputValue("")
 
@@ -798,44 +856,16 @@ export default function Chat(props) {
 
             console.log(data.choices[0]?.message?.content)
 
-
-            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
-            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
+            const cleanedResponse = fullResponse.trim()           
             
-            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
-            const explanation = explanationMatch ? explanationMatch[1] : "";
-            
-
-            const cleanedResponse = fullResponse
-            .replace(/Severity:\s*(green|yellow|red)/i, "")
-            .replace(/Explanation:\s*[^\n]+/i, "")
-            .trim()           
-            
-            console.log("Severity:", severity)
-            console.log("Explanation:", explanation)
-            console.log("Cleaned response:", cleanedResponse)
-            
-
             await setMessages(prev => [
                 ...prev, 
                 { sender: "assistant", text: cleanedResponse }
             ])
 
-            await setMessages((prev) =>
-                prev.map((msg, index) =>
-                    index === prev.length - 2
-                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
-                        : msg
-                )
-            )
-
 
         } catch (error) {
             console.error("Error fetching GPT response:", error);
-            setMessages((prev) => [
-                ...prev,
-                { sender: "assistant", text: "Sorry, I couldn't process your request." },
-            ]);
         }
 
         
@@ -906,6 +936,8 @@ export default function Chat(props) {
         const userMessage = { sender: "user", text: userText };
         setMessages((prev) => [...prev, userMessage]);
 
+        handleGetMessageFeedback(userMessage)
+
         const modeContext = chatModes[selectedMode]?.context || "";
 
         try {
@@ -936,30 +968,12 @@ export default function Chat(props) {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
-
-            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
-            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
-            
-            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
-            const explanation = explanationMatch ? explanationMatch[1] : "";
-
-            const cleanedResponse = fullResponse
-            .replace(/Severity:\s*(green|yellow|red)/i, "")
-            .replace(/Explanation:\s*[^\n]+/i, "")
-            .trim()
+            const cleanedResponse = fullResponse.trim()
 
             setMessages(prev => [
                 ...prev, 
                 { sender: "assistant", text: cleanedResponse }
-            ])
-
-            setMessages((prev) =>
-                prev.map((msg, index) =>
-                    index === prev.length - 2
-                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
-                        : msg
-                )
-            )          
+            ])        
             setInputValue("");
 
         } catch (error) {
@@ -977,6 +991,7 @@ export default function Chat(props) {
             userMessage
         ])
         
+        handleGetMessageFeedback(userMessage)
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
@@ -1005,33 +1020,12 @@ export default function Chat(props) {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
-
-            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
-            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
-            
-            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
-            const explanation = explanationMatch ? explanationMatch[1] : "";
-
-
-            const cleanedResponse = fullResponse
-            .replace(/Severity:\s*(green|yellow|red)/i, "")
-            .replace(/Explanation:\s*[^\n]+/i, "")
-            .trim()
+            const cleanedResponse = fullResponse.trim()
 
             setMessages(prev => [
                 ...prev,
                 { sender: "assistant", text: cleanedResponse }
             ])
-
-
-            setMessages((prev) =>
-                prev.map((msg, index) =>
-                    index === prev.length - 2
-                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
-                        : msg
-                )
-            )
-
             setInputValue("");       
         
     }
@@ -1079,16 +1073,7 @@ export default function Chat(props) {
             const fullResponse = data.choices[0]?.message?.content || "";
 
 
-            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
-            const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
-            
-            const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
-            const explanation = explanationMatch ? explanationMatch[1] : "";
-
-            const cleanedResponse = fullResponse
-            .replace(/Severity:\s*(green|yellow|red)/i, "")
-            .replace(/Explanation:\s*[^\n]+/i, "")
-            .trim()
+            const cleanedResponse = fullResponse.trim()
 
             
             setMessages(prev => [

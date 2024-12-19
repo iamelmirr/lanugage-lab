@@ -1,14 +1,16 @@
 import Home from "./pages/Home"
-import React from "react"
+import React, { useState } from "react"
+import LandingPage from "./pages/LandingPage"
 
 function App() {
+const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  
   
 
   return (
     <>
-      <Home></Home>
+      {!isAuthenticated && <LandingPage></LandingPage>}
+      {isAuthenticated && <Home></Home>}
     </>
   )
 }

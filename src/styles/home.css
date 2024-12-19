@@ -44,6 +44,7 @@ body {
     width: 100%;
     max-width: 1440px;
     
+    
 }
 
 
@@ -649,3 +650,53 @@ body {
 .chat-info-div .fa-xmark {
     cursor: pointer;
 }
+
+
+
+
+
+/* LANDING PAGE */
+
+
+.landing-page-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.landing-page-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 82px;
+}
+
+.landing-header {
+    display: flex;
+    position: fixed;
+    top: 8px;
+    width: 90%;
+    max-width: 1200px;
+    z-index: 8;
+    justify-content: space-between;
+    height: 74px;
+    align-items: center;
+    background: var(--primary-color);
+    padding-inline: 15px;
+    border-radius: 35px;
+}
+
+.hero-div {
+    display: flex;
+    min-height: calc(100vh - 80px);
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-img-div img {
+    height: 540px;
+
+}
+

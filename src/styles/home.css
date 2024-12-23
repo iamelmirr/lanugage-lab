@@ -676,7 +676,7 @@ body {
 .landing-header {
     display: flex;
     position: fixed;
-    top: 8px;
+    top: 7px;
     width: 90%;
     max-width: 1200px;
     z-index: 8;

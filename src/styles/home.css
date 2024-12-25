@@ -673,8 +673,7 @@ body {
     margin-top: 82px;
 }
 
-.landing-header {
-    display: flex;
+.landing-header {    display: flex;
     position: fixed;
     top: 7px;
     width: 90%;

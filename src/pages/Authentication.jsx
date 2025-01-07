@@ -4,16 +4,13 @@
 
 
 
-export default function Authentication() {
+
+export default function Authentication(props) {
+    const {isGettingStarted} = props
+
     return (
-        
-
-        <div className="authentication-body">
-
-            <div className="registration-div">
-                
-            </div>
-
-        </div>
+    <>
+        {isGettingStarted && <Registration></Registration>}
+    </>
     )
 }

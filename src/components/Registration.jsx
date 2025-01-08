@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { auth } from '../utils/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function Registration() {
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
@@ -9,12 +11,41 @@ export default function Registration() {
         reason: '',
     });
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+
+
+    const handleRegistration = async (email, password) => {
+
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+    
+        if (!passwordRegex.test(password)) {
+            alert("Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, and one number.");
+            return;
+        }
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          console.log("User registered successfully:", userCredential.user)
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error("Registration error:", error);
+          // Handle error
+        }
+      }
+
     const handleInputChange = (name, value) => {
         setFormData(prevData => ({
             ...prevData,
-            [name]: value
+            [name]: value,
         }));
     };
+    
 
     const handleNextStep = () => {
         if (step < steps.length - 1) {
@@ -154,7 +185,8 @@ export default function Registration() {
                         name="firstName"
                         placeholder="First Name"
                         value={formData.firstName}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+
                     />
                     <input
                         type="text"
@@ -168,23 +200,22 @@ export default function Registration() {
                         name="email"
                         placeholder="Email"
                         value={formData.email}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
                     />
                     <input
                         type="password"
                         name="password"
                         placeholder="Password"
                         value={formData.password}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange('password', e.target.value)}
                     />
                     <input
                         type="password"
                         name="confirmPassword"
                         placeholder="Repeat Password"
                         value={formData.confirmPassword}
-                        onChange={handleInputChange}
                     />
-                    <button onClick={handleNextStep}>Register</button>
+                    <button onClick={handleRegistration(formData.email, formData.password)}>Register</button>
                 </div>
             ),
         }

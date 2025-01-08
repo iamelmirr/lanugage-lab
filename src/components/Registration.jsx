@@ -25,9 +25,11 @@ export default function Registration() {
     };
 
     const languages = [
-        { code: 'en', name: 'English', flag: '/flags/english.png' },
-        { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
-        { code: 'fr', name: 'French', flag: '/flags/french.png' },
+        { code: 'en', name: 'English', flag: './public/flags/english.png' },
+        { code: 'es', name: 'Spanish', flag: './public//flags/spanish.png' },
+        { code: 'fr', name: 'French', flag: './public//flags/french.png' },
+        { code: 'de', name: 'German', flag: './public//flags/german.png' },
+        { code: 'it', name: 'Italian', flag: './public//flags/italian.png' },
         // Add more languages here
     ];
 
@@ -44,10 +46,14 @@ export default function Registration() {
                                 onClick={() => handleInputChange('language', lang.code)}
                                 className={`language-option ${formData.language === lang.code ? 'selected' : ''}`}
                             >
-                                <img src={lang.flag} alt={lang.name} />
+                                <span className='img-span'><img className='lang-flag' src={lang.flag} alt={lang.name} /></span>
                                 <span>{lang.name}</span>
                             </div>
                         ))}
+                    </div>
+                    <div className='reg-process-btns'>
+                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
             )
@@ -68,6 +74,10 @@ export default function Registration() {
                             </button>
                         ))}
                     </div>
+                    <div className='reg-process-btns'>
+                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+                    </div>
                 </div>
             )
         },
@@ -86,6 +96,10 @@ export default function Registration() {
                                 {goal}
                             </button>
                         ))}
+                    </div>
+                    <div className='reg-process-btns'>
+                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
             )
@@ -106,6 +120,10 @@ export default function Registration() {
                             </button>
                         ))}
                     </div>
+                    <div className='reg-process-btns'>
+                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+                    </div>
                 </div>
             )
         },
@@ -120,7 +138,9 @@ export default function Registration() {
                         <button>Sign up with Facebook</button>
                         <button>Sign up with Email</button>
                     </div>
-                    <p>Already a member? <a href="/login">Log in</a></p>
+                    <div className='reg-process-btns'>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+                    </div>
                 </div>
             )
         }
@@ -131,20 +151,22 @@ export default function Registration() {
     return (
         <div className="registration-container">
             {step === -1 ? (
-                <div className="registration-intro">
+                <div className="registration-content">
                     <h1>The most efficient way to learn a language</h1>
-                    <div className="intro-buttons">
-                        <button onClick={() => setStep(0)}>Get started</button>
-                        <a href="/login">Log in</a>
+                    <h3>Learn languages with an AI-powered language teacher using immersive, fun and engaging methods.</h3>
+                    <img className='teacherfullimg' src="./src/assets/teacherfullimg.png" alt="teacherfullimg" />
+                    <div className="action-buttons">
+                        <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
+                        <a className='reg-btn-action login-btn' href="/login">Log in</a>
                     </div>
                 </div>
             ) : (
-                <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
+                <div className="registration-content step-div">
+                <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
                     {steps[step].component}
-                    {step < steps.length - 1 && (
-                        <button type="submit">Continue</button>
-                    )}
+                    {step < steps.length - 1}
                 </form>
+                </div>
             )}
         </div>
     );

@@ -52,7 +52,7 @@ export default function Registration() {
                         ))}
                     </div>
                     <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.language}>Continue</button>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ export default function Registration() {
                         ))}
                     </div>
                     <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.level}>Continue</button>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
@@ -98,7 +98,7 @@ export default function Registration() {
                         ))}
                     </div>
                     <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.goal}>Continue</button>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ export default function Registration() {
                         ))}
                     </div>
                     <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit">Continue</button>
+                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.reason}>Continue</button>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
@@ -136,13 +136,57 @@ export default function Registration() {
                         <button>Sign up with Google</button>
                         <button>Sign up with Apple</button>
                         <button>Sign up with Facebook</button>
-                        <button>Sign up with Email</button>
+                        <button onClick={() => setStep(steps.length - 1)}>Sign up with Email</button>
                     </div>
                     <div className='reg-process-btns'>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
             )
+        },
+        {
+            title: "Sign Up with Email",
+            component: (
+                <div className="registration-step">
+                    <h2>Create Your Account</h2>
+                    <input
+                        type="text"
+                        name="firstName"
+                        placeholder="First Name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="text"
+                        name="lastName"
+                        placeholder="Last Name"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Repeat Password"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                    />
+                    <button onClick={handleNextStep}>Register</button>
+                </div>
+            ),
         }
     ];
 

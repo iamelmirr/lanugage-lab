@@ -8,6 +8,7 @@ import DialogueModes from "../components/DialogueModes";
 import RoleplayModes from "../components/RoleplayModes";
 import DebateModes from "../components/DebateModes";
 import ScenarioModes from "../components/ScenarioModes";
+import ProfileMode from "../components/ProfileMode";
 
 
 export default function Home() {
@@ -65,6 +66,11 @@ export default function Home() {
         {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}
 
         {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></Dashboard>}
+
+
+        {selectedMode === 'profile-mode' && <ProfileMode selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}
+
         </>
+
     )
 }

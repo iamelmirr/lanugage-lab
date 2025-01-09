@@ -3,7 +3,11 @@
 
 
 
-export default function Header () {
+export default function Header (props) {
+
+    const {setIsAuthenticated, 
+        setIsRegistering,
+        setIsLogingIn} = props
 
 
     return (
@@ -11,7 +15,7 @@ export default function Header () {
             <div className="lan-header-container">
             <img src="/" alt="logo" />
             </div>
-            <a href="/" className="get-started-a">Get Started</a>
+            <a href="/" className="get-started-a" onClick={(e) => {e.preventDefault(), setIsRegistering(true)}}>Get Started</a>
         </div>
     )
 }

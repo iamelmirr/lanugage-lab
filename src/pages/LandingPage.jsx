@@ -4,12 +4,17 @@ import Hero from "../components/Hero";
 
 
 
-export default function LandingPage() {
+export default function LandingPage(props) {
+    const {setIsAuthenticated, 
+    setIsRegistering,
+    setIsLogingIn} = props
     
 
     return (
         <div className="landing-page-div">
-        <Header/>
+        <Header setIsAuthenticated={setIsAuthenticated} 
+        setIsRegistering={setIsRegistering}
+        setIsLogingIn={setIsLogingIn}/>
         <div className="landing-page-body">
             <Hero></Hero>
         </div>

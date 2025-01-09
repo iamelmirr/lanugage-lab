@@ -1,19 +1,26 @@
 import { useState } from 'react';
-import { auth } from '../utils/firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../utils/firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
-export default function Registration() {
+export default function Registration(props) {
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn } = props
+
+
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
     const [formData, setFormData] = useState({
         language: '',
         level: '',
         goal: '',
         reason: '',
+        firstName: '',
+        email: '',
+
     });
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
 
 
@@ -30,9 +37,31 @@ export default function Registration() {
         }
 
         try {
+
+        
+
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          console.log("User created:", userCredential);
+
+          await updateProfile(userCredential.user, {
+            displayName: `${formData.firstName} ${formData.lastName}`
+            })  
+
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+                firstName: formData.firstName,
+                email: email,
+                language: formData.language,
+                level: formData.level,
+                goal: formData.goal,
+                reason: formData.reason,
+                createdAt: new Date()
+            })
+
           console.log("User registered successfully:", userCredential.user)
           setIsAuthenticated(true);
+          setIsRegistering(false)
+          setIsLogingIn(false)
+          
         } catch (error) {
           console.error("Registration error:", error);
           // Handle error
@@ -74,8 +103,8 @@ export default function Registration() {
                         {languages.map(lang => (
                             <div 
                                 key={lang.code} 
-                                onClick={() => handleInputChange('language', lang.code)}
-                                className={`language-option ${formData.language === lang.code ? 'selected' : ''}`}
+                                onClick={() => handleInputChange('language', lang.name)}
+                                className={`language-option ${formData.language === lang.name ? 'selected' : ''}`}
                             >
                                 <span className='img-span'><img className='lang-flag' src={lang.flag} alt={lang.name} /></span>
                                 <span>{lang.name}</span>
@@ -163,23 +192,6 @@ export default function Registration() {
             component: (
                 <div className="registration-step">
                     <h2>Complete your registration</h2>
-                    <div className="auth-options">
-                        <button>Sign up with Google</button>
-                        <button>Sign up with Apple</button>
-                        <button>Sign up with Facebook</button>
-                        <button onClick={() => setStep(steps.length - 1)}>Sign up with Email</button>
-                    </div>
-                    <div className='reg-process-btns'>
-                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
-                    </div>
-                </div>
-            )
-        },
-        {
-            title: "Sign Up with Email",
-            component: (
-                <div className="registration-step">
-                    <h2>Create Your Account</h2>
                     <input
                         type="text"
                         name="firstName"
@@ -215,9 +227,14 @@ export default function Registration() {
                         placeholder="Repeat Password"
                         value={formData.confirmPassword}
                     />
-                    <button onClick={handleRegistration(formData.email, formData.password)}>Register</button>
+                    <button onClick={() => handleRegistration(formData.email, formData.password)}>Register</button>
+                    <div className="auth-options">
+                        <button>Sign up with Google</button>                      
+                    </div>
+                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+                    
                 </div>
-            ),
+            )
         }
     ];
 
@@ -232,7 +249,10 @@ export default function Registration() {
                     <img className='teacherfullimg' src="./src/assets/teacherfullimg.png" alt="teacherfullimg" />
                     <div className="action-buttons">
                         <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
-                        <a className='reg-btn-action login-btn' href="/login">Log in</a>
+                        <a className='reg-btn-action login-btn' href="/login" onClick={(e) =>                                            {e.preventDefault();
+                                setIsLogingIn(true);
+                                setIsRegistering(false);
+                                }}>Log in</a>
                     </div>
                 </div>
             ) : (

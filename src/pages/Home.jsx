@@ -2,7 +2,7 @@ import Nav from "../components/Nav";
 import React from "react"
 import Main from "../components/Main";
 import Dashboard from "../components/Dashboard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Chat from "../components/Chat";
 import DialogueModes from "../components/DialogueModes";
 import RoleplayModes from "../components/RoleplayModes";
@@ -12,7 +12,7 @@ import ProfileMode from "../components/ProfileMode";
 
 
 export default function Home(props) {
-    const {userName, setUserName} = props
+    const {userName, setUserName, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds} = props
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
@@ -33,12 +33,15 @@ export default function Home(props) {
         setActiveTab(tab)
     }
 
-    const [selectedMode, setSelectedMode] = useState('main')
+    
 
     const handleSelectedMode = (mode) => {
         setSelectedMode(mode)
         console.log(selectedMode)
     }
+
+
+
 
     const chatModes = [
         'default-chat', 'airport', 'medical-emergency', 'doctor-appointment',
@@ -50,6 +53,8 @@ export default function Home(props) {
         'scenario-product-return', 'pronunciation-practice', 'interview'
     ]
 
+
+    
     return (
         <>
         <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab}></Nav>
@@ -64,9 +69,9 @@ export default function Home(props) {
 
         {selectedMode === 'scenario-modes' && <ScenarioModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ScenarioModes>}
 
-        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}
+        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore}/>}
 
-        {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName}></Dashboard>}
+        {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
 
 
         {selectedMode === 'profile-mode' && <ProfileMode selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}

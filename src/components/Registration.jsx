@@ -56,8 +56,9 @@ export default function Registration(props) {
                 goal: formData.goal,
                 reason: formData.reason,
                 translationLanguage: 'English',
-                progressLevel: '1',
-                progressScore: '0',
+                progressLevel: 1,
+                progressScore: 0,
+                lastChatTime: new Date(),
                 createdAt: new Date()
             })
 

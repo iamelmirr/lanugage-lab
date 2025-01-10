@@ -9,6 +9,8 @@ window.Buffer = Buffer
 import AWS from 'aws-sdk'
 import AWSConfig from "../utils/aws-config.js"
 import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { auth, db } from '../utils/firebaseConfig';
 
 
 
@@ -527,7 +529,7 @@ const synthesizeSpeech = (text, voice = "Matthew") => {
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore } = props;
     const [messages, setMessages] = useState([
         chatModes[selectedMode]?.firstMessage,
     ])
@@ -544,6 +546,22 @@ export default function Chat(props) {
     const [isChatInfoVisible, setIsChatInfoVisible] = useState(true)
     const [currentAudio, setCurrentAudio] = useState(null)
     const [isMuted, setIsMuted] = useState(false)
+
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+          // Update score in Firebase
+          const userDocRef = doc(db, "users", auth.currentUser.uid);
+          updateDoc(userDocRef, {
+            progressScore: increment(1)
+          });
+          
+          // Update local state
+          props.setProgressScore(prev => prev + 1);
+        }, 60000); // 1 minute interval
+      
+        return () => clearInterval(timer);
+      }, [])
 
 
     useEffect(() => {

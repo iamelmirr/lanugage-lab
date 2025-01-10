@@ -5,7 +5,7 @@ import Authentication from "./pages/Authentication"
 import Registration from "./components/Registration"
 import Login from "./components/Login"
 import { auth, db } from './utils/firebaseConfig'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -14,9 +14,45 @@ function App() {
   })
 const [isRegistering, setIsRegistering] = useState(true)
 const [isLogingIn, setIsLogingIn] = useState(false)
+const [selectedMode, setSelectedMode] = useState('main')
 
+const [progressScore, setProgressScore] = useState(0);
+const [progressLevel, setProgressLevel] = useState(1);
 
 const [userName, setUserName] = useState('');
+
+const levelThresholds = Array(100).fill(0).reduce((thresholds, _, index) => {
+  if (index === 0) thresholds.push(0); // Level 1 starts at 0
+  else if (index < 10) thresholds.push(thresholds[index - 1] + 5); // Levels 1–10: +5 points
+  else if (index < 30) thresholds.push(thresholds[index - 1] + 10); // Levels 11–30: +10 points
+  else if (index < 60) thresholds.push(thresholds[index - 1] + 20); // Levels 31–60: +20 points
+  else thresholds.push(thresholds[index - 1] + 30); // Levels 61–100: +30 points
+  return thresholds;
+}, []);
+
+
+const calculateLevel = (score) => {
+  return levelThresholds.findIndex((threshold) => score < threshold) || 100;
+};
+
+useEffect(() => {
+  const newLevel = calculateLevel(progressScore);
+  setProgressLevel(newLevel);
+  
+  // Update Firebase
+  if (auth.currentUser) {
+    const userDocRef = doc(db, "users", auth.currentUser.uid);
+    updateDoc(userDocRef, {
+      progressScore,
+      progressLevel: newLevel
+    });
+  }
+}, [progressScore]);
+
+
+
+
+
 
 // App.jsx
 const [userData, setUserData] = useState(null);
@@ -32,6 +68,8 @@ useEffect(() => {
         if (userDoc.exists()) {
           setUserData(userDoc.data());
           setUserName(userDoc.data().firstName);
+          setProgressScore(userDoc.data().progressScore)
+          setProgressLevel(userDoc.data().progressLevel)
           console.log(userData)
         } else {
           console.log(`No user document found for UID: ${user.uid}`)
@@ -63,7 +101,7 @@ useEffect(() => {
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
     }
-    return <Home userName={userName} setUserName={setUserName}/>;
+    return <Home userName={userName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}/>;
   };
 
   return <>{renderPage()}</>

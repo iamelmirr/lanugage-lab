@@ -6,8 +6,8 @@ import { useState, useEffect, React } from "react";
 
 export default function Dashboard(props) {
 
-    const {selectedMode, setSelectedMode, handleSelectedMode, userName, setUserName} = props
-
+    const {selectedMode, setSelectedMode, handleSelectedMode, userName, setUserName, progressScore, progressLevel, levelThresholds} = props
+    const pointsToNextLevel = levelThresholds[progressLevel] - progressScore
     
 
     return (
@@ -20,7 +20,7 @@ export default function Dashboard(props) {
                 <h2>Hi {userName}, have you tried new challenge?</h2>
                  </div>
                 <div className="dashboard-streak">
-                <h2>You need 4 minutes to get to level 14</h2>
+                <h2>You need {pointsToNextLevel} minutes to get to level {progressLevel + 1}</h2>
                 </div>
                 <div className="dashboard-stats">
 

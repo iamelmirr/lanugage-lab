@@ -11,7 +11,8 @@ import ScenarioModes from "../components/ScenarioModes";
 import ProfileMode from "../components/ProfileMode";
 
 
-export default function Home() {
+export default function Home(props) {
+    const {userName, setUserName} = props
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
@@ -65,7 +66,7 @@ export default function Home() {
 
         {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}
 
-        {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></Dashboard>}
+        {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName}></Dashboard>}
 
 
         {selectedMode === 'profile-mode' && <ProfileMode selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}/>}

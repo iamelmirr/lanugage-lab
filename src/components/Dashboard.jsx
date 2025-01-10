@@ -6,28 +6,9 @@ import { useState, useEffect, React } from "react";
 
 export default function Dashboard(props) {
 
-    const {selectedMode, setSelectedMode, handleSelectedMode} = props
+    const {selectedMode, setSelectedMode, handleSelectedMode, userName, setUserName} = props
 
-    const [userName, setUserName] = useState('');
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (auth.currentUser) {
-                const userDocRef = doc(db, "users", auth.currentUser.uid);
-                const userDoc = await getDoc(userDocRef);
-                console.log("User doc:", userDoc.data())
-                
-                if (userDoc.exists()) {
-                    
-                    console.log(userData);
-                    setUserName(userDoc.firstName);
-                } else {
-                    console.log("No such document!");
-                }
-            }
-        };
-        fetchUserData();
-    }, []);
+    
 
     return (
         <div className="dashboard-div">

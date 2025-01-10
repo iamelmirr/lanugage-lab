@@ -5,6 +5,7 @@ import Authentication from "./pages/Authentication"
 import Registration from "./components/Registration"
 import Login from "./components/Login"
 import { auth, db } from './utils/firebaseConfig'
+import { doc, getDoc } from 'firebase/firestore'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -14,48 +15,59 @@ function App() {
 const [isRegistering, setIsRegistering] = useState(true)
 const [isLogingIn, setIsLogingIn] = useState(false)
 
+
+const [userName, setUserName] = useState('');
+
+// App.jsx
+const [userData, setUserData] = useState(null);
+
 useEffect(() => {
-  // Listen for auth state changes
-  const unsubscribe = auth.onAuthStateChanged((user) => {
-    setIsAuthenticated(user !== null);
-    setIsRegistering(false);
-      setIsLogingIn(false);
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      setIsAuthenticated(true)
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());
+          setUserName(userDoc.data().firstName);
+          console.log(userData)
+        } else {
+          console.log(`No user document found for UID: ${user.uid}`)
+        }
+      } catch (error) {
+        console.error("Error fetching user data");
+      }
+    } else {
+      setIsAuthenticated(false)
+      setUserData(null);
+      setUserName('');
+    }
   });
 
   return () => unsubscribe();
-}, [])
+}, []);
+
   
 
-  return (
-    <>
-      
-      {!isAuthenticated && !isLogingIn && isRegistering && (
-      <Registration 
-        setIsAuthenticated={setIsAuthenticated} 
+  const renderPage = () => {
+    if (!isAuthenticated) {
+        if (isRegistering) return <Registration setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
-        setIsLogingIn={setIsLogingIn}
-      />
-    )}
-    {!isAuthenticated && isLogingIn && !isRegistering && (
-      <Login 
-        setIsAuthenticated={setIsAuthenticated} 
+        setIsLogingIn={setIsLogingIn} />
+        if (isLogingIn) return <Login setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
-        setIsLogingIn={setIsLogingIn}
-      />
-    )}
-    {!isAuthenticated && !isLogingIn && !isRegistering && (
-      <LandingPage 
-      setIsAuthenticated={setIsAuthenticated} 
-      setIsRegistering={setIsRegistering}
-      setIsLogingIn={setIsLogingIn}
-      />
-    )}
-    {isAuthenticated && (
-      <Home />
-    )}
-      
-    </>
-  )
+        setIsLogingIn={setIsLogingIn} />;
+        return <LandingPage setIsAuthenticated={setIsAuthenticated} 
+        setIsRegistering={setIsRegistering}
+        setIsLogingIn={setIsLogingIn} />;
+    }
+    return <Home userName={userName} setUserName={setUserName}/>;
+  };
+
+  return <>{renderPage()}</>
+
 }
 
 export default App

@@ -25,11 +25,16 @@ br {
     font-family: 'Poppins', 'sans-serif';
 }
 
+html {
+    height: 100vh;
+}
+
 html, body, #root {
     height: 100%;
     color: #282828;
     scrollbar-width: none;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 body {
@@ -329,6 +334,7 @@ body {
     width:60%;
     background: rgb(255, 250, 243);
     transition: width 0.2s ease-in-out;
+    overflow-x: none;
 }
 
 .chat-div.expanded {

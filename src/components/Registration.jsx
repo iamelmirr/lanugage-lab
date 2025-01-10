@@ -16,6 +16,7 @@ export default function Registration(props) {
         firstName: '',
         email: '',
 
+
     });
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,6 +55,9 @@ export default function Registration(props) {
                 level: formData.level,
                 goal: formData.goal,
                 reason: formData.reason,
+                translationLanguage: 'English',
+                progressLevel: '1',
+                progressScore: '0',
                 createdAt: new Date()
             })
 

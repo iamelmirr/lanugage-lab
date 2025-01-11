@@ -10,6 +10,7 @@ export default function Registration(props) {
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
     const [formData, setFormData] = useState({
         language: '',
+        translationLanguage: '',
         level: '',
         goal: '',
         reason: '',
@@ -52,6 +53,7 @@ export default function Registration(props) {
                 firstName: formData.firstName,
                 email: email,
                 language: formData.language,
+                translationLanguage: formData.translationLanguage,
                 level: formData.level,
                 goal: formData.goal,
                 reason: formData.reason,
@@ -96,6 +98,15 @@ export default function Registration(props) {
         { code: 'de', name: 'German', flag: './public//flags/german.png' },
         { code: 'it', name: 'Italian', flag: './public//flags/italian.png' },
         // Add more languages here
+    ];
+
+    const translationLanguages = [
+        { code: 'en', name: 'English', flag: './public/flags/english.png' },
+        { code: 'es', name: 'Spanish', flag: './public//flags/spanish.png' },
+        { code: 'fr', name: 'French', flag: './public//flags/french.png' },
+        { code: 'de', name: 'German', flag: './public//flags/german.png' },
+        { code: 'it', name: 'Italian', flag: './public//flags/italian.png' },
+        { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png' }
     ];
 
     const steps = [
@@ -146,6 +157,44 @@ export default function Registration(props) {
                 </div>
             )
         },
+        {
+            title: "Translation Language",
+            component: (
+                <div className="registration-step">
+                    <h2>Choose your translation language</h2>
+                    <div className="language-options">
+                    {translationLanguages.filter(lang => lang.name !== formData.language).map(lang => (
+                    <div 
+                        key={lang.code} 
+                        onClick={() => handleInputChange('translationLanguage', lang.name)}
+                        className={`language-option ${formData.translationLanguage === lang.name ? 'selected' : ''}`}
+                    >
+                        <span className='img-span'>
+                            <img className='lang-flag' src={lang.flag} alt={lang.name} />
+                        </span>
+                        <span>{lang.name}</span>
+                    </div>
+                ))}
+            </div>
+            <div className='reg-process-btns'>
+                <button 
+                    className='reg-btn-action'
+                    onClick={() => handleInputChange('translationLanguage', 'none')}
+                >
+                    Skip
+                </button>
+                <button 
+                    className='reg-btn-action registration-btn' 
+                    type="submit" 
+                    disabled={!formData.translationLanguage}
+                >
+                    Continue
+                </button>
+                <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+            </div>
+        </div>
+    )
+},
         {
             title: "Your Goal",
             component: (

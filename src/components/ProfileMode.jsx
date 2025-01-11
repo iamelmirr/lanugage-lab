@@ -13,9 +13,27 @@ export default function ProfileMode() {
     const [languageLevel, setLanguageLevel] = useState('Beginner (A1 - A2)')
 
     // Add language options
-    const targetLanguages = ['English', 'German', 'Spanish', 'Italian', 'French']
-    const translationLanguages = ['English', 'German', 'Croatian', 'Italian', 'French', 'Spanish']
-    const levels = ['Beginner (A1 - A2)', 'Intermediate (B1 - B2)', 'Advanced (C1 - C2)']
+    const targetLanguages = [
+        { code: 'en', name: 'English', flag: './public/flags/english.png' },
+        { code: 'de', name: 'German', flag: './public/flags/german.png' },
+        { code: 'es', name: 'Spanish', flag: './public/flags/spanish.png' },
+        { code: 'it', name: 'Italian', flag: './public/flags/italian.png' },
+        { code: 'fr', name: 'French', flag: './public/flags/french.png' }
+    ];
+    const translationLanguages = [
+        { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png'},
+        { code: 'en', name: 'English', flag: './public/flags/english.png' },
+        { code: 'de', name: 'German', flag: './public/flags/german.png' },
+        { code: 'es', name: 'Spanish', flag: './public/flags/spanish.png' },
+        { code: 'it', name: 'Italian', flag: './public/flags/italian.png' },
+        { code: 'fr', name: 'French', flag: './public/flags/french.png' }
+    ];
+
+    const levels = [
+        { code: 'a1-a2', name: 'Beginner (A1 - A2)' },
+        { code: 'b1-b2', name: 'Intermediate (B1 - B2)' },
+        { code: 'c1-c2', name: 'Advanced (C1 - C2)' }
+      ];
 
     const handleLogout = async () => {
         try {
@@ -24,6 +42,70 @@ export default function ProfileMode() {
             console.error("Error signing out:", error);
         }
     }
+
+    const CustomLevelSelect = ({ options, value, onChange }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        
+        return (
+            <div className="select-container">
+                <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
+                    <span>{value}</span>
+                    <span className="fa-solid fa-chevron-down"></span>
+                </div>
+                
+                {isOpen && (
+                    <div className="custom-select">
+                        {options.map(level => (
+                            <div 
+                                key={level.code} 
+                                className={`select-option ${value === level.name ? 'selected' : ''}`}
+                                onClick={() => {
+                                    onChange(level.name);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                <span>{level.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+
+    const CustomSelect = ({ options, value, onChange }) => {
+        const [isOpen, setIsOpen] = useState(false);
+
+        const selectedLanguage = options.find(lang => lang.name === value)
+
+
+        return (
+            <div className="select-container">
+            <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
+            {selectedLanguage && <img src={selectedLanguage.flag} alt={value} />}
+              
+              <span>{value}</span>
+              <span className="fa-solid fa-chevron-down"></span>
+            </div>
+            
+            {isOpen && (
+              <div className="custom-select">
+                {options.map(lang => (
+                  <div 
+                  key={lang.code} 
+                  className={`select-option ${value === lang.code ? 'selected' : ''}`}
+                  onClick={() => onChange(lang.name)} // Use the passed onChange prop
+                >
+                  <img src={lang.flag} alt={lang.name} />
+                  <span>{lang.name}</span>
+                </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
 
     return (
         <div className='profile-mode'>
@@ -104,49 +186,37 @@ export default function ProfileMode() {
                     }}></span>
                     <h2>Settings</h2>
                 </div>
-                <div className='profile-options-btn-list'>
-                    <div className="profile-menu-option">
-                        <span className='fa-solid fa-language'></span>
-                        <div>
-                            <p>Target Language</p>
-                            <select 
-                                value={targetLanguage} 
-                                onChange={(e) => setTargetLanguage(e.target.value)}
-                            >
-                                {targetLanguages.map(lang => (
-                                    <option key={lang} value={lang}>{lang}</option>
-                                ))}
-                            </select>
-                        </div>
+                <div className='profile-settings-btn-list'>
+                    <div className="profile-menu-setting">
+                        
+                        
+                            <p>Choose your target language</p>
+                            
+                            <CustomSelect
+                            options={targetLanguages}
+                            value={targetLanguage}
+                            onChange={setTargetLanguage}
+                            />
+                        
                     </div>
-                    <div className="profile-menu-option">
-                        <span className='fa-solid fa-language'></span>
-                        <div>
-                            <p>Translation Language</p>
-                            <select 
-                                value={translationLanguage} 
-                                onChange={(e) => setTranslationLanguage(e.target.value)}
-                            >
-                                {translationLanguages.map(lang => (
-                                    <option key={lang} value={lang}>{lang}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="profile-menu-option">
-                        <span className='fa-solid fa-stairs'></span>
-                        <div>
-                            <p>Language Level</p>
-                            <select 
-                                value={languageLevel} 
-                                onChange={(e) => setLanguageLevel(e.target.value)}
-                            >
-                                {levels.map(level => (
-                                    <option key={level} value={level}>{level}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
+                    <div className="profile-menu-setting">
+                    <p>Choose your translation language</p>
+                    <CustomSelect
+                        options={translationLanguages}
+                        value={translationLanguage}
+                        onChange={setTranslationLanguage}
+                    />
+                </div>
+                    
+                    <div className="profile-menu-setting">
+                    <p>Choose your target language level</p>
+                    <CustomLevelSelect
+                        options={levels}
+                        value={languageLevel}
+                        onChange={setLanguageLevel}
+                    />
+                </div>
+                    
                 </div>
             </div>
         )}

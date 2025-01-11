@@ -732,7 +732,7 @@ export default function Chat(props) {
             console.log(data.choices[0]?.message?.content)
 
 
-            const severityMatch = fullResponse.match(/Severity:\s*(green|yellow|red)/i);
+            const severityMatch = fullResponse.match(/Severity:\s*\[?(green|yellow|red)\]?/i);
             const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
             
             const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
@@ -1072,10 +1072,16 @@ export default function Chat(props) {
                     {msg.sender === "user" ? <span className="fa-solid fa-circle-info" onClick={() => handleShowFeedback(msg)}></span> : ""}
                     <div key={index} className={`message ${msg.sender}`}>  
                         <p>{msg.text}</p>
+                        <div className="msg-options-div">
                         <span className="repeat-msg" onClick={() => handleRepeatMessage(msg.text)}>
                             <span className="fa-solid fa-rotate-right"></span>
                             <p>Repeat</p>
                         </span>
+                        <span className="translate-msg" onClick={() => handleRepeatMessage(msg.text)}>
+                            <span className="fa-solid fa-language"></span>
+                            <p>Translate</p>
+                        </span>
+                        </div>
                     </div>
                     </div>
                 ))}

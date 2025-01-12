@@ -1,6 +1,6 @@
 import React from 'react';
 import { auth, db } from '../utils/firebaseConfig';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { updateProfile, updatePassword, updateEmail, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 
@@ -9,7 +9,7 @@ import { updateProfile, updatePassword, updateEmail, sendEmailVerification, send
 
 export default function ProfileMode(props) {
 
-    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword} = props
+    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated} = props
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
@@ -252,6 +252,14 @@ export default function ProfileMode(props) {
 
 
     const DeleteAccountModal = React.memo(() => {
+        const [inputValue, setInputValue] = useState('');
+        const inputRef = useRef(null);
+
+    useEffect(() => {
+        inputRef.current.focus();
+    }, [deleteAccountPassword])
+
+
         return (
             <div
                 className="modal-overlay"
@@ -290,6 +298,7 @@ export default function ProfileMode(props) {
                         type="password"
                         name="deleteAccountPassword"
                         placeholder="Enter your password"
+                        ref={inputRef}
                         value={deleteAccountPassword}
                         onChange={(e) => {
                             if (e.target && e.target.value !== undefined) {

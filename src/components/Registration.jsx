@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { auth, db } from '../utils/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
 export default function Registration(props) {
-    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData } = props
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData } = props
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
@@ -35,32 +35,60 @@ export default function Registration(props) {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           console.log("User created:", userCredential);
 
+
           await sendEmailVerification(userCredential.user, {
             url: window.location.href, // Redirect URL after verification
             handleCodeInApp: true
           });
 
-          await updateProfile(userCredential.user, {
-            displayName: `${formData.firstName} ${formData.lastName}`
-            })  
-
-            await setDoc(doc(db, "users", userCredential.user.uid), {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                email: email,
-                password: formData.password,
-                language: formData.language,
-                translationLanguage: formData.translationLanguage,
-                level: formData.level,
-                goal: formData.goal,
-                reason: formData.reason,
-                translationLanguage: 'English',
-                progressLevel: 1,
-                progressScore: 0,
-                lastChatTime: new Date(),
-                createdAt: new Date()
+          
+          await setDoc(doc(db, "users", userCredential.user.uid), {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: email,
+              password: formData.password,
+              language: formData.language,
+              translationLanguage: formData.translationLanguage,
+              level: formData.level,
+              goal: formData.goal,
+              reason: formData.reason,
+              translationLanguage: formData.translationLanguage,
+              progressLevel: 1,
+              progressScore: 0,
+              lastChatTime: new Date(),
+              createdAt: new Date(),
+              savedChats: [],
+              
             })
 
+
+            await updateProfile(userCredential.user, {
+              displayName: `${formData.firstName} ${formData.lastName}`
+              })  
+
+                    const userEmail = userCredential.user.email;
+                    setUserEmail(userEmail);
+                    setTempUserEmail(userEmail);
+                    console.log("User email:", userEmail)
+            
+                    const userDocRef = doc(db, "users", userCredential.user.uid);
+                    const userDoc = await getDoc(userDocRef);
+                    
+                    if (userDoc.exists()) {
+                      setUserData(userDoc.data());
+                      setUserName(userDoc.data().firstName);
+                      setUserLastName(userDoc.data().lastName)
+                      setUserPassword(userDoc.data().password)
+                      setProgressScore(userDoc.data().progressScore)
+                      setProgressLevel(userDoc.data().progressLevel)
+                      
+                      console.log(userDoc)
+            
+                      
+                    } else {
+                      console.log(`No user document found for UID: ${user.uid}`)
+                    }
+            
           console.log("User registered successfully:", userCredential.user)
           setIsAuthenticated(true);
           setIsRegistering(false)
@@ -256,7 +284,7 @@ export default function Registration(props) {
                         name="lastName"
                         placeholder="Last Name"
                         value={formData.lastName}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
                     />
                     <input
                         type="email"

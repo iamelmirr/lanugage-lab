@@ -6,6 +6,8 @@ import Registration from "./components/Registration"
 import Login from "./components/Login"
 import { auth, db } from './utils/firebaseConfig'
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore'
+import { signInWithEmailLink, isSignInWithEmailLink, updateEmail } from "firebase/auth"
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -24,6 +26,7 @@ const [userLastName, setUserLastName] = useState('')
 const [userEmail, setUserEmail] = useState('')
 const [tempUserEmail, setTempUserEmail] = useState('')
 const [newUserEmail, setNewUserEmail] = useState('')
+const [userPassword, setUserPassword] = useState('')
 
 const [formData, setFormData] = useState({
   language: '',
@@ -32,7 +35,9 @@ const [formData, setFormData] = useState({
   goal: '',
   reason: '',
   firstName: '',
+  lastName: '',
   email: '',
+  password: ''
 
 
 })
@@ -59,7 +64,7 @@ useEffect(() => {
   if (auth.currentUser) {
     const userDocRef = doc(db, "users", auth.currentUser.uid);
     updateDoc(userDocRef, {
-      progressScore,
+      progressScore: progressScore,
       progressLevel: newLevel
     });
   }
@@ -70,7 +75,7 @@ useEffect(() => {
 
 
 
-// App.jsx
+
 const [userData, setUserData] = useState(null);
 
 useEffect(() => {
@@ -91,11 +96,13 @@ useEffect(() => {
           setUserData(userDoc.data());
           setUserName(userDoc.data().firstName);
           setUserLastName(userDoc.data().lastName)
-          setNewUserEmail(userDoc.data().newUserEmail || '')
+          setUserPassword(userDoc.data().password)
           setProgressScore(userDoc.data().progressScore)
           setProgressLevel(userDoc.data().progressLevel)
           
           console.log(userDoc)
+
+          
         } else {
           console.log(`No user document found for UID: ${user.uid}`)
         }
@@ -126,7 +133,7 @@ useEffect(() => {
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
     }
-    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail}/>;
+    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword}/>;
   };
 
   return <>{renderPage()}</>

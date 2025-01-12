@@ -550,15 +550,9 @@ export default function Chat(props) {
 
     useEffect(() => {
         const timer = setInterval(() => {
-          // Update score in Firebase
-          const userDocRef = doc(db, "users", auth.currentUser.uid);
-          updateDoc(userDocRef, {
-            progressScore: increment(1)
-          });
           
-          // Update local state
           props.setProgressScore(prev => prev + 1);
-        }, 60000); // 1 minute interval
+        }, 60000); 
       
         return () => clearInterval(timer);
       }, [])

@@ -46,7 +46,9 @@ export default function Registration(props) {
 
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 firstName: formData.firstName,
+                lastName: formData.lastName,
                 email: email,
+                password: formData.password,
                 language: formData.language,
                 translationLanguage: formData.translationLanguage,
                 level: formData.level,

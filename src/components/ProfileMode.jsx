@@ -1,17 +1,19 @@
+import React from 'react';
 import { auth, db } from '../utils/firebaseConfig';
-import { useState } from 'react';
-import { updateDoc, doc } from 'firebase/firestore';
-import { updateProfile, updatePassword, updateEmail, sendEmailVerification } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { updateProfile, updatePassword, updateEmail, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 
 
 
 
 export default function ProfileMode(props) {
 
-    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail} = props
+    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword} = props
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
+    const [deleteAccountPassword, setDeleteAccountPassword] = useState('');
     
 
     const [currentPassword, setCurrentPassword] = useState('');
@@ -20,6 +22,8 @@ export default function ProfileMode(props) {
 
 
     const [selectedOption, setSelectedOption] = useState('unexpanded')
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const [targetLanguage, setTargetLanguage] = useState('English')
     const [translationLanguage, setTranslationLanguage] = useState('English')
@@ -86,6 +90,10 @@ export default function ProfileMode(props) {
         );
     };
 
+    useEffect(() => {
+        return () => setDeleteAccountPassword('');
+    }, [showDeleteModal]);
+
 
     const CustomSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
@@ -123,76 +131,44 @@ export default function ProfileMode(props) {
 
       const handleSavePersonalDetails = async () => {
         if (!tempUserEmail.trim() || !tempUserName.trim() || !tempUserLastName.trim()) {
-            alert("Email and first name cannot be empty");
+            alert("Email, first name or last name can not be empty!");
             return;
         }
     
         try {
             const user = auth.currentUser;
             if (!user) return;
-
+    
             const userDocRef = doc(db, "users", user.uid);
+    
+            // Update user profile in Firestore
             await updateDoc(userDocRef, {
-            firstName: tempUserName,
-            lastName: tempUserLastName
-        })
-    
-            await updateProfile(user, {
-            displayName: tempUserName
+                firstName: tempUserName,
+                lastName: tempUserLastName,
             });
-
-            if(tempUserEmail !== userEmail) {
-                try {
-                    const user = auth.currentUser;
-                    
-                    // 1. Update email in Firebase Auth
-                    await updateEmail(user, tempUserEmail);
-                    
-                    // 2. Send verification email
-                    await sendEmailVerification(user, {
-                        url: window.location.href,
-                        handleCodeInApp: true
-                    });
-                    
-                    // 3. Store new email in Firestore for tracking
-                    const userDocRef = doc(db, "users", user.uid);
-                    await updateDoc(userDocRef, {
-                        newUserEmail: tempUserEmail
-                    });
-                    
-                    setNewUserEmail(tempUserEmail);
-                    alert("Please check your email to verify the new address");
-                    
-                    // 4. Set up an auth state listener to check verification
-                    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-                        if (user?.emailVerified && user.email === tempUserEmail) {
-                            // Update Firestore with verified email
-                            await updateDoc(userDocRef, {
-                                email: tempUserEmail
-                            });
-                            setUserEmail(tempUserEmail);
-                            unsubscribe();
-                        }
-                    });
-            
-                } catch (error) {
-                    console.error("Error updating email:", error);
-                    alert("Failed to update email. Make sure you're recently logged in.");
-                }
-            }
     
-            // Update parent state only after successful save
+            // Update Firebase Authentication profile
+            await updateProfile(user, {
+                displayName: tempUserName,
+            });
             
+    
             setUserName(tempUserName);
             setUserLastName(tempUserLastName);
     
             alert("Profile updated successfully");
-    
         } catch (error) {
             console.error("Error updating profile:", error);
-            alert("Failed to update profile");
+            if (error.code === "auth/requires-recent-login") {
+                alert("Please log in again to update your email.");
+            } else {
+                alert("Failed to update profile");
+            }
         }
-    }
+    };
+    
+    
+    
 
 
     const handleChangePassword = async () => {
@@ -209,9 +185,16 @@ export default function ProfileMode(props) {
         try {
             const user = auth.currentUser;
             if (!user) return;
-    
+
+
+            const credential = EmailAuthProvider.credential(user.email, currentPassword)
+            await reauthenticateWithCredential(user, credential);
+
             await updatePassword(user, newPassword);
             alert("Password updated successfully");
+            await updateDoc(userDocRef, {
+                password: newPassword,
+            });
             
             // Clear the fields
             setCurrentPassword('');
@@ -223,6 +206,135 @@ export default function ProfileMode(props) {
             alert("Failed to update password. Make sure your current password is correct.");
         }
     };
+
+    const handleForgotPassword = async () => {
+        if (!userEmail) {
+            alert("Please enter your email address");
+            return;
+        }
+    
+        try {
+            await sendPasswordResetEmail(auth, userEmail);
+            alert("Password reset instructions have been sent to your email");
+        } catch (error) {
+            console.error("Error sending reset email:", error);
+            alert("Failed to send reset email. Please try again.");
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+    
+            const credential = EmailAuthProvider.credential(user.email, deleteAccountPassword)
+            await reauthenticateWithCredential(user, credential);
+            // Delete user data from Firestore
+            const userDocRef = doc(db, "users", user.uid);
+            await deleteDoc(userDocRef);
+    
+            // Delete user account from Firebase Authentication
+            await deleteUser(user);
+    
+            // Close the modal and redirect/logout
+            setShowDeleteModal(false);
+            setIsAuthenticated(false);
+        } catch (error) {
+            console.error("Error deleting account:", error);
+            if (error.code === "auth/requires-recent-login") {
+                alert("Please log in again to delete your account.");
+            } else {
+                alert("Failed to delete account");
+            }
+        }
+    };
+
+
+
+    const DeleteAccountModal = React.memo(() => {
+        return (
+            <div
+                className="modal-overlay"
+                onClick={(e) => {
+                    if (e.target.className === 'modal-overlay') {
+                        setShowDeleteModal(false);
+                    }
+                }}
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 1000,
+                }}
+            >
+                <div
+                    className="modal-content"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                        background: 'white',
+                        padding: '24px',
+                        borderRadius: '12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '16px',
+                    }}
+                >
+                    <h2>Are you sure you want to delete your account?</h2>
+                    <input 
+                        type="password"
+                        name="deleteAccountPassword"
+                        placeholder="Enter your password"
+                        value={deleteAccountPassword}
+                        onChange={(e) => {
+                            if (e.target && e.target.value !== undefined) {
+                                setDeleteAccountPassword(e.target.value);
+                            }
+                        }}
+                    />
+                    <div
+                        style={{
+                            display: 'flex',
+                            gap: '12px',
+                        }}
+                    >
+                        <button
+                            style={{
+                                background: '#F44336',
+                                color: 'white',
+                                border: 'none',
+                                padding: '8px 16px',
+                                borderRadius: '6px',
+                            }}
+                            onClick={handleDeleteAccount}
+                        >
+                            Delete
+                        </button>
+                        <button
+                            style={{
+                                background: '#e4e4e4',
+                                border: 'none',
+                                padding: '8px 16px',
+                                borderRadius: '6px',
+                            }}
+                            onClick={() => setShowDeleteModal(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    });
+    
+    
+    
+    
 
 
     return (
@@ -291,7 +403,7 @@ export default function ProfileMode(props) {
                     <p>Change password</p>
                     <p className='profile-menu-small-text'>Change your current password.</p>
                     </div></div>
-                <div className="profile-menu-option"><span className='fa-solid fa-trash log-out-text'></span>
+                <div className="profile-menu-option" onClick={() => setShowDeleteModal(true)}><span className='fa-solid fa-trash log-out-text'></span>
                     <div>
                     <p className='log-out-text'>Delete account</p>
                     <p className='profile-menu-small-text'>This action can not be undone.</p>
@@ -299,6 +411,8 @@ export default function ProfileMode(props) {
                     </div>
             </div>
         )}
+
+        {showDeleteModal && <DeleteAccountModal/>}
 
         {selectedOption === 'personal-details' && (
             <div className="profile-options-div expanded">
@@ -314,7 +428,7 @@ export default function ProfileMode(props) {
                         
                             <p>Your email address</p>
                             
-                            <input type="text" value={tempUserEmail} onChange={(e) => setTempUserEmail(e.target.value)}/>
+                            <input type="text" disabled value={tempUserEmail} onChange={(e) => setTempUserEmail(e.target.value)}/>
 
                             
                         
@@ -421,12 +535,12 @@ export default function ProfileMode(props) {
                         
                             <p>Your email address</p>
                             
-                            <input type="text"  value={userEmail}/>
+                            <input type="text"  value={userEmail} onChange={(e) => setUserEmail(e.target.value)}/>
                             
                         
                     </div>
                     
-                        <button className='personal-details-btn'>Send instructions</button>
+                        <button className='personal-details-btn' onClick={handleForgotPassword}>Send instructions</button>
                         
                     </div>
                     

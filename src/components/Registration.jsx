@@ -1,24 +1,14 @@
 import { useState } from 'react';
 import { auth, db } from '../utils/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
 export default function Registration(props) {
-    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn } = props
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData } = props
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
-    const [formData, setFormData] = useState({
-        language: '',
-        translationLanguage: '',
-        level: '',
-        goal: '',
-        reason: '',
-        firstName: '',
-        email: '',
-
-
-    });
+    
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,6 +34,11 @@ export default function Registration(props) {
 
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           console.log("User created:", userCredential);
+
+          await sendEmailVerification(userCredential.user, {
+            url: window.location.href, // Redirect URL after verification
+            handleCodeInApp: true
+          });
 
           await updateProfile(userCredential.user, {
             displayName: `${formData.firstName} ${formData.lastName}`

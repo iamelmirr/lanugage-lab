@@ -1,10 +1,23 @@
-import { auth } from '../utils/firebaseConfig';
+import { auth, db } from '../utils/firebaseConfig';
 import { useState } from 'react';
+import { updateDoc, doc } from 'firebase/firestore';
+import { updateProfile, updatePassword, updateEmail, sendEmailVerification } from 'firebase/auth';
 
 
 
 
-export default function ProfileMode() {
+export default function ProfileMode(props) {
+
+    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail} = props
+
+    const [tempUserName, setTempUserName] = useState(userName);
+    const [tempUserLastName, setTempUserLastName] = useState(userLastName);
+    
+
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
 
     const [selectedOption, setSelectedOption] = useState('unexpanded')
 
@@ -107,11 +120,116 @@ export default function ProfileMode() {
         );
       }
 
+
+      const handleSavePersonalDetails = async () => {
+        if (!tempUserEmail.trim() || !tempUserName.trim() || !tempUserLastName.trim()) {
+            alert("Email and first name cannot be empty");
+            return;
+        }
+    
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const userDocRef = doc(db, "users", user.uid);
+            await updateDoc(userDocRef, {
+            firstName: tempUserName,
+            lastName: tempUserLastName
+        })
+    
+            await updateProfile(user, {
+            displayName: tempUserName
+            });
+
+            if(tempUserEmail !== userEmail) {
+                try {
+                    const user = auth.currentUser;
+                    
+                    // 1. Update email in Firebase Auth
+                    await updateEmail(user, tempUserEmail);
+                    
+                    // 2. Send verification email
+                    await sendEmailVerification(user, {
+                        url: window.location.href,
+                        handleCodeInApp: true
+                    });
+                    
+                    // 3. Store new email in Firestore for tracking
+                    const userDocRef = doc(db, "users", user.uid);
+                    await updateDoc(userDocRef, {
+                        newUserEmail: tempUserEmail
+                    });
+                    
+                    setNewUserEmail(tempUserEmail);
+                    alert("Please check your email to verify the new address");
+                    
+                    // 4. Set up an auth state listener to check verification
+                    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+                        if (user?.emailVerified && user.email === tempUserEmail) {
+                            // Update Firestore with verified email
+                            await updateDoc(userDocRef, {
+                                email: tempUserEmail
+                            });
+                            setUserEmail(tempUserEmail);
+                            unsubscribe();
+                        }
+                    });
+            
+                } catch (error) {
+                    console.error("Error updating email:", error);
+                    alert("Failed to update email. Make sure you're recently logged in.");
+                }
+            }
+    
+            // Update parent state only after successful save
+            
+            setUserName(tempUserName);
+            setUserLastName(tempUserLastName);
+    
+            alert("Profile updated successfully");
+    
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile");
+        }
+    }
+
+
+    const handleChangePassword = async () => {
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert("All fields are required");
+            return;
+        }
+    
+        if (newPassword !== confirmPassword) {
+            alert("New passwords don't match");
+            return;
+        }
+    
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+    
+            await updatePassword(user, newPassword);
+            alert("Password updated successfully");
+            
+            // Clear the fields
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            
+        } catch (error) {
+            console.error("Error updating password:", error);
+            alert("Failed to update password. Make sure your current password is correct.");
+        }
+    };
+
+
     return (
         <div className='profile-mode'>
         <div className="profile-list-div">
             <div className="profile-header">
-                <span className="fa-solid fa-arrow-left"></span>
+                <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>
                 <h2>Account</h2>
             </div>
             
@@ -157,14 +275,18 @@ export default function ProfileMode() {
                 <h2>Profile</h2>
                 </div>
                 <div className='profile-options-btn-list'>
-                <div className="profile-menu-option">
+                <div className="profile-menu-option" onClick={() => {
+                    setSelectedOption('personal-details')
+                }}>
                     <span className='fa-regular fa-user'></span>
                     <div>
                     <p>Personal details</p>
                     <p className='profile-menu-small-text'>Manage your personal details below.</p>
                     </div>
                 </div>
-                <div className="profile-menu-option"><span className='fa-solid fa-lock'></span>
+                <div className="profile-menu-option" onClick={() => {
+                    setSelectedOption('change-password')
+                }}><span className='fa-solid fa-lock'></span>
                     <div>
                     <p>Change password</p>
                     <p className='profile-menu-small-text'>Change your current password.</p>
@@ -176,6 +298,140 @@ export default function ProfileMode() {
                     </div></div>
                     </div>
             </div>
+        )}
+
+        {selectedOption === 'personal-details' && (
+            <div className="profile-options-div expanded">
+                <div className='profile-option-h-div'>
+                <span className='fa-solid fa-arrow-left' onClick={() => {
+                    setSelectedOption('profile')
+                }}></span>
+                <h2>Personal details</h2>
+                </div>
+                <div className='personal-details-btn-list'>
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>Your email address</p>
+                            
+                            <input type="text" value={tempUserEmail} onChange={(e) => setTempUserEmail(e.target.value)}/>
+
+                            
+                        
+                    </div>
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>First name</p>
+                            
+                            <input type="text" value={tempUserName} onChange={(e) => setTempUserName(e.target.value)}/>
+
+                            
+                        
+                    </div>
+                    
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>Last name</p>
+                            
+                            <input type="text" value={tempUserLastName} onChange={(e) => setTempUserLastName(e.target.value)}/>
+                            
+                        
+                    </div>
+
+                    <button className='personal-details-btn' onClick={handleSavePersonalDetails}>Save</button>
+                    
+                </div>
+            </div>
+        )}
+
+        {selectedOption === 'change-password' && (
+            <div className="profile-options-div expanded">
+                <div className='profile-option-h-div'>
+                <span className='fa-solid fa-arrow-left' onClick={() => {
+                    setSelectedOption('profile')
+                }}></span>
+                <h2>Change password</h2>
+                </div>
+                <div className='personal-details-btn-list'>
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>Current password</p>
+                            
+                            <input 
+                                type="password" 
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                            />
+                            
+                        
+                    </div>
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>New password</p>
+                            
+                            <input 
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            
+                        
+                    </div>
+                    
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>Repeat password</p>
+                            
+                            <input 
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            
+                        
+                    </div>
+
+                    <div className='change-password-btns'>
+                        <button className='personal-details-btn' onClick={handleChangePassword}>Save</button>
+                        <p>Forgot password? <a onClick={() => {
+                    setSelectedOption('forgot-password')
+                }}>Click here</a></p>
+                    </div>
+                    
+                </div>
+            </div>
+        )}
+
+        {selectedOption === 'forgot-password' && (
+            <div className="profile-options-div expanded">
+                <div className='profile-option-h-div'>
+                <span className='fa-solid fa-arrow-left' onClick={() => {
+                    setSelectedOption('change-password')
+                }}></span>
+                <h2>Forgot password?</h2>
+                </div>
+                <div className='personal-details-btn-list'>
+                    <div className="personal-details-setting">
+                        
+                        
+                            <p>Your email address</p>
+                            
+                            <input type="text"  value={userEmail}/>
+                            
+                        
+                    </div>
+                    
+                        <button className='personal-details-btn'>Send instructions</button>
+                        
+                    </div>
+                    
+                </div>
+            
         )}
         
         {selectedOption === 'settings' && (

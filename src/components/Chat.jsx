@@ -1043,7 +1043,7 @@ export default function Chat(props) {
         <>
         <div className={`chat-div ${!isChatInfoVisible ? 'expanded' : ''}`}>
             <div className="chat-label">
-                <span className="fa-solid fa-arrow-left"></span>
+                <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>
                 <h2>Chat</h2>
             </div>
             <div className="chat-options">

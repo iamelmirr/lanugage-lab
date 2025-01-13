@@ -9,7 +9,7 @@ import { updateProfile, updatePassword, updateEmail, sendEmailVerification, send
 
 export default function ProfileMode(props) {
 
-    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated} = props
+    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel} = props
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
@@ -25,8 +25,7 @@ export default function ProfileMode(props) {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const [targetLanguage, setTargetLanguage] = useState('English')
-    const [translationLanguage, setTranslationLanguage] = useState('English')
+    
     const [languageLevel, setLanguageLevel] = useState('Beginner (A1 - A2)')
 
     // Add language options
@@ -60,8 +59,55 @@ export default function ProfileMode(props) {
         }
     }
 
+
+    const handleLanguageChange = async (newLanguage, type) => {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+    
+            const userDocRef = doc(db, "users", user.uid);
+            
+            // Update state based on type
+            if (type === 'target') {
+                setTargetLanguage(newLanguage);
+            } else {
+                setTranslationLanguage(newLanguage);
+            }
+    
+            // Update Firebase
+            await updateDoc(userDocRef, {
+                [type === 'target' ? 'language' : 'translationLanguage']: newLanguage
+            });
+    
+        } catch (error) {
+            console.error("Error updating language:", error);
+        }
+    };
+
+
     const CustomLevelSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
+
+        const handleLevelChange = async (newLevel) => {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+                
+                const userDocRef = doc(db, "users", user.uid);
+                
+                // Update state
+                onChange(newLevel);
+                
+                // Update Firebase
+                await updateDoc(userDocRef, {
+                    level: newLevel
+                });
+                
+                setIsOpen(false);
+            } catch (error) {
+                console.error("Error updating level:", error);
+            }
+        };
         
         return (
             <div className="select-container">
@@ -74,15 +120,12 @@ export default function ProfileMode(props) {
                     <div className="custom-select">
                         {options.map(level => (
                             <div 
-                                key={level.code} 
-                                className={`select-option ${value === level.name ? 'selected' : ''}`}
-                                onClick={() => {
-                                    onChange(level.name);
-                                    setIsOpen(false);
-                                }}
-                            >
-                                <span>{level.name}</span>
-                            </div>
+                            key={level.code} 
+                            className={`select-option ${value === level.name ? 'selected' : ''}`}
+                            onClick={() => handleLevelChange(level.name)}
+                        >
+                            <span>{level.name}</span>
+                        </div>
                         ))}
                     </div>
                 )}
@@ -235,6 +278,24 @@ export default function ProfileMode(props) {
     
             // Delete user account from Firebase Authentication
             await deleteUser(user);
+
+            setFormData({
+                language: '',
+                translationLanguage: '',
+                level: '',
+                goal: '',
+                reason: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: ''
+            })
+
+            setUserName('')
+            setUserLastName('')
+            setUserEmail('')
+            setTempUserEmail('')
+            
     
             // Close the modal and redirect/logout
             setShowDeleteModal(false);
@@ -572,9 +633,9 @@ export default function ProfileMode(props) {
                             <p>Choose your target language</p>
                             
                             <CustomSelect
-                            options={targetLanguages}
-                            value={targetLanguage}
-                            onChange={setTargetLanguage}
+                                options={targetLanguages}
+                                value={targetLanguage}
+                                onChange={(newValue) => handleLanguageChange(newValue, 'target')}
                             />
                         
                     </div>
@@ -583,7 +644,7 @@ export default function ProfileMode(props) {
                     <CustomSelect
                         options={translationLanguages}
                         value={translationLanguage}
-                        onChange={setTranslationLanguage}
+                        onChange={(newValue) => handleLanguageChange(newValue, 'translation')}
                     />
                 </div>
                     
@@ -591,8 +652,8 @@ export default function ProfileMode(props) {
                     <p>Choose your target language level</p>
                     <CustomLevelSelect
                         options={levels}
-                        value={languageLevel}
-                        onChange={setLanguageLevel}
+                        value={targetLanguageLevel}
+                        onChange={setTargetLanguageLevel}
                     />
                 </div>
                     

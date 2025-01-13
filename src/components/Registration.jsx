@@ -4,7 +4,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
 export default function Registration(props) {
-    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData } = props
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel } = props
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
@@ -52,7 +52,6 @@ export default function Registration(props) {
               level: formData.level,
               goal: formData.goal,
               reason: formData.reason,
-              translationLanguage: formData.translationLanguage,
               progressLevel: 1,
               progressScore: 0,
               lastChatTime: new Date(),
@@ -81,6 +80,9 @@ export default function Registration(props) {
                       setUserPassword(userDoc.data().password)
                       setProgressScore(userDoc.data().progressScore)
                       setProgressLevel(userDoc.data().progressLevel)
+                      setTargetLanguage(userDoc.data().language)
+                    setTranslationLanguage(userDoc.data().translationLanguage)
+                    setTargetLanguageLevel(userDoc.data().level)
                       
                       console.log(userDoc)
             
@@ -165,7 +167,7 @@ export default function Registration(props) {
                 <div className="registration-step">
                     <h2>What's your current level?</h2>
                     <div className="level-options">
-                        {["Beginner", "Intermediate", "Advanced"].map(level => (
+                        {["Beginner (A1 - A2)", "Intermediate (B1 - B2)", "Advanced (C1 - C2)"].map(level => (
                             <button 
                                 key={level} 
                                 onClick={() => handleInputChange('level', level)}

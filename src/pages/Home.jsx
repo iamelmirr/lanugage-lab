@@ -12,7 +12,7 @@ import ProfileMode from "../components/ProfileMode";
 
 
 export default function Home(props) {
-    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated} = props
+    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, translationLanguage, targetLanguage, targetLanguageLevel, setTargetLanguageLevel} = props
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
@@ -74,7 +74,7 @@ export default function Home(props) {
         {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
 
 
-        {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>}
+        {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel}/>}
 
         </>
 

@@ -27,6 +27,9 @@ const [userEmail, setUserEmail] = useState('')
 const [tempUserEmail, setTempUserEmail] = useState('')
 const [newUserEmail, setNewUserEmail] = useState('')
 const [userPassword, setUserPassword] = useState('')
+const [targetLanguage, setTargetLanguage] = useState('')
+const [translationLanguage, setTranslationLanguage] = useState('')
+const [targetLanguageLevel, setTargetLanguageLevel] = useState('')
 
 const [formData, setFormData] = useState({
   language: '',
@@ -99,6 +102,10 @@ useEffect(() => {
           setUserPassword(userDoc.data().password)
           setProgressScore(userDoc.data().progressScore)
           setProgressLevel(userDoc.data().progressLevel)
+          setTargetLanguage(userDoc.data().language)
+          setTranslationLanguage(userDoc.data().translationLanguage)
+          setTargetLanguageLevel(userDoc.data().level)
+
           
           console.log(userDoc)
 
@@ -123,7 +130,7 @@ useEffect(() => {
 
   const renderPage = () => {
     if (!isAuthenticated) {
-        if (isRegistering) return <Registration formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
+        if (isRegistering) return <Registration setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setProgressLevel={setProgressLevel} setUserData={setUserData}/>
         if (isLogingIn) return <Login setIsAuthenticated={setIsAuthenticated} 
@@ -133,7 +140,7 @@ useEffect(() => {
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
     }
-    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>;
+    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel}/>;
   };
 
   return <>{renderPage()}</>

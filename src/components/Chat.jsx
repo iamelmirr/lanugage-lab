@@ -529,7 +529,7 @@ const synthesizeSpeech = (text, voice = "Matthew") => {
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage } = props;
     const [messages, setMessages] = useState([
         chatModes[selectedMode]?.firstMessage,
     ])
@@ -546,6 +546,7 @@ export default function Chat(props) {
     const [isChatInfoVisible, setIsChatInfoVisible] = useState(true)
     const [currentAudio, setCurrentAudio] = useState(null)
     const [isMuted, setIsMuted] = useState(false)
+    const [translationMessage, setTranslationMessage] = useState('')
 
 
     useEffect(() => {
@@ -1031,6 +1032,46 @@ export default function Chat(props) {
     }
 
 
+    const handleTranslateMessage = async (message) => {
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: `Translate the following text to ${translationLanguage}` },
+                        { role: "user", content: message.text }
+                    ],
+                }),
+            });
+    
+            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+            const data = await response.json();
+            const translation = data.choices[0]?.message?.content || "";
+
+            setTranslationMessage(translation)
+
+            setSelectedMessage({
+                text: message.text,
+                translation: {
+                    language: translationLanguage,
+                    content: translation,
+                }
+            });
+
+            setIsChatInfoVisible(true)
+    
+            
+        } catch (error) {
+            console.error("Translation error:", error);
+        }
+    };
+
+
     
 
     return (
@@ -1071,7 +1112,7 @@ export default function Chat(props) {
                             <span className="fa-solid fa-rotate-right"></span>
                             <p>Repeat</p>
                         </span>
-                        <span className="translate-msg" onClick={() => handleRepeatMessage(msg.text)}>
+                        <span className="translate-msg" onClick={() => handleTranslateMessage(msg)}>
                             <span className="fa-solid fa-language"></span>
                             <p>Translate</p>
                         </span>
@@ -1114,30 +1155,38 @@ export default function Chat(props) {
         
         <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`}>
     <div className="chat-info-title">
-        <h2>{selectedMessage ? 'Feedback' : 'Information'}</h2>
+    <h2>{selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
         <span className="fa-solid fa-xmark" onClick={() => {
     setIsChatInfoVisible(false);
 }}></span>
     </div>
     
     <div className="chat-info-list">
-        {selectedMessage ? (
-            <>
-                <div className="severity-indicator">
-                    <span className={`circle ${selectedMessage.feedback.severity}`}></span>
-                </div>
-                
-                <div className="message-content">
-                    <h3>Your message</h3>
-                    <p>{selectedMessage.text}</p>
-                </div>
-                
-                <div className={`feedback-card ${selectedMessage.feedback.severity}`}>
-                    <h3>{selectedMessage.feedback.severity === 'green' ? 'Good job!' : 'Mistake'}</h3>
-                    <p>{selectedMessage.feedback.explanation}
-                    </p>
-                </div>
-            </>
+    {selectedMessage ? (
+            selectedMessage.translation ? (
+                <>
+                    <div className="translation-content">
+                        <h3>{targetLanguage}</h3>
+                        <p>{selectedMessage.text}</p>
+                        <h3>{selectedMessage.translation.language}</h3>
+                        <p>{selectedMessage.translation.content}</p>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div className="severity-indicator">
+                        <span className={`circle ${selectedMessage.feedback?.severity}`}></span>
+                    </div>
+                    <div className="message-content">
+                        <h3>Your message</h3>
+                        <p>{selectedMessage.text}</p>
+                    </div>
+                    <div className={`feedback-card ${selectedMessage.feedback?.severity}`}>
+                        <h3>{selectedMessage.feedback?.severity === 'green' ? 'Good job!' : 'Mistake'}</h3>
+                        <p>{selectedMessage.feedback?.explanation}</p>
+                    </div>
+                </>
+            )
         ) : (
             <div className="default-chat-info-card">                          <h2>Get feedback on messages</h2>
                             <div className="chat-info-card-icons">

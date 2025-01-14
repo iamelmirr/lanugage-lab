@@ -328,13 +328,14 @@ body {
 
 .chat-div {
     display: flex;
+    position: sticky;
     flex-direction: column;
     padding-inline: 24px;
     height: 100vh;
     width:60%;
     background: rgb(255, 250, 243);
     transition: width 0.2s ease-in-out;
-    overflow-x: none;
+    
 }
 
 .chat-div.expanded {
@@ -591,6 +592,7 @@ body {
     opacity: 0;
     width: 0;
     padding-inline: 0;
+    height: -100vh;
     
 }
 

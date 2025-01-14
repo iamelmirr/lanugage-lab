@@ -689,12 +689,6 @@ export default function Chat(props) {
     }
 
 
-    const handleShowFeedback = (message) => {
-        setSelectedMessage(message)
-        setIsChatInfoVisible(true)
-    }
-
-
 
     const handleGetMessageFeedback = async (message) => {
         if (message.sender !== "user") {return}
@@ -709,11 +703,8 @@ export default function Chat(props) {
                 body: JSON.stringify({
                     model: "gpt-3.5-turbo",
                     messages: [
-                        { role: "system", content: `Take a look at the user's last message and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation like you are talking to the user.] even if there are no mistakes and severity is green provide severity and explanation"` },
-                        ...messages.map((msg) => ({
-                            role: msg.sender === "assistant" ? "assistant" : "user",
-                            content: msg.text,
-                        })),
+                        { role: "system", content: `Take a look at my last message and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation as if you are talking, address with you.] even if there are no mistakes and severity is green provide severity and explanation"` },
+                        
                         { role: "user", content: message.text},
                     ],
                 }),
@@ -736,13 +727,15 @@ export default function Chat(props) {
             console.log("Severity:", severity)
             console.log("Explanation:", explanation)
 
-            await setMessages((prev) =>
-                prev.map((msg) =>
-                    msg === message
-                        ? { ...msg, feedback: { severity: severity, explanation: explanation } }
-                        : msg
-                )
-            )
+            setSelectedMessage({
+                text: message.text,
+                feedback: {
+                    severity: severity,
+                    explanation: explanation
+                }
+            });
+
+            setIsChatInfoVisible(true);
 
 
         } catch (error) {
@@ -771,7 +764,7 @@ export default function Chat(props) {
             userMessage
         ])
 
-        handleGetMessageFeedback(userMessage)
+        
 
         setInputValue("")
 
@@ -882,7 +875,7 @@ export default function Chat(props) {
         const userMessage = { sender: "user", text: userText };
         setMessages((prev) => [...prev, userMessage]);
 
-        handleGetMessageFeedback(userMessage)
+        
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
@@ -937,7 +930,7 @@ export default function Chat(props) {
             userMessage
         ])
         
-        handleGetMessageFeedback(userMessage)
+        
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
@@ -1104,7 +1097,7 @@ export default function Chat(props) {
             <div className="chat-msg-wrapper" ref={chatContainerRef}>
                 {messages.map((msg, index) => (
                     <div key={index} className={`message-wrapper wrapper-${msg.sender}`}>
-                    {msg.sender === "user" ? <span className="fa-solid fa-circle-info" onClick={() => handleShowFeedback(msg)}></span> : ""}
+                    {msg.sender === "user" ? <span className="fa-solid fa-circle-info" onClick={() => handleGetMessageFeedback(msg)}></span> : ""}
                     <div key={index} className={`message ${msg.sender}`}>  
                         <p>{msg.text}</p>
                         <div className="msg-options-div">

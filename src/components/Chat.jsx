@@ -6,11 +6,9 @@ window.process = {
 }
 import { Buffer } from 'buffer'
 window.Buffer = Buffer
-import AWS from 'aws-sdk'
-import AWSConfig from "../utils/aws-config.js"
-import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 import { doc, updateDoc, increment } from 'firebase/firestore';
 import { auth, db } from '../utils/firebaseConfig';
+import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 
@@ -19,28 +17,7 @@ import { auth, db } from '../utils/firebaseConfig';
 
 
 
-const polly = new AWS.Polly(AWSConfig)
 
-const synthesizeSpeech = (text, voice = "Matthew") => {
-    return new Promise((resolve, reject) => {
-        const params = {
-            OutputFormat: "mp3",
-            Text: text,
-            VoiceId: voice
-        }
-        polly.synthesizeSpeech(params, (err, data) => {
-            if (err) {
-                console.log("polly error:", err)
-                reject(err)
-            } else if (data && data.AudioStream) {
-                const audioBlob = new Blob([data.AudioStream], {  type: "audio/mpeg"  })
-                const audioUrl = URL.createObjectURL(audioBlob)
-                resolve(audioUrl)
-            
-            }
-        })
-    })
-}
 
 
 export default function Chat(props) {
@@ -49,6 +26,7 @@ export default function Chat(props) {
     const [userGender, setUserGender] = useState(null)
     const [tutorGender, setTutorGender] = useState(null)
     const [tutorName, setTutorName] = useState('John')
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false)
 
 
     const chatModes = {
@@ -1125,6 +1103,10 @@ export default function Chat(props) {
     })
 
 
+    
+
+
+
     const [inputValue, setInputValue] = useState("");
     const [suggestedAnswer, setSuggestedAnswer] = useState("")
     const [isRecording, setIsRecording] = useState(false)
@@ -1138,7 +1120,78 @@ export default function Chat(props) {
     const [isMuted, setIsMuted] = useState(false)
     const [translationMessage, setTranslationMessage] = useState('')
     const [showGenderModal, setShowGenderModal] = useState(true)
+
+
+    const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
+        return new Promise((resolve, reject) => {
+            const speechConfig = speechSdk.SpeechConfig.fromSubscription(
+                import.meta.env.VITE_AZURE_SPEECH_KEY,
+                import.meta.env.VITE_AZURE_REGION
+            );
+            
+            speechConfig.speechSynthesisVoiceName = voice;
+            const audioConfig = speechSdk.AudioConfig.PullAudioOutputStream;
+            const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
     
+            synthesizer.speakTextAsync(
+                text,
+                (result) => {
+                    if (result.reason === speechSdk.ResultReason.SynthesizingAudioCompleted) {
+                        resolve(result.audioData); // Just return the audio data without playing
+                    } else {
+                        reject(`Failed: ${result.errorDetails}`);
+                    }
+                    synthesizer.close();
+                },
+                (error) => {
+                    console.error("Error during speech synthesis:", error);
+                    synthesizer.close();
+                    reject(error);
+                }
+            );
+        });
+    };
+    
+    
+
+    useEffect(() => {
+        const handleSpeech = async () => {
+            if (isPlayingAudio || isMuted || messages.length === 0) return;
+        
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage.sender === "assistant") {
+                const voice = targetLanguage === "English" ? "en-US-JennyNeural"
+                            : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
+                            : targetLanguage === "French" ? "fr-FR-DeniseNeural"
+                            : targetLanguage === "German" ? "de-DE-KatjaNeural"
+                            : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
+                            : "en-US-JennyNeural";
+        
+                try {
+                    const audioData = await synthesizeSpeech(lastMessage.text, voice);
+                    const audioBlob = new Blob([audioData], { type: "audio/wav" });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    
+                    setCurrentAudio(audio);
+                    setIsPlayingAudio(true);
+                    
+                    audio.play(); // Now you control when to play
+        
+                    audio.onended = () => {
+                        setCurrentAudio(null);
+                        setIsPlayingAudio(false);
+                    };
+                } catch (error) {
+                    console.error("Error in handleSpeech:", error);
+                }
+            }
+        };
+    
+        handleSpeech();
+    }, [messages, isMuted, targetLanguage]);
+
+
 
 
     const GenderSelectionModal = () => {
@@ -1266,34 +1319,17 @@ export default function Chat(props) {
     // }, [messages])
     
 
+    
+
     useEffect(() => {
-        if (messages.length > 0) {
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage.sender === "assistant" && !isMuted) {
-
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio.currentTime = 0;
-                }
-
-                synthesizeSpeech(lastMessage.text).then((audioUrl) => {
-                    const audio = new Audio(audioUrl)
-                    setCurrentAudio(audio)
-                    audio.play()
-                    
-                })
-                .catch((err) => console.error("Error playing Polly audio:", err))
-            }
+        if (isMuted && currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            URL.revokeObjectURL(currentAudio.src);
+            setCurrentAudio(null);
+            setIsPlayingAudio(false);
         }
-
-        return () => {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        }
-
-    }, [messages, isMuted])
+    }, [isMuted]);
     
     
     useEffect(() => {
@@ -1333,20 +1369,50 @@ export default function Chat(props) {
 
 
 
-    const handleRepeatMessage = (messageText) => {
-
-        if(currentAudio) {
-            currentAudio.pause()
-            currentAudio.currentTime = 0
+    const handleRepeatMessage = async (messageText) => {
+        if (isPlayingAudio) {
+            console.log("An audio is already playing. Skipping repeat.");
+            return;
         }
-
-        synthesizeSpeech(messageText).then((audioUrl) => {
-            const audio = new Audio(audioUrl)
-            setCurrentAudio(audio)
-            audio.play()
-        })
-        .catch((err) => console.error("error playing polly audio:", err))
-    }
+    
+        try {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                URL.revokeObjectURL(currentAudio.src);
+            }
+    
+            if (isMuted) {
+                console.log("Muted. No audio will play.");
+                return;
+            }
+    
+            const voice = targetLanguage === "English" ? "en-US-JennyNeural"
+                        : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
+                        : targetLanguage === "French" ? "fr-FR-DeniseNeural"
+                        : targetLanguage === "German" ? "de-DE-KatjaNeural"
+                        : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
+                        : "en-US-JennyNeural";
+    
+            const audioData = await synthesizeSpeech(messageText, voice);
+            const audioBlob = new Blob([audioData], { type: "audio/wav" });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+    
+            setCurrentAudio(audio);
+            setIsPlayingAudio(true)
+    
+            audio.play();
+    
+            audio.onended = () => {
+                setCurrentAudio(null);
+                setIsPlayingAudio(false);
+            };
+        } catch (error) {
+            console.error("Error in handleRepeatMessage:", error);
+            setIsPlayingAudio(false)
+        }
+    };
 
 
 

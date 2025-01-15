@@ -111,7 +111,16 @@ export default function Chat(props) {
                 teacherName: "John",
                 teacherImage: "./src/assets/john.png",
             },
-            firstMessage: { sender: "assistant", text: "Welcome to Skyport International Airport! I'm John, your airport assistant. How can I help you today? Whether it's directions, check-in assistance, or general information, feel free to ask!" },
+            firstMessage: { 
+                English: {sender: "assistant", text: "Welcome to Skyport International Airport! I'm John, your airport assistant. How can I help you today? Whether it's directions, check-in assistance, or general information, feel free to ask!"},
+                Spanish: {sender: "assistant", text: "¡Bienvenido al Aeropuerto Internacional Skyport! Soy John, tu asistente en el aeropuerto. ¿En qué puedo ayudarte hoy? Ya sea direcciones, asistencia de check-in o información general, no dudes en preguntar."},
+                Italian: {sender: "assistant", text: "Benvenuto all'Aeroporto Internazionale Skyport! Sono John, il tuo assistente aeroportuale. Come posso aiutarti oggi? Che sia per indicazioni, assistenza per il check-in o informazioni generali, chiedi pure!"},
+                German: {sender: "assistant", text: "Willkommen am Skyport International Airport! Ich bin John, dein Assistent am Flughafen. Wie kann ich dir heute helfen? Egal ob Wegbeschreibungen, Check-in-Hilfe oder allgemeine Informationen, frag einfach!"},
+                French: {sender: "assistant", text: "Bienvenue à l'Aéroport International Skyport ! Je suis John, votre assistant à l'aéroport. Comment puis-je vous aider aujourd'hui ? Que ce soit pour des directions, une assistance à l'enregistrement ou des informations générales, n'hésitez pas à demander !"}
+            },
+            
+
+
             context: `You are John, a professional and friendly airport assistant, and your role is to help the user practice ${targetLanguage} by simulating realistic airport interactions. You understand that:
 
     The user's current learning goal is: ${learningGoal}
@@ -154,9 +163,13 @@ export default function Chat(props) {
             teacherImage: "./src/assets/john.png",
         },
         firstMessage: { 
-            sender: "assistant", 
-            text: "Hi, I’m John, your virtual medical assistant. Imagine you’re in a medical emergency—what would you say to ask for help? For example, how would you describe your symptoms?" 
+            English: {sender: "assistant", text: "Hi, I’m John, your virtual medical assistant. Imagine you’re in a medical emergency—what would you say to ask for help? For example, how would you describe your symptoms?"},
+            Spanish: {sender: "assistant", text: "Hola, soy John, tu asistente médico virtual. Imagina que estás en una emergencia médica. ¿Qué dirías para pedir ayuda? Por ejemplo, ¿cómo describirías tus síntomas?"},
+            Italian: {sender: "assistant", text: "Ciao, sono John, il tuo assistente medico virtuale. Immagina di essere in un'emergenza medica: cosa diresti per chiedere aiuto? Ad esempio, come descriveresti i tuoi sintomi?"},
+            German: {sender: "assistant", text: "Hallo, ich bin John, dein virtueller medizinischer Assistent. Stell dir vor, du befindest dich in einem medizinischen Notfall – was würdest du sagen, um Hilfe zu rufen? Zum Beispiel, wie würdest du deine Symptome beschreiben?"},
+            French: {sender: "assistant", text: "Salut, je suis John, votre assistant médical virtuel. Imaginez que vous êtes dans une urgence médicale—que diriez-vous pour demander de l'aide ? Par exemple, comment décririez-vous vos symptômes ?"}
         },
+        
         context: 
         `You are a highly empathetic and adaptive language tutor named John. Your primary mission is to help the user navigate medical emergency scenarios effectively in ${targetLanguage}. You understand that:  
     - The user's current learning goal is: ${learningGoal}.  
@@ -201,9 +214,13 @@ export default function Chat(props) {
             teacherImage: "./src/assets/john.png",
         },
         firstMessage: { 
-            sender: "assistant", 
-            text: "Hi, I’m John, your virtual assistant for doctor appointments. Imagine you’re at a clinic—how would you describe the reason for your visit today?" 
+            English: {sender: "assistant", text: "Hi, I’m John, your virtual assistant for doctor appointments. Imagine you’re at a clinic—how would you describe the reason for your visit today?"},
+            Spanish: {sender: "assistant", text: "Hola, soy John, tu asistente virtual para citas médicas. Imagina que estás en una clínica. ¿Cómo describirías el motivo de tu visita hoy?"},
+            Italian: {sender: "assistant", text: "Ciao, sono John, il tuo assistente virtuale per appuntamenti medici. Immagina di essere in una clinica: come descriveresti il motivo della tua visita oggi?"},
+            German: {sender: "assistant", text: "Hallo, ich bin John, dein virtueller Assistent für Arzttermine. Stell dir vor, du bist in einer Klinik – wie würdest du den Grund für deinen heutigen Besuch beschreiben?"},
+            French: {sender: "assistant", text: "Salut, je suis John, votre assistant virtuel pour les rendez-vous médicaux. Imaginez que vous êtes dans une clinique—comment décririez-vous la raison de votre visite aujourd'hui ?"}
         },
+        
         context: 
         `You are a highly engaging and empathetic virtual assistant named John. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
     The user's current learning goal is: ${learningGoal} 
@@ -254,9 +271,13 @@ export default function Chat(props) {
             teacherImage: "./src/assets/john.png", 
         }, 
         firstMessage: { 
-            sender: "assistant", 
-            text: "Hi! Let's practice booking movie tickets. What kind of movie do you feel like watching today?" 
-        }, 
+            English: {sender: "assistant", text: "Hi! Let's practice booking movie tickets. What kind of movie do you feel like watching today?"},
+            Spanish: {sender: "assistant", text: "¡Hola! Practiquemos reservar entradas para el cine. ¿Qué tipo de película te apetece ver hoy?"},
+            Italian: {sender: "assistant", text: "Ciao! Esercitiamoci a prenotare i biglietti del cinema. Che tipo di film ti piacerebbe guardare oggi?"},
+            German: {sender: "assistant", text: "Hallo! Lass uns üben, Kinokarten zu buchen. Auf welchen Film hast du heute Lust?"},
+            French: {sender: "assistant", text: "Salut ! Pratiquons la réservation de billets de cinéma. Quel genre de film avez-vous envie de regarder aujourd'hui ?"}
+        },
+        
         context: 
         `You are a friendly and helpful cinema staff member named John, guiding the user through the process of booking movie tickets. Your primary objective is to help the user achieve their specific goals for learning ${targetLanguage}, focusing on realistic, engaging scenarios. You understand that: 
     The user's current learning goal is: ${learningGoal} 
@@ -302,8 +323,11 @@ export default function Chat(props) {
             teacherImage: "./src/assets/john.png", 
         }, 
         firstMessage: { 
-            sender: "assistant", 
-            text: "Welcome to our restaurant! Are you ready to order, or would you like to hear today’s specials?" 
+            English: {sender: "assistant", text: "Welcome to our restaurant! Are you ready to order, or would you like to hear today’s specials?"},
+            Spanish: {sender: "assistant", text: "¡Bienvenido a nuestro restaurante! ¿Estás listo para pedir o te gustaría escuchar las especialidades del día?"},
+            Italian: {sender: "assistant", text: "Benvenuto nel nostro ristorante! Sei pronto per ordinare o vuoi conoscere i piatti del giorno?"},
+            German: {sender: "assistant", text: "Willkommen in unserem Restaurant! Sind Sie bereit zu bestellen, oder möchten Sie die Tagesangebote hören?"},
+            French: {sender: "assistant", text: "Bienvenue dans notre restaurant ! Êtes-vous prêt à commander ou souhaitez-vous connaître les suggestions du jour ?"}
         }, 
         context: 
         `You are role-playing as a friendly and professional restaurant server. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
@@ -345,8 +369,11 @@ export default function Chat(props) {
             teacherImage: "./src/assets/john.png", 
         }, 
         firstMessage: { 
-            sender: "assistant", 
-            text: "Good evening! Welcome to our hotel. Do you have a reservation, or would you like to check room availability?" 
+            English: {sender: "assistant", text: "Good evening! Welcome to our hotel. Do you have a reservation, or would you like to check room availability?"},
+            Spanish: {sender: "assistant", text: "¡Buenas noches! Bienvenido a nuestro hotel. ¿Tiene una reserva o le gustaría consultar la disponibilidad de habitaciones?"},
+            Italian: {sender: "assistant", text: "Buonasera! Benvenuto nel nostro hotel. Ha una prenotazione o desidera verificare la disponibilità delle camere?"},
+            German: {sender: "assistant", text: "Guten Abend! Willkommen in unserem Hotel. Haben Sie eine Reservierung, oder möchten Sie die Zimmerverfügbarkeit prüfen?"},
+            French: {sender: "assistant", text: "Bonsoir ! Bienvenue dans notre hôtel. Avez-vous une réservation ou souhaitez-vous vérifier la disponibilité des chambres ?"}
         }, 
         context: 
         `You are role-playing as a hotel receptionist. Your primary goal is to help the user practice conversational skills in ${targetLanguage} related to checking into a hotel. You understand that:
@@ -417,7 +444,60 @@ export default function Chat(props) {
     **Guidelines for Communication**: 
     - Stay immersive: Communicate entirely in ${targetLanguage}, adapting explanations and corrections to fit the context. 
     - Be adaptive: Continuously tailor the dialogue to match the user's language level and progress, ensuring an engaging and effective learning experience. 
-    - Maintain authenticity: Strive to make the role-playing experience feel realistic and enjoyable, with meaningful exchanges that mirror real-world dating interactions.`
+    - Maintain authenticity: Strive to make the role-playing experience feel realistic and enjoyable, with meaningful exchanges that mirror real-world dating interactions.`,
+    firstMessage: {
+        English: {
+            female: {
+                sender: "assistant",
+                text: "Hello, beautiful... I'm so thrilled to meet you. My name is Noah. Let's create a magical moment together. Tell me, what would be the perfect way to start our enchanting date?",
+            },
+            male: {
+                sender: "assistant",
+                text: "Hey there, handsome... It's a pleasure to meet you. My name is Mia. I can't wait to play the role of your date and share a little spark of romance. So, where should we begin our unforgettable evening?"
+            }
+        },
+        Spanish: {
+            female: {
+                sender: "assistant",
+                text: "Hola, hermosa... Estoy tan emocionada de conocerte. Mi nombre es Noah. Vamos a crear un momento mágico juntos. Dime, ¿cuál sería la forma perfecta de comenzar nuestra cita encantadora?"
+            },
+            male: {
+                sender: "assistant",
+                text: "Hola, guapo... Es un placer conocerte. Mi nombre es Mia. No puedo esperar para hacer de tu cita y compartir un poco de romance. Entonces, ¿por dónde debemos comenzar nuestra noche inolvidable?"
+            }
+        },
+        Italian: {
+            female: {
+                sender: "assistant",
+                text: "Ciao, bellissima... Sono così felice di incontrarti. Mi chiamo Noah. Creiamo insieme un momento magico. Dimmi, qual è il modo perfetto per iniziare il nostro appuntamento incantevole?"
+            },
+            male: {
+                sender: "assistant",
+                text: "Ciao, bello... È un piacere conoscerti. Mi chiamo Mia. Non vedo l'ora di essere la tua data e condividere un po' di romanticismo. Allora, da dove dovremmo iniziare la nostra serata indimenticabile?"
+            }
+        },
+        German: {
+            female: {
+                sender: "assistant",
+                text: "Hallo, schöne... Ich freue mich so, dich kennenzulernen. Mein Name ist Noah. Lass uns zusammen einen magischen Moment erschaffen. Sag mir, was wäre der perfekte Weg, unser bezauberndes Date zu beginnen?"
+            },
+            male: {
+                sender: "assistant",
+                text: "Hey, hübscher... Es ist mir eine Freude, dich kennenzulernen. Mein Name ist Mia. Ich kann es kaum erwarten, deine Begleitung zu sein und ein bisschen Romantik zu teilen. Also, wo sollten wir unseren unvergesslichen Abend beginnen?"
+            }
+        },
+        French: {
+            female: {
+                sender: "assistant",
+                text: "Salut, belle... Je suis tellement heureuse de te rencontrer. Je m'appelle Noah. Créons ensemble un moment magique. Dis-moi, quelle serait la manière parfaite de commencer notre rendez-vous enchanteur ?"
+            },
+            male: {
+                sender: "assistant",
+                text: "Salut, beau... C'est un plaisir de te rencontrer. Je m'appelle Mia. J'ai hâte de jouer le rôle de ton rendez-vous et de partager un peu de romance. Alors, par où devrions-nous commencer notre soirée inoubliable ?"
+            }
+        }
+        
+    }
   }
     ,
         'time-traveler': {
@@ -458,10 +538,14 @@ export default function Chat(props) {
     - Stay immersive: Respond exclusively in ${targetLanguage}, integrating explanations and corrections naturally into the conversation.
     - Be adaptive: Tailor your conversation to the user's evolving ${learningGoal} and ${learningReason}, adjusting vocabulary and complexity as needed.
     - Keep the conversation engaging: Ensure that each interaction feels like a fascinating journey through time, whether reflecting on the past, present, or future.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Greetings! I come from the year 3024. Tell me, what era are you from, and what would you like to know about my time?"
-        }
+    firstMessage: { 
+        English: {sender: "assistant", text: "Greetings! I come from the year 3024. Tell me, what era are you from, and what would you like to know about my time?"},
+        Spanish: {sender: "assistant", text: "¡Saludos! Vengo del año 3024. Dime, ¿de qué época eres y qué te gustaría saber sobre mi tiempo?"},
+        Italian: {sender: "assistant", text: "Saluti! Vengo dall'anno 3024. Dimmi, di quale epoca sei e cosa ti piacerebbe sapere del mio tempo?"},
+        German: {sender: "assistant", text: "Grüße! Ich komme aus dem Jahr 3024. Sag mir, aus welcher Epoche kommst du, und was möchtest du über meine Zeit wissen?"},
+        French: {sender: "assistant", text: "Salutations ! Je viens de l'année 3024. Dis-moi, de quelle époque viens-tu et que voudrais-tu savoir sur mon époque ?"}
+    }
+    
     },
         'detective': {
         name: "Detective",
@@ -501,10 +585,14 @@ export default function Chat(props) {
     - Stay immersive: Respond exclusively in ${targetLanguage}, integrating language learning seamlessly into the detective scenario.
     - Be adaptive: Adjust the difficulty of clues, questions, and challenges based on the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the investigation engaging: Ensure that each interaction is stimulating and contributes to both the mystery-solving process and the user’s language progress.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Detective here. We’ve got a suspect on the run! What’s the first question you’d ask to help solve this case?"
-        }
+    firstMessage: { 
+        English: {sender: "assistant", text: "Detective here. We’ve got a suspect on the run! What’s the first question you’d ask to help solve this case?"},
+        Spanish: {sender: "assistant", text: "Aquí el detective. ¡Tenemos un sospechoso prófugo! ¿Cuál sería la primera pregunta que harías para ayudar a resolver este caso?"},
+        Italian: {sender: "assistant", text: "Qui il detective. Abbiamo un sospetto in fuga! Qual è la prima domanda che faresti per aiutare a risolvere questo caso?"},
+        German: {sender: "assistant", text: "Hier spricht der Detektiv. Wir haben einen Verdächtigen auf der Flucht! Welche Frage würdest du zuerst stellen, um den Fall zu lösen?"},
+        French: {sender: "assistant", text: "Ici le détective. Nous avons un suspect en fuite ! Quelle serait la première question que vous poseriez pour aider à résoudre cette affaire ?"}
+    }
+    
     },
         'police-officer': {
         name: "Police Officer",
@@ -544,10 +632,14 @@ export default function Chat(props) {
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating legal terminology and situations naturally into the conversation.
     - Be adaptive: Tailor your language use to match the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the interaction professional but approachable: Create a comfortable and safe environment for the user to learn while simulating realistic police scenarios.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Excuse me! Why were you speeding just now? Let me see your ID and tell me where you were going in such a hurry."
-        }
+    firstMessage: { 
+        English: {sender: "assistant", text: "Excuse me! Why were you speeding just now? Let me see your ID and tell me where you were going in such a hurry."},
+        Spanish: {sender: "assistant", text: "¡Perdón! ¿Por qué ibas tan rápido ahora mismo? Déjame ver tu identificación y dime adónde ibas con tanta prisa."},
+        Italian: {sender: "assistant", text: "Scusa! Perché stavi andando così veloce adesso? Fammi vedere il tuo documento e dimmi dove stavi andando così in fretta."},
+        German: {sender: "assistant", text: "Entschuldigung! Warum bist du gerade so schnell gefahren? Lass mich deinen Ausweis sehen und sag mir, wohin du so eilig unterwegs warst."},
+        French: {sender: "assistant", text: "Excusez-moi ! Pourquoi rouliez-vous aussi vite tout à l'heure ? Montrez-moi votre pièce d'identité et dites-moi où vous alliez si vite."}
+    }
+    
     },
         'debate-social-media': {
         name: "Is Social Media Beneficial?",
@@ -587,10 +679,14 @@ export default function Chat(props) {
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating critical thinking and debate vocabulary naturally into the conversation.
     - Be adaptive: Adjust your language use to match the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the interaction respectful and constructive: Create a safe and stimulating environment for the user to explore their opinions and improve their language skills.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Social media is just a waste of time and promotes fake news. What do you think—do the negatives outweigh the positives?"
-        }
+    firstMessage: { 
+        English: {sender: "assistant", text: "Social media is just a waste of time and promotes fake news. What do you think—do the negatives outweigh the positives?"},
+        Spanish: {sender: "assistant", text: "Las redes sociales son solo una pérdida de tiempo y promueven noticias falsas. ¿Qué piensas tú, los aspectos negativos superan a los positivos?"},
+        Italian: {sender: "assistant", text: "I social media sono solo una perdita di tempo e promuovono notizie false. Cosa ne pensi, i lati negativi superano i positivi?"},
+        German: {sender: "assistant", text: "Soziale Medien sind nur Zeitverschwendung und fördern Fake News. Was denkst du, überwiegen die negativen Aspekte die positiven?"},
+        French: {sender: "assistant", text: "Les réseaux sociaux ne sont qu'une perte de temps et propagent de fausses informations. Qu'en penses-tu, les inconvénients l'emportent-ils sur les avantages ?"}
+    }
+    
     },
     
     'debate-online-learning': {
@@ -628,10 +724,14 @@ export default function Chat(props) {
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating debate-specific vocabulary and expressions to improve fluency.
     - Be adaptive: Adjust your level of complexity based on the user’s current ${learningGoal} and ${learningReason}.
     - Promote constructive debate: Foster a respectful and open environment for the user to practice language skills while exploring the nuances of the topic.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Online education is more accessible and flexible than traditional classrooms, which are outdated. Do you agree, or do you think traditional learning is still superior?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "Online education is more accessible and flexible than traditional classrooms, which are outdated. Do you agree, or do you think traditional learning is still superior?"},
+        Spanish: {sender: "assistant", text: "La educación en línea es más accesible y flexible que las aulas tradicionales, que están desactualizadas. ¿Estás de acuerdo o crees que el aprendizaje tradicional sigue siendo superior?"},
+        Italian: {sender: "assistant", text: "L'istruzione online è più accessibile e flessibile rispetto alle aule tradizionali, che sono obsolete. Sei d'accordo o pensi che l'apprendimento tradizionale sia ancora superiore?"},
+        German: {sender: "assistant", text: "Online-Bildung ist zugänglicher und flexibler als traditionelle Klassenzimmer, die veraltet sind. Stimmst du zu oder denkst du, dass traditionelles Lernen immer noch überlegen ist?"},
+        French: {sender: "assistant", text: "L'éducation en ligne est plus accessible et flexible que les salles de classe traditionnelles, qui sont dépassées. Es-tu d'accord ou penses-tu que l'apprentissage traditionnel reste supérieur ?"}
+    }
+    
     },
     
     'debate-mandatory-voting': {
@@ -669,10 +769,14 @@ export default function Chat(props) {
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating political vocabulary and expressions to help the user articulate their viewpoint.
     - Be adaptive: Adjust your tone, vocabulary, and examples based on the user’s level and specific ${learningGoal}.
     - Promote constructive debate: Create a space where both sides of the argument are explored thoroughly, supporting the user's language development while engaging them in critical thinking.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Mandatory voting undermines individual freedom. Shouldn't people have the right to abstain? What's your stance?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "Mandatory voting undermines individual freedom. Shouldn't people have the right to abstain? What's your stance?"},
+        Spanish: {sender: "assistant", text: "El voto obligatorio socava la libertad individual. ¿No deberían las personas tener el derecho de abstenerse? ¿Cuál es tu postura?"},
+        Italian: {sender: "assistant", text: "Il voto obbligatorio mina la libertà individuale. Le persone non dovrebbero avere il diritto di astenersi? Qual è la tua posizione?"},
+        German: {sender: "assistant", text: "Pflichtwahl untergräbt die individuelle Freiheit. Sollten Menschen nicht das Recht haben, sich zu enthalten? Was ist deine Meinung dazu?"},
+        French: {sender: "assistant", text: "Le vote obligatoire mine la liberté individuelle. Les gens ne devraient-ils pas avoir le droit de s'abstenir ? Quelle est ta position ?"}
+    }
+    
     },
         
     
@@ -718,9 +822,13 @@ export default function Chat(props) {
     - Be Adaptive: Adjust your communication style and vocabulary to match the user's level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life experience to maximize learning and ensure the user feels confident in a grocery shopping setting.`,
         firstMessage: {
-            sender: "assistant",
-            text: "What items are you looking for today? Are there any specific brands or types you prefer?"
-        }
+        English: {sender: "assistant", text: "What items are you looking for today? Are there any specific brands or types you prefer?"},
+        Spanish: {sender: "assistant", text: "¿Qué artículos estás buscando hoy? ¿Hay alguna marca o tipo específico que prefieras?"},
+        Italian: {sender: "assistant", text: "Quali articoli stai cercando oggi? Ci sono marche o tipi specifici che preferisci?"},
+        German: {sender: "assistant", text: "Nach welchen Artikeln suchst du heute? Gibt es bestimmte Marken oder Arten, die du bevorzugst?"},
+        French: {sender: "assistant", text: "Quels articles recherchez-vous aujourd'hui ? Y a-t-il des marques ou des types spécifiques que vous préférez ?"}
+    }
+    
     },
     
     'scenario-restaurant-order': {
@@ -761,10 +869,14 @@ export default function Chat(props) {
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using common expressions and phrases associated with ordering food to maximize vocabulary retention.
     - Be Adaptive: Adjust the complexity of your language based on the user's proficiency level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life restaurant experience, ensuring that the user feels confident navigating different food-related conversations.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "What kind of food are you in the mood for today? Are there any dietary restrictions I should know about?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "What kind of food are you in the mood for today? Are there any dietary restrictions I should know about?"},
+        Spanish: {sender: "assistant", text: "¿Qué tipo de comida te apetece hoy? ¿Hay alguna restricción dietética que deba saber?"},
+        Italian: {sender: "assistant", text: "Che tipo di cibo ti va oggi? Ci sono restrizioni dietetiche di cui dovrei essere a conoscenza?"},
+        German: {sender: "assistant", text: "Worauf hast du heute Appetit? Gibt es diätetische Einschränkungen, die ich wissen sollte?"},
+        French: {sender: "assistant", text: "Quel type de nourriture vous fait envie aujourd'hui ? Y a-t-il des restrictions alimentaires dont je devrais être informé ?"}
+    }
+    
     },
     
     'scenario-lost-city': {
@@ -803,10 +915,14 @@ export default function Chat(props) {
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, providing helpful expressions and phrases commonly used when navigating a city to build vocabulary retention.
     - Be Adaptive: Adjust the complexity of your language based on the user's proficiency level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life experience, ensuring the user feels confident navigating a new city with practical language skills.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "You're lost in a new city and need directions. Where do you need to go, and how can I help you find it?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "You're lost in a new city and need directions. Where do you need to go, and how can I help you find it?"},
+        Spanish: {sender: "assistant", text: "Estás perdido en una ciudad nueva y necesitas direcciones. ¿A dónde necesitas ir y cómo puedo ayudarte a encontrarlo?"},
+        Italian: {sender: "assistant", text: "Sei perso in una città nuova e hai bisogno di indicazioni. Dove devi andare e come posso aiutarti a trovarlo?"},
+        German: {sender: "assistant", text: "Du bist in einer neuen Stadt verloren und benötigst eine Wegbeschreibung. Wohin musst du gehen und wie kann ich dir helfen, es zu finden?"},
+        French: {sender: "assistant", text: "Vous êtes perdu dans une nouvelle ville et avez besoin d'indications. Où devez-vous aller et comment puis-je vous aider à le trouver ?"}
+    }
+    
     },
         'scenario-car-trouble': {
         name: "Car Trouble",
@@ -845,10 +961,14 @@ export default function Chat(props) {
     - Be Adaptive: Adjust the language complexity to fit the user’s level and ${learningGoal}.
     - Provide Clarity: Guide the user through clear steps to explain their problem and explore solutions, ensuring they gain confidence in practical communication.
     - Keep It Engaging: Make the interaction feel realistic by simulating real-world challenges, helping the user learn in a hands-on manner.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "It looks like you're having car trouble. Can you describe the issue you're facing?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "It looks like you're having car trouble. Can you describe the issue you're facing?"},
+        Spanish: {sender: "assistant", text: "Parece que tienes problemas con el coche. ¿Puedes describir el problema que estás enfrentando?"},
+        Italian: {sender: "assistant", text: "Sembra che tu abbia problemi con l'auto. Puoi descrivere il problema che stai affrontando?"},
+        German: {sender: "assistant", text: "Es sieht so aus, als hättest du Probleme mit dem Auto. Kannst du das Problem beschreiben, mit dem du konfrontiert bist?"},
+        French: {sender: "assistant", text: "Il semble que vous ayez des problèmes avec votre voiture. Pouvez-vous décrire le problème auquel vous faites face ?"}
+    }
+    
     },
     
     'scenario-product-return': {
@@ -888,10 +1008,14 @@ export default function Chat(props) {
     - Be Adaptive: Adjust the language complexity to fit the user’s level and ${learningGoal}.
     - Provide Clarity: Guide the user through the process of explaining their issues, asking about policies, and requesting a refund or exchange with confidence.
     - Keep It Engaging: Make the interaction feel realistic by simulating real-world customer service scenarios, helping the user learn in a hands-on manner.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "You've encountered an issue with a product. What seems to be the problem, and are you looking for a return or exchange?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "You've encountered an issue with a product. What seems to be the problem, and are you looking for a return or exchange?"},
+        Spanish: {sender: "assistant", text: "Has tenido un problema con un producto. ¿Cuál parece ser el problema y estás buscando una devolución o un cambio?"},
+        Italian: {sender: "assistant", text: "Hai avuto un problema con un prodotto. Qual è il problema e stai cercando un reso o un cambio?"},
+        German: {sender: "assistant", text: "Du hast ein Problem mit einem Produkt. Was scheint das Problem zu sein und möchtest du eine Rückgabe oder einen Umtausch?"},
+        French: {sender: "assistant", text: "Vous avez rencontré un problème avec un produit. Quel est le problème et cherchez-vous un retour ou un échange ?"}
+    }
+    
     },
     
     'pronunciation-practice': {
@@ -933,10 +1057,14 @@ export default function Chat(props) {
     - Be Adaptive: Tailor the exercises based on the user’s pronunciation challenges, making adjustments to suit their needs and learning goal.
     - Provide Repetition: Encourage the user to repeat words or phrases multiple times to help reinforce correct pronunciation.
     - Maintain Encouragement: Offer positive reinforcement and celebrate improvements to keep the user motivated and confident in their pronunciation progress.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Let's start with a pronunciation exercise. Choose a word or phrase you'd like to work on."
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "Let's start with a pronunciation exercise. Choose a word or phrase you'd like to work on."},
+        Spanish: {sender: "assistant", text: "Comencemos con un ejercicio de pronunciación. Elige una palabra o frase en la que te gustaría trabajar."},
+        Italian: {sender: "assistant", text: "Iniziamo con un esercizio di pronuncia. Scegli una parola o frase su cui vuoi lavorare."},
+        German: {sender: "assistant", text: "Lass uns mit einer Ausspracheübung beginnen. Wähle ein Wort oder einen Satz, an dem du arbeiten möchtest."},
+        French: {sender: "assistant", text: "Commençons par un exercice de prononciation. Choisis un mot ou une phrase sur laquelle tu aimerais travailler."}
+    }
+    
     },
     
     'interview': {
@@ -979,17 +1107,21 @@ export default function Chat(props) {
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using language appropriate to the interview context and aligning with the user's learning goal and reason for learning.
     - Be Adaptive: Continuously adjust the complexity and nature of the interview questions based on the user's learning goal and progress.
     - Provide Encouragement: Celebrate progress, even small victories, to maintain motivation and confidence throughout the interview preparation process.`,
-        firstMessage: {
-            sender: "assistant",
-            text: "Let's practice for a job interview. Can you tell me a little about yourself and what you're hoping to discuss?"
-        }
+    firstMessage: {
+        English: {sender: "assistant", text: "Let's practice for a job interview. Can you tell me a little about yourself and what you're hoping to discuss?"},
+        Spanish: {sender: "assistant", text: "Vamos a practicar para una entrevista de trabajo. ¿Puedes contarme un poco sobre ti y qué esperas discutir?"},
+        Italian: {sender: "assistant", text: "Pratichiamo per un colloquio di lavoro. Puoi parlarmi un po' di te e cosa speri di discutere?"},
+        German: {sender: "assistant", text: "Lass uns für ein Vorstellungsgespräch üben. Kannst du mir ein wenig über dich erzählen und was du gerne besprechen möchtest?"},
+        French: {sender: "assistant", text: "Pratiquons pour un entretien d'embauche. Peux-tu me parler un peu de toi et de ce que tu aimerais discuter ?"}
+    }
+    
     },
 };
       const [messages, setMessages] = useState(() => {
         if (selectedMode === 'date') {
             return []
         } else {
-        return [chatModes[selectedMode]?.firstMessage]}
+        return [chatModes[selectedMode]?.firstMessage[targetLanguage]]}
     })
 
 
@@ -1039,11 +1171,12 @@ export default function Chat(props) {
                   // Update context for AI to play female role
                   setTutorGender('female')
                   setTutorName('Mia')
-                  setMessages(prev => [...prev, {
-                    sender: "assistant",
-                    text: "Hey there, handsome... It's a pleasure to meet you. My name is Mia. I can't wait to play the role of your date and share a little spark of romance. So, where should we begin our unforgettable evening?",
-                }])
                   setShowGenderModal(false)
+                  setMessages([{
+                    sender: "assistant",
+                    text: chatModes?.date?.firstMessage[targetLanguage]['male'].text
+                }])
+                  
                   
 
                 }}>Male</button>
@@ -1051,14 +1184,15 @@ export default function Chat(props) {
                   setUserGender('female');
                   setTutorGender('male')
                   setTutorName('Noah')
-                  setMessages(prev => [...prev, {
-                    sender: "assistant",
-                    text: "Hello, beautiful... I'm so thrilled to meet you. My name is Noah. Let's create a magical moment together. Tell me, what would be the perfect way to start our enchanting date?",
-                }])  
-                
-                  // Update context for AI to play male role
-                  
                   setShowGenderModal(false)
+                  setMessages([{
+                    sender: "assistant",
+                    text: chatModes?.date?.firstMessage[targetLanguage]['female'].text
+                }])
+                
+                  
+                  
+                  
                 }}>Female</button>
               </div>
             </div>

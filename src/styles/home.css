@@ -357,6 +357,27 @@ body {
     border-bottom: 1px solid #282828;
 }
 
+.modal-overlay {
+    z-index: 4;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+  }
+  
+  .options-modal {
+    position: relative;
+    z-index: 6;
+  }
+  
+  .fa-ellipsis-vertical {
+    position: relative;
+    z-index: 6;
+  }
+
 .teacher-info {
     display: flex;
     gap: 10px;
@@ -368,6 +389,22 @@ body {
     gap: 20px;
     padding-block: 24px;
 }
+
+.chat-settings button {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .chat-settings button:hover {
+    background: #f5f5f5;
+  }
+
+
+  
 
 .chat-msg-wrapper {
     display: flex;
@@ -585,6 +622,7 @@ body {
     transition: transform 0.2s ease-in-out, width 0.2s ease-in-out;
     transform-origin: right;
     opacity: 1;
+    z-index: 2;
 }
 
 .chat-info-div.hidden {
@@ -622,6 +660,7 @@ body {
 .chat-info-card-icons {
     display: flex;
     gap: 16px;
+    
 }
 
 .chat-info-card-icons span {
@@ -632,11 +671,12 @@ body {
     color: white;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 
 }
 
 .chat-info-card-icons span i {
-    display: grid;
+    display: flex;
     aspect-ratio: 1/1;
     height: 16px;
 }

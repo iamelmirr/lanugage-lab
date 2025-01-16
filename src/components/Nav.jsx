@@ -22,10 +22,10 @@ const navOptions = [
 
 export default function Nav(props) {
 
-    const {selectedMode, setSelectedMode, handleSelectedMode, handleTabChange} = props
+    const {selectedMode, setSelectedMode, handleSelectedMode, handleTabChange, setShowOptionsModal} = props
 
     return (
-        <div className="nav">
+        <div className="nav" onClick={() => setShowOptionsModal(false)}>
             <div className="logo-div">
                 <img src="./public/header-logo.png" alt="" />
             </div>

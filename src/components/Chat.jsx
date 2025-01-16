@@ -21,13 +21,69 @@ import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal } = props;
 
+    
+    const [messages, setMessages] = useState([])
     const [userGender, setUserGender] = useState(null)
     const [tutorGender, setTutorGender] = useState(null)
     const [tutorName, setTutorName] = useState('John')
     const [isPlayingAudio, setIsPlayingAudio] = useState(false)
+    const [isSuggestingAnswer, setIsSuggestingAnswer] = useState(false)
 
+    const saveChat = async () => {
+        if (!auth.currentUser) return;
+        
+        const chatData = {
+          id: Date.now().toString(), // unique identifier
+          mode: selectedMode,
+          messages: messages,
+          lastUpdated: new Date(),
+          isActive: true
+        };
+      
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        
+        // Check if chat exists
+        const existingChatIndex = savedChats.findIndex(chat => chat.id === chatData.id);
+        
+        if (existingChatIndex !== -1) {
+          // Update existing chat
+          const updatedChats = [...savedChats];
+          updatedChats[existingChatIndex] = chatData;
+          await updateDoc(userDocRef, {
+            savedChats: updatedChats
+          });
+          setSavedChats(updatedChats);
+        } else {
+          // Save new chat
+          const newChats = [...savedChats, chatData];
+          await updateDoc(userDocRef, {
+            savedChats: newChats
+          });
+          setSavedChats(newChats);
+        }
+      };
+
+      useEffect(() => {
+        if (savedChats.length > 0) {
+          // Find the most recent chat for the current mode
+          const latestChat = savedChats
+            .filter(chat => chat.mode === selectedMode)
+            .sort((a, b) => b.lastUpdated - a.lastUpdated)[0];
+          
+          if (latestChat) {
+            setMessages(latestChat.messages);
+          } else {
+            // Handle the case where no chat is found for the selected mode
+            if (selectedMode === 'date') {
+              setMessages([]);
+            } else {
+              setMessages(chatModes[selectedMode]?.firstMessage[targetLanguage] || []);
+            }
+          }
+        }
+      }, [selectedMode]);
 
     const chatModes = {
         'default-chat': {
@@ -1095,14 +1151,25 @@ export default function Chat(props) {
     
     },
 };
-      const [messages, setMessages] = useState(() => {
-        if (selectedMode === 'date') {
-            return []
-        } else {
-        return [chatModes[selectedMode]?.firstMessage[targetLanguage]]}
-    })
+    //   const [messages, setMessages] = useState(() => {
+    //     if (selectedMode === 'date') {
+    //         return []
+    //     } else {
+    //     return [chatModes[selectedMode]?.firstMessage[targetLanguage]]}
+    // })
 
 
+
+    useEffect(() => {
+        // Load initial state from sessionStorage
+        const savedMuteState = sessionStorage.getItem('isMuted');
+        if (savedMuteState !== null) {
+            setIsMuted(JSON.parse(savedMuteState));
+        }
+    }, []);
+
+
+    
     
 
 
@@ -1117,9 +1184,27 @@ export default function Chat(props) {
     const [feedback, setFeedback] = useState({severity: "", explanation: ""})
     const [isChatInfoVisible, setIsChatInfoVisible] = useState(true)
     const [currentAudio, setCurrentAudio] = useState(null)
-    const [isMuted, setIsMuted] = useState(false)
+    
     const [translationMessage, setTranslationMessage] = useState('')
     const [showGenderModal, setShowGenderModal] = useState(true)
+    
+
+    
+
+      useEffect(() => {
+        if (messages.length > 0) {
+          saveChat();
+        }
+      }, [messages]);
+
+
+      const loadChat = (chatId) => {
+        const chat = savedChats.find(c => c.id === chatId);
+        if (chat) {
+          setMessages(chat.messages);
+          setSelectedMode(chat.mode);
+        }
+      };
 
 
     const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
@@ -1130,7 +1215,7 @@ export default function Chat(props) {
             );
             
             speechConfig.speechSynthesisVoiceName = voice;
-            const audioConfig = speechSdk.AudioConfig.PullAudioOutputStream;
+            const audioConfig = null
             const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
     
             synthesizer.speakTextAsync(
@@ -1158,16 +1243,27 @@ export default function Chat(props) {
         const handleSpeech = async () => {
             if (isPlayingAudio || isMuted || messages.length === 0) return;
         
+            const voice = targetLanguage === "English" ? "en-US-BrandonNeural"
+            : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
+            : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
+            : targetLanguage === "German" ? "de-DE-ConradNeural"
+            : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
+            : "en-US-BrandonNeural";
+
+
             const lastMessage = messages[messages.length - 1];
             if (lastMessage.sender === "assistant") {
-                const voice = targetLanguage === "English" ? "en-US-JennyNeural"
-                            : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
-                            : targetLanguage === "French" ? "fr-FR-DeniseNeural"
-                            : targetLanguage === "German" ? "de-DE-KatjaNeural"
-                            : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
-                            : "en-US-JennyNeural";
+                
         
                 try {
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                        URL.revokeObjectURL(currentAudio.src);
+                        setCurrentAudio(null);
+                        setIsPlayingAudio(false);
+                    }
+
                     const audioData = await synthesizeSpeech(lastMessage.text, voice);
                     const audioBlob = new Blob([audioData], { type: "audio/wav" });
                     const audioUrl = URL.createObjectURL(audioBlob);
@@ -1253,6 +1349,41 @@ export default function Chat(props) {
         );
       }; 
 
+
+      const OptionsModal = () => (
+        <>
+          <div className="modal-overlay" onClick={(e) => { e.stopPropagation()
+             setShowOptionsModal(false)}} />
+          <div className="options-modal" style={{
+            position: 'absolute',
+            top: '20px',
+            right: '-10px',
+            background: 'white',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+            borderRadius: '8px',
+            padding: '8px 0',
+            zIndex: 5,
+            minWidth: '200px'
+          }}>
+              <button style={{
+                width: '100%', // Add this line
+                padding: '8px 16px', // Add padding
+                textAlign: 'left'
+              }}>Start a new chat</button>
+              <button style={{
+                width: '100%',
+                padding: '8px 16px',
+                textAlign: 'left'
+              }}>See chat history</button>
+              <button style={{
+                width: '100%',
+                padding: '8px 16px',
+                textAlign: 'left'
+              }}>Settings</button>
+            </div>
+  </>
+);
+
       useEffect(() => {
         if (selectedMode === 'date' && messages.length === 0) {
           // Show modal instead of first message
@@ -1312,11 +1443,11 @@ export default function Chat(props) {
     }, [])
 
 
-    // useEffect(() => {
-    //     if (messages.length > 0 && messages[messages.length - 1].sender === "assistant") {
-    //         handleCreateSuggestedAnswer();
-    //     }
-    // }, [messages])
+     useEffect(() => {
+         if (messages.length > 0 && messages[messages.length - 1].sender === "assistant" && isSuggestingAnswer) {
+             handleCreateSuggestedAnswer();
+         }
+     }, [messages])
     
 
     
@@ -1387,12 +1518,12 @@ export default function Chat(props) {
                 return;
             }
     
-            const voice = targetLanguage === "English" ? "en-US-JennyNeural"
-                        : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
-                        : targetLanguage === "French" ? "fr-FR-DeniseNeural"
-                        : targetLanguage === "German" ? "de-DE-KatjaNeural"
-                        : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
-                        : "en-US-JennyNeural";
+            const voice = targetLanguage === "English" ? "en-US-BrandonNeural"
+            : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
+            : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
+            : targetLanguage === "German" ? "de-DE-ConradNeural"
+            : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
+            : "en-US-BrandonNeural";
     
             const audioData = await synthesizeSpeech(messageText, voice);
             const audioBlob = new Blob([audioData], { type: "audio/wav" });
@@ -1812,15 +1943,20 @@ export default function Chat(props) {
                 <div className="chat-settings">
                 <span 
                  className={`fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}
-                onClick={() => {
-                    setIsMuted(!isMuted)
-                if (!isMuted && currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        }}
-    />
-                    <span className="fa-solid fa-ellipsis-vertical"></span>
+                 onClick={() => {
+                    const newMuteState = !isMuted;
+                    setIsMuted(newMuteState);
+                    sessionStorage.setItem('isMuted', JSON.stringify(newMuteState));
+                    if (!newMuteState && currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                    }
+                }}
+                    />
+                        <span 
+                        className="fa-solid fa-ellipsis-vertical" 
+                        onClick={() => setShowOptionsModal(!showOptionsModal)}
+                        >{showOptionsModal && <OptionsModal />}</span>                
                 </div>
             </div>
             <div className="chat-msg-wrapper" ref={chatContainerRef}>
@@ -1876,7 +2012,7 @@ export default function Chat(props) {
         </div>
         
         
-        <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`}>
+        <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`} onClick={() => setShowOptionsModal(false)}>
     <div className="chat-info-title">
     <h2>{selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
         <span className="fa-solid fa-xmark" onClick={() => {

@@ -12,7 +12,7 @@ import ProfileMode from "../components/ProfileMode";
 
 
 export default function Home(props) {
-    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, translationLanguage, targetLanguage, targetLanguageLevel, setTargetLanguageLevel, learningGoal, learningReason} = props
+    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, translationLanguage, targetLanguage, targetLanguageLevel, setTargetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal} = props
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
@@ -57,7 +57,7 @@ export default function Home(props) {
     
     return (
         <>
-        <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab}></Nav>
+        <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}></Nav>
 
         {selectedMode === 'main' && <Main selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange}></Main>}
 
@@ -69,7 +69,7 @@ export default function Home(props) {
 
         {selectedMode === 'scenario-modes' && <ScenarioModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ScenarioModes>}
 
-        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason}/>}
+        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}/>}
 
         {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
 

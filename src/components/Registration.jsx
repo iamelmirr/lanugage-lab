@@ -9,6 +9,7 @@ export default function Registration(props) {
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
     
+    
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

@@ -30,60 +30,97 @@ export default function Chat(props) {
     const [tutorName, setTutorName] = useState('John')
     const [isPlayingAudio, setIsPlayingAudio] = useState(false)
     const [isSuggestingAnswer, setIsSuggestingAnswer] = useState(false)
+    const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false)
+    const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
+    const [activeChat, setActiveChat] = useState(null)
+
+
+    useEffect(() => {
+        if (messages.length === 0 && !hasLoadedInitialChat) {
+            if (savedChats.length > 0) {
+                const latestChat = savedChats
+                    .filter(chat => chat.mode === selectedMode)
+                    .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated))[0];
+                
+                if (latestChat) {
+                    setMessages(latestChat.messages);
+                    setActiveChat(latestChat)
+                } else {
+                    if (selectedMode === 'date') {
+                        setMessages([])
+                        setActiveChat(null)
+                    } else {
+                        setMessages([chatModes[selectedMode]?.firstMessage[targetLanguage]]);
+                        setActiveChat(null)
+                    }
+                }
+            
+            }   else {
+                if (selectedMode === 'date') {
+                    setMessages([])
+                    setActiveChat(null)
+                } else {
+                    setMessages([chatModes[selectedMode]?.firstMessage[targetLanguage]]);
+                    setActiveChat(null)
+                }
+            }
+            setHasLoadedInitialChat(true)
+            console.log("saved chats:", savedChats)
+            console.log("activeChat:", activeChat)
+        }}, [selectedMode]);
+
+
+      useEffect(() => {
+        if (selectedMode === 'date' && messages.length === 0) {
+          // Show modal instead of first message
+          setShowGenderModal(true)
+        }      
+      }, [selectedMode])
+
 
     const saveChat = async () => {
         if (!auth.currentUser) return;
         
+        // Check if there's an existing chat for this mode
+        
+        
         const chatData = {
-          id: Date.now().toString(), // unique identifier
-          mode: selectedMode,
-          messages: messages,
-          lastUpdated: new Date(),
-          isActive: true
+            id: activeChat ? activeChat.id : Date.now().toString(),
+            mode: selectedMode,
+            messages: messages,
+            lastUpdated: new Date().toISOString(),
+            isActive: true
         };
-      
+        
         const userDocRef = doc(db, "users", auth.currentUser.uid);
         
-        // Check if chat exists
-        const existingChatIndex = savedChats.findIndex(chat => chat.id === chatData.id);
-        
-        if (existingChatIndex !== -1) {
-          // Update existing chat
-          const updatedChats = [...savedChats];
-          updatedChats[existingChatIndex] = chatData;
-          await updateDoc(userDocRef, {
-            savedChats: updatedChats
-          });
-          setSavedChats(updatedChats);
+        if (activeChat) {
+            // Update existing chat
+            const updatedChats = savedChats.map(chat => 
+                chat.id === activeChat.id ? chatData : chat
+            );
+            await updateDoc(userDocRef, {
+                savedChats: updatedChats
+            });
+            setSavedChats(updatedChats);
         } else {
-          // Save new chat
-          const newChats = [...savedChats, chatData];
-          await updateDoc(userDocRef, {
-            savedChats: newChats
-          });
-          setSavedChats(newChats);
+            // Save new chat
+            const newChats = [...savedChats, chatData];
+            await updateDoc(userDocRef, {
+                savedChats: newChats
+            });
+            setSavedChats(newChats);
+            setActiveChat(chatData)
         }
-      };
+        console.log("saved chats:", savedChats)
+        console.log("activeChat:", activeChat)
+    };
 
-      useEffect(() => {
-        if (savedChats.length > 0) {
-          // Find the most recent chat for the current mode
-          const latestChat = savedChats
-            .filter(chat => chat.mode === selectedMode)
-            .sort((a, b) => b.lastUpdated - a.lastUpdated)[0];
-          
-          if (latestChat) {
-            setMessages(latestChat.messages);
-          } else {
-            // Handle the case where no chat is found for the selected mode
-            if (selectedMode === 'date') {
-              setMessages([]);
-            } else {
-              setMessages(chatModes[selectedMode]?.firstMessage[targetLanguage] || []);
-            }
-          }
-        }
-      }, [selectedMode]);
+      
+
+
+      
+
 
     const chatModes = {
         'default-chat': {
@@ -1159,6 +1196,9 @@ export default function Chat(props) {
     // })
 
 
+    
+
+
 
     useEffect(() => {
         // Load initial state from sessionStorage
@@ -1192,7 +1232,9 @@ export default function Chat(props) {
     
 
       useEffect(() => {
-        if (messages.length > 0) {
+        const lastMessage = messages[messages.length - 1];
+        
+        if (messages.length > 1 && lastMessage.sender === 'assistant') {
           saveChat();
         }
       }, [messages]);
@@ -1201,10 +1243,52 @@ export default function Chat(props) {
       const loadChat = (chatId) => {
         const chat = savedChats.find(c => c.id === chatId);
         if (chat) {
-          setMessages(chat.messages);
-          setSelectedMode(chat.mode);
-        }
+        setMessages([]); // Clear messages first
+        setTimeout(() => {
+            setMessages(chat.messages); // Set messages after a brief delay
+        }, 0);
+        setActiveChat(chat)
+        console.log("activeChat:", activeChat)
+        setSelectedMode(chat.mode);
+    }
+    console.log("saved chats:", savedChats)
       };
+
+      const handleStartNewChat = async () => {
+        
+        const initialMessages = selectedMode === 'date' ? [] : [chatModes[selectedMode]?.firstMessage[targetLanguage]]
+        
+        
+        // Initialize new chat data
+        const newChatData = {
+            id: Date.now().toString(),
+            mode: selectedMode,
+            messages: initialMessages,
+            lastUpdated: new Date().toISOString(),
+            isActive: true
+        };
+        
+        // Update Firebase with the new chat
+        if (auth.currentUser) {
+            const userDocRef = doc(db, "users", auth.currentUser.uid);
+            const updatedChats = [...savedChats, newChatData];
+            await updateDoc(userDocRef, {
+                savedChats: updatedChats
+            });
+            setSavedChats(updatedChats);
+        }
+        
+        // Set current messages to the new chat
+        setMessages(initialMessages);
+        
+        // Show gender modal if needed
+        if (selectedMode === 'date') {
+            setShowGenderModal(true);
+        }
+        
+        console.log("saved chats:", savedChats)
+        setShowOptionsModal(false);
+    };
 
 
     const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
@@ -1369,12 +1453,16 @@ export default function Chat(props) {
                 width: '100%', // Add this line
                 padding: '8px 16px', // Add padding
                 textAlign: 'left'
-              }}>Start a new chat</button>
+              }} onClick={() => {
+                setActiveChat(null)
+                handleStartNewChat()}}>Start a new chat</button>
               <button style={{
                 width: '100%',
                 padding: '8px 16px',
                 textAlign: 'left'
-              }}>See chat history</button>
+              }} onClick={() => {
+                setIsChatInfoVisible(true)
+                setIsChatHistoryOpen(true)}}>See chat history</button>
               <button style={{
                 width: '100%',
                 padding: '8px 16px',
@@ -1384,13 +1472,7 @@ export default function Chat(props) {
   </>
 );
 
-      useEffect(() => {
-        if (selectedMode === 'date' && messages.length === 0) {
-          // Show modal instead of first message
-          setShowGenderModal(true)
-        }
-        // Rest of your chat initialization logic
-      }, [selectedMode])
+      
 
 
     useEffect(() => {
@@ -2012,16 +2094,40 @@ export default function Chat(props) {
         </div>
         
         
-        <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`} onClick={() => setShowOptionsModal(false)}>
+        <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : ''}`} onClick={() => {setShowOptionsModal(false)
+            setIsChatHistoryOpen(false)
+        }}>
     <div className="chat-info-title">
-    <h2>{selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
+    <h2>{isChatHistoryOpen ? 'Chat history' : selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
         <span className="fa-solid fa-xmark" onClick={() => {
     setIsChatInfoVisible(false);
 }}></span>
     </div>
     
     <div className="chat-info-list">
-    {selectedMessage ? (
+    {isChatHistoryOpen ? (savedChats
+            .filter(chat => chat.mode === selectedMode)
+            .map((chat) => (
+                <div key={chat.id} className="chat-history-item">
+                    <button onClick={() => loadChat(chat.id)}>
+                        {new Date(chat.lastUpdated).toLocaleDateString()}
+                    </button>
+                    <button 
+                        className="delete-chat-btn"
+                        onClick={async () => {
+                            const updatedChats = savedChats.filter(c => c.id !== chat.id);
+                            const userDocRef = doc(db, "users", auth.currentUser.uid);
+                            await updateDoc(userDocRef, {
+                                savedChats: updatedChats
+                            });
+                            setSavedChats(updatedChats);
+                        }}
+                    >
+                        <span className="fa-solid fa-trash"></span>
+                    </button>
+                </div>
+            ))
+        ) : selectedMessage ? (
             selectedMessage.translation ? (
                 <>
                     <div className="translation-content">

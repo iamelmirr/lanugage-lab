@@ -403,7 +403,24 @@ body {
     background: #f5f5f5;
   }
 
+  .chat-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e4e4e4;
+}
 
+.chat-history-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.delete-chat-btn {
+    color: #F44336;
+}
   
 
 .chat-msg-wrapper {

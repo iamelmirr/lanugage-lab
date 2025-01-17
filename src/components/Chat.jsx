@@ -9,6 +9,7 @@ window.Buffer = Buffer
 import { doc, updateDoc, increment } from 'firebase/firestore';
 import { auth, db } from '../utils/firebaseConfig';
 import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
+import { use } from "react";
 
 
 
@@ -21,7 +22,7 @@ import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed } = props;
 
     
     const [messages, setMessages] = useState([])
@@ -33,7 +34,7 @@ export default function Chat(props) {
     const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false)
     const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
     const [activeChat, setActiveChat] = useState(null)
-    const [voiceSpeed, setVoiceSpeed] = useState(1)
+    
 
     const translationLanguages = [
         { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png'},
@@ -1224,24 +1225,7 @@ export default function Chat(props) {
     //         return []
     //     } else {
     //     return [chatModes[selectedMode]?.firstMessage[targetLanguage]]}
-    // })
-
-
-    
-
-
-
-    useEffect(() => {
-        // Load initial state from sessionStorage
-        const savedMuteState = sessionStorage.getItem('isMuted');
-        if (savedMuteState !== null) {
-            setIsMuted(JSON.parse(savedMuteState));
-        }
-    }, []);
-
-
-    
-    
+    // })  
 
 
 
@@ -1262,13 +1246,7 @@ export default function Chat(props) {
 
     
 
-      useEffect(() => {
-        const lastMessage = messages[messages.length - 1];
-        
-        if (messages.length > 1 && lastMessage.sender === 'assistant') {
-          saveChat();
-        }
-      }, [messages]);
+      
 
 
       const loadChat = (chatId) => {
@@ -1314,6 +1292,7 @@ export default function Chat(props) {
     };
 
 
+
     const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
         return new Promise((resolve, reject) => {
             const speechConfig = speechSdk.SpeechConfig.fromSubscription(
@@ -1322,21 +1301,27 @@ export default function Chat(props) {
             );
             
             speechConfig.speechSynthesisVoiceName = voice;
-            speechConfig.speechSynthesisRate = voiceSpeed;
-            const audioConfig = null
-            const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
+            
+            // Update the SSML to include the VOICE tag
+            const ssmlText = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+                <voice name="${voice}">
+                    <prosody rate="${voiceSpeed}">${text}</prosody>
+                </voice>
+            </speak>`;
     
-            synthesizer.speakTextAsync(
-                text,
-                (result) => {
+            const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, null);
+            
+            synthesizer.speakSsmlAsync(
+                ssmlText,
+                result => {
                     if (result.reason === speechSdk.ResultReason.SynthesizingAudioCompleted) {
-                        resolve(result.audioData); // Just return the audio data without playing
+                        resolve(result.audioData);
                     } else {
                         reject(`Failed: ${result.errorDetails}`);
                     }
                     synthesizer.close();
                 },
-                (error) => {
+                error => {
                     console.error("Error during speech synthesis:", error);
                     synthesizer.close();
                     reject(error);
@@ -1344,10 +1329,42 @@ export default function Chat(props) {
             );
         });
     };
-    
-    
 
-    useEffect(() => {
+
+
+
+    // const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
+    //     return new Promise((resolve, reject) => {
+    //         const speechConfig = speechSdk.SpeechConfig.fromSubscription(
+    //             import.meta.env.VITE_AZURE_SPEECH_KEY,
+    //             import.meta.env.VITE_AZURE_REGION
+    //         );
+            
+    //         speechConfig.speechSynthesisVoiceName = voice;
+    //         speechConfig.speechSynthesisRate = voiceSpeed;
+    //         const audioConfig = null
+    //         const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
+    
+    //         synthesizer.speakTextAsync(
+    //             text,
+    //             (result) => {
+    //                 if (result.reason === speechSdk.ResultReason.SynthesizingAudioCompleted) {
+    //                     resolve(result.audioData); // Just return the audio data without playing
+    //                 } else {
+    //                     reject(`Failed: ${result.errorDetails}`);
+    //                 }
+    //                 synthesizer.close();
+    //             },
+    //             (error) => {
+    //                 console.error("Error during speech synthesis:", error);
+    //                 synthesizer.close();
+    //                 reject(error);
+    //             }
+    //         );
+    //     });
+    // };
+    
+    
         const handleSpeech = async () => {
             if (isPlayingAudio || isMuted || messages.length === 0) return;
         
@@ -1391,9 +1408,25 @@ export default function Chat(props) {
                 }
             }
         };
+
+        useEffect(() => {
+            const lastMessage = messages[messages.length - 1];
+            
+            if (messages.length > 1 && lastMessage.sender === 'assistant') { 
+              saveChat();
+            } 
+          }, [messages]);
+
+
+        useEffect(() => {
+            const lastMessage = messages[messages.length - 1];
+            
+            if (messages.length > 0 && lastMessage.sender === 'assistant') { 
+              handleSpeech()
+            } 
+        }, [messages])  
     
-        handleSpeech();
-    }, [messages, isMuted, targetLanguage]);
+
 
 
     const handleLanguageChange = async (newLanguage, type) => {
@@ -2156,13 +2189,7 @@ export default function Chat(props) {
                 <span 
                  className={`fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}
                  onClick={() => {
-                    const newMuteState = !isMuted;
-                    setIsMuted(newMuteState);
-                    sessionStorage.setItem('isMuted', JSON.stringify(newMuteState));
-                    if (!newMuteState && currentAudio) {
-                        currentAudio.pause();
-                        currentAudio.currentTime = 0;
-                    }
+                    setIsMuted(!isMuted);
                 }}
                     />
                         <span 

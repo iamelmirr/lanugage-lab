@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { auth } from '../utils/firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, googleProvider } from '../utils/firebaseConfig';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogingIn }) {
     const [formData, setFormData] = useState({
@@ -18,6 +18,21 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         } catch (error) {
             console.error("Login error:", error);
             // Handle error appropriately
+        }
+    };
+
+    const handleGoogleLogin = async (e) => {
+        e.preventDefault()
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            
+            
+                setIsAuthenticated(true);
+                setIsRegistering(false);
+                setIsLogingIn(false);
+            
+        } catch (error) {
+            console.error("Google login error:", error);
         }
     };
 
@@ -50,7 +65,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                     />
                     <a href="#" className="forgot-password">Forgot password?</a>
                     
-                    <button className="reg-btn-action">
+                    <button className="reg-btn-action" onClick={handleGoogleLogin}>
                         Continue with Google
                     </button>
                     

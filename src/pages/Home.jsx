@@ -59,7 +59,7 @@ export default function Home(props) {
         <>
         <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}></Nav>
 
-        {selectedMode === 'main' && <Main selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange}></Main>}
+        {(selectedMode === 'main' || selectedMode === 'progress') && <Main selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange}></Main>}
 
         {selectedMode === 'dialogue-modes' && <DialogueModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DialogueModes>}
 
@@ -69,9 +69,11 @@ export default function Home(props) {
 
         {selectedMode === 'scenario-modes' && <ScenarioModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ScenarioModes>}
 
-        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}/>}
+        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} setTargetLanguageLevel={setTargetLanguageLevel} setTranslationLanguage={setTranslationLanguage}/>}
 
-        {selectedMode === 'main' && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
+        
+
+        {(selectedMode === 'main' || selectedMode === 'progress') && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
 
 
         {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel}/>}

@@ -663,6 +663,8 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 17px;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .default-chat-info-card {
@@ -741,6 +743,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: none;
 }
 
 .feedback-card.green { background: #E8F5E9; }

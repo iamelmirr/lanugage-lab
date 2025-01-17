@@ -21,7 +21,7 @@ import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage } = props;
 
     
     const [messages, setMessages] = useState([])
@@ -33,6 +33,22 @@ export default function Chat(props) {
     const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false)
     const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
     const [activeChat, setActiveChat] = useState(null)
+    const [voiceSpeed, setVoiceSpeed] = useState(1)
+
+    const translationLanguages = [
+        { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png'},
+        { code: 'en', name: 'English', flag: './public/flags/english.png' },
+        { code: 'de', name: 'German', flag: './public/flags/german.png' },
+        { code: 'es', name: 'Spanish', flag: './public/flags/spanish.png' },
+        { code: 'it', name: 'Italian', flag: './public/flags/italian.png' },
+        { code: 'fr', name: 'French', flag: './public/flags/french.png' }
+    ];
+
+    const levels = [
+        { code: 'a1-a2', name: 'Beginner (A1 - A2)' },
+        { code: 'b1-b2', name: 'Intermediate (B1 - B2)' },
+        { code: 'c1-c2', name: 'Advanced (C1 - C2)' }
+      ];
 
 
     useEffect(() => {
@@ -87,7 +103,7 @@ export default function Chat(props) {
         const chatData = {
             id: activeChat ? activeChat.id : Date.now().toString(),
             mode: selectedMode,
-            messages: messages,
+            messages: messages.length > 100 ? messages.slice(-100) : messages,
             lastUpdated: new Date().toISOString(),
             isActive: true
         };
@@ -99,18 +115,33 @@ export default function Chat(props) {
             const updatedChats = savedChats.map(chat => 
                 chat.id === activeChat.id ? chatData : chat
             );
+            setSavedChats(updatedChats);
             await updateDoc(userDocRef, {
                 savedChats: updatedChats
             });
-            setSavedChats(updatedChats);
+            
         } else {
             // Save new chat
-            const newChats = [...savedChats, chatData];
+            const newChats = [...savedChats, {
+                id: Date.now().toString(),
+                mode: selectedMode,
+                messages: messages,
+                lastUpdated: new Date().toISOString(),
+                isActive: true
+            }];
+            setSavedChats(newChats);
+            setActiveChat({
+                id: Date.now().toString(),
+                mode: selectedMode,
+                messages: messages,
+                lastUpdated: new Date().toISOString(),
+                isActive: true
+            })
             await updateDoc(userDocRef, {
                 savedChats: newChats
             });
-            setSavedChats(newChats);
-            setActiveChat(chatData)
+            
+            
         }
         console.log("saved chats:", savedChats)
         console.log("activeChat:", activeChat)
@@ -1258,6 +1289,7 @@ export default function Chat(props) {
         
         const initialMessages = selectedMode === 'date' ? [] : [chatModes[selectedMode]?.firstMessage[targetLanguage]]
         
+        setActiveChat(null)
         
         // Initialize new chat data
         const newChatData = {
@@ -1268,15 +1300,6 @@ export default function Chat(props) {
             isActive: true
         };
         
-        // Update Firebase with the new chat
-        if (auth.currentUser) {
-            const userDocRef = doc(db, "users", auth.currentUser.uid);
-            const updatedChats = [...savedChats, newChatData];
-            await updateDoc(userDocRef, {
-                savedChats: updatedChats
-            });
-            setSavedChats(updatedChats);
-        }
         
         // Set current messages to the new chat
         setMessages(initialMessages);
@@ -1299,6 +1322,7 @@ export default function Chat(props) {
             );
             
             speechConfig.speechSynthesisVoiceName = voice;
+            speechConfig.speechSynthesisRate = voiceSpeed;
             const audioConfig = null
             const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
     
@@ -1372,7 +1396,106 @@ export default function Chat(props) {
     }, [messages, isMuted, targetLanguage]);
 
 
+    const handleLanguageChange = async (newLanguage, type) => {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+        
+                const userDocRef = doc(db, "users", user.uid);
+                
+                // Update state based on type
+                
+                setTranslationLanguage(newLanguage);
+                
+        
+                // Update Firebase
+                await updateDoc(userDocRef, {
+                    [type === 'target' ? 'language' : 'translationLanguage']: newLanguage
+                });
+        
+            } catch (error) {
+                console.error("Error updating language:", error);
+            }
+        };
 
+
+    const CustomSelect = ({ options, value, onChange }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const selectedLanguage = options.find(lang => lang.name === value);
+    
+        return (
+            <div className="select-container">
+                <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
+                    {selectedLanguage && <img src={selectedLanguage.flag} alt={value} />}
+                    <span>{value}</span>
+                    <span className="fa-solid fa-chevron-down"></span>
+                </div>
+                
+                {isOpen && (
+                    <div className="custom-select">
+                        {options.map(lang => (
+                            <div 
+                                key={lang.code} 
+                                className={`select-option ${value === lang.code ? 'selected' : ''}`}
+                                onClick={() => onChange(lang.name)}
+                            >
+                                <img src={lang.flag} alt={lang.name} />
+                                <span>{lang.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const CustomLevelSelect = ({ options, value, onChange }) => {
+            const [isOpen, setIsOpen] = useState(false);
+    
+            const handleLevelChange = async (newLevel) => {
+                try {
+                    const user = auth.currentUser;
+                    if (!user) return;
+                    
+                    const userDocRef = doc(db, "users", user.uid);
+                    
+                    // Update state
+                    onChange(newLevel);
+                    
+                    // Update Firebase
+                    await updateDoc(userDocRef, {
+                        level: newLevel
+                    });
+                    
+                    setIsOpen(false);
+                } catch (error) {
+                    console.error("Error updating level:", error);
+                }
+            };
+            
+            return (
+                <div className="select-container">
+                    <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
+                        <span>{value}</span>
+                        <span className="fa-solid fa-chevron-down"></span>
+                    </div>
+                    
+                    {isOpen && (
+                        <div className="custom-select">
+                            {options.map(level => (
+                                <div 
+                                key={level.code} 
+                                className={`select-option ${value === level.name ? 'selected' : ''}`}
+                                onClick={() => handleLevelChange(level.name)}
+                            >
+                                <span>{level.name}</span>
+                            </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
 
     const GenderSelectionModal = () => {
         
@@ -1462,12 +1585,19 @@ export default function Chat(props) {
                 textAlign: 'left'
               }} onClick={() => {
                 setIsChatInfoVisible(true)
-                setIsChatHistoryOpen(true)}}>See chat history</button>
+                setIsChatHistoryOpen(true)
+                setSelectedMessage('')}}>See chat history</button>
               <button style={{
                 width: '100%',
                 padding: '8px 16px',
                 textAlign: 'left'
-              }}>Settings</button>
+              }} onClick={() => {
+                setIsChatInfoVisible(true)
+                setIsChatHistoryOpen(false)
+                setSelectedMessage({
+                  settings: true
+                })
+                }}>Settings</button>
             </div>
   </>
 );
@@ -2098,14 +2228,57 @@ export default function Chat(props) {
             setIsChatHistoryOpen(false)
         }}>
     <div className="chat-info-title">
-    <h2>{isChatHistoryOpen ? 'Chat history' : selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
+    <h2>{isChatHistoryOpen && !selectedMessage ? 'Chat history' : selectedMessage?.settings ? 'Settings' : selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
         <span className="fa-solid fa-xmark" onClick={() => {
     setIsChatInfoVisible(false);
 }}></span>
     </div>
+
+
     
     <div className="chat-info-list">
-    {isChatHistoryOpen ? (savedChats
+
+    {selectedMessage?.settings ? (
+      <div className="profile-settings-btn-list">
+        <div className="profile-menu-setting">
+          <p>Choose your translation language</p>
+          <CustomSelect
+            options={translationLanguages}
+            value={translationLanguage}
+            onChange={(newValue) => handleLanguageChange(newValue, 'translation')}
+          />
+        </div>
+        <div className="profile-menu-setting">
+          <p>Choose your target language level</p>
+          <CustomLevelSelect
+            options={levels}
+            value={targetLanguageLevel}
+            onChange={setTargetLanguageLevel}
+          />
+        </div>
+        <div className="profile-menu-setting">
+          <p>Show suggestion bar</p>
+          <input
+            type="checkbox"
+            checked={isSuggestingAnswer}
+            onChange={(e) => setIsSuggestingAnswer(e.target.checked)}
+          />
+        </div>
+        <div className="profile-menu-setting">
+          <p>Voice speed</p>
+          <input
+            type="range"
+            min="0.5"
+            max="1.5"
+            step="0.25"
+            value={voiceSpeed}
+            onChange={(e) => setVoiceSpeed(parseFloat(e.target.value))}
+            />
+        </div>
+      </div>
+    ) :
+
+    isChatHistoryOpen && !selectedMessage ? (savedChats
             .filter(chat => chat.mode === selectedMode)
             .map((chat) => (
                 <div key={chat.id} className="chat-history-item">

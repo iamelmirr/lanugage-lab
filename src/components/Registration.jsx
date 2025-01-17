@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { auth, db } from '../utils/firebaseConfig';
+import { auth, db, googleProvider } from '../utils/firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signInWithPopup } from 'firebase/auth';
 
 export default function Registration(props) {
-    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel, setLearningReason, setLearningGoal } = props
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel, setLearningReason, setLearningGoal, savedChats, setSavedChats } = props
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
@@ -14,6 +14,69 @@ export default function Registration(props) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    
+
+
+    const handleGoogleRegistration = async (googleUser) => {
+        try {
+          // Create user document in Firestore with same structure
+          await setDoc(doc(db, "users", googleUser.uid), {
+            firstName: googleUser.displayName.split(' ')[0],
+            lastName: googleUser.displayName.split(' ')[1] || '',
+            email: googleUser.email,
+            language: formData.language,
+            translationLanguage: formData.translationLanguage,
+            level: formData.level,
+            goal: formData.goal,
+            reason: formData.reason,
+            progressLevel: 1,
+            progressScore: 0,
+            lastChatTime: new Date(),
+            createdAt: new Date(),
+            savedChats: []
+          });
+
+          setUserEmail(googleUser.email);
+          setTempUserEmail(googleUser.email);
+          setUserName(googleUser.displayName.split(' ')[0])
+          setUserLastName(googleUser.displayName.split(' ')[1] || '');
+
+          const userDocRef = doc(db, "users", googleUser.uid);
+          const userDoc = await getDoc(userDocRef);
+      
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+            setUserName(userDoc.data().firstName);
+            setUserLastName(userDoc.data().lastName);
+            setProgressScore(userDoc.data().progressScore);
+            setProgressLevel(userDoc.data().progressLevel);
+            setTargetLanguage(userDoc.data().language);
+            setTranslationLanguage(userDoc.data().translationLanguage);
+            setTargetLanguageLevel(userDoc.data().level);
+            setLearningGoal(userDoc.data().goal);
+            setLearningReason(userDoc.data().reason);
+        }
+          
+
+
+          setIsAuthenticated(true);
+          setIsRegistering(false);
+          setIsLogingIn(false);
+        } catch (error) {
+          console.error("Google registration error:", error);
+        }
+      };
+
+
+      const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            await handleGoogleRegistration(result.user);
+        } catch (error) {
+            console.error("Google sign-in error:", error);
+        }
+    };
 
 
 
@@ -86,6 +149,7 @@ export default function Registration(props) {
                     setTargetLanguageLevel(userDoc.data().level)
                     setLearningGoal(userDoc.data().goal)
                     setLearningReason(userDoc.data().reason)
+                    setSavedChats(userDoc.data().savedChats)
                       
                       console.log(userDoc)
             
@@ -313,7 +377,7 @@ export default function Registration(props) {
                     />
                     <button onClick={() => handleRegistration(formData.email, formData.password)}>Register</button>
                     <div className="auth-options">
-                        <button>Sign up with Google</button>                      
+                        <button onClick={handleGoogleSignIn}>Sign up with Google</button>                      
                     </div>
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     

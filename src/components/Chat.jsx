@@ -6,7 +6,7 @@ window.process = {
 }
 import { Buffer } from 'buffer'
 window.Buffer = Buffer
-import { doc, updateDoc, increment } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, increment } from 'firebase/firestore';
 import { auth, db } from '../utils/firebaseConfig';
 import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
 import { use } from "react";
@@ -22,7 +22,7 @@ import { use } from "react";
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime } = props;
 
     
     const [messages, setMessages] = useState([])
@@ -150,7 +150,51 @@ export default function Chat(props) {
 
       
 
+    const updateChatTime = async () => {
+        const now = new Date();
+        const today = now.toDateString();
 
+        
+        
+        console.log("streak count:", streakCount)
+        console.log("longest streak:", longestStreak)
+        console.log("last chat date:", lastChatDate)
+    
+        // If chat time reaches 3 minutes (180 seconds) and hasn't been counted today
+        if (lastChatDate !== today) {
+
+            console.log("started updateChatTime")
+            
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const isContinuingStreak = lastChatDate === yesterday.toDateString();
+    
+            const newStreak = isContinuingStreak ? streakCount + 1 : 1;
+            const longestStreakValue = Math.max(longestStreak, newStreak);
+    
+            setStreakCount(newStreak);
+            setLongestStreak(longestStreakValue);
+            setLastChatDate(today);
+    
+            // Update Firebase
+            if (auth.currentUser) {
+                const userDocRef = doc(db, "users", auth.currentUser.uid);
+                try {
+                    await updateDoc(userDocRef, {
+                        streakCount: newStreak,
+                        longestStreak: longestStreakValue,
+                        lastChatDate: today,
+                        
+                    });
+                    console.log("Streak data updated successfully!");
+                } catch (error) {
+                    console.error("Error updating streak data:", error);
+                }
+            }
+        }   else {
+            console.log("Message sent on the same day, no streak update needed.");
+        }
+    };
       
 
 
@@ -1414,6 +1458,7 @@ export default function Chat(props) {
             
             if (messages.length > 1 && lastMessage.sender === 'assistant') { 
               saveChat();
+              updateChatTime()
             } 
           }, [messages]);
 
@@ -1454,10 +1499,24 @@ export default function Chat(props) {
 
     const CustomSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
+        const selectRef = useRef(null);
         const selectedLanguage = options.find(lang => lang.name === value);
+
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (selectRef.current && !selectRef.current.contains(event.target)) {
+                    setIsOpen(false);
+                }
+            };
+    
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, []);
     
         return (
-            <div className="select-container">
+            <div className="select-container" ref={selectRef}>
                 <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
                     {selectedLanguage && <img src={selectedLanguage.flag} alt={value} />}
                     <span>{value}</span>
@@ -1484,6 +1543,21 @@ export default function Chat(props) {
 
     const CustomLevelSelect = ({ options, value, onChange }) => {
             const [isOpen, setIsOpen] = useState(false);
+            const selectRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (selectRef.current && !selectRef.current.contains(event.target)) {
+                        setIsOpen(false);
+                    }
+                };
+        
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                };
+            }, []);
+
     
             const handleLevelChange = async (newLevel) => {
                 try {
@@ -1507,7 +1581,7 @@ export default function Chat(props) {
             };
             
             return (
-                <div className="select-container">
+                <div className="select-container" ref={selectRef}>
                     <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
                         <span>{value}</span>
                         <span className="fa-solid fa-chevron-down"></span>
@@ -1642,6 +1716,7 @@ export default function Chat(props) {
         const timer = setInterval(() => {
           
           props.setProgressScore(prev => prev + 1);
+          
         }, 60000); 
       
         return () => clearInterval(timer);
@@ -2228,7 +2303,7 @@ export default function Chat(props) {
                 )}
             </div>
             <div className="chat-input-wrapper">
-                <div className="assistant-options">
+                <div className={`assistant-options ${showSuggestionBar ? '' : 'hidden'}`}>
                     <span onClick={handleAnotherQuestion}>Another question</span>
                     <span onClick={handleSuggestAnswer}>Suggest answer</span>
                 </div>
@@ -2287,8 +2362,8 @@ export default function Chat(props) {
           <p>Show suggestion bar</p>
           <input
             type="checkbox"
-            checked={isSuggestingAnswer}
-            onChange={(e) => setIsSuggestingAnswer(e.target.checked)}
+            checked={showSuggestionBar}
+            onChange={() => setShowSuggestionBar(!showSuggestionBar)}
           />
         </div>
         <div className="profile-menu-setting">

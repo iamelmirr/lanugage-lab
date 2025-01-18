@@ -36,6 +36,12 @@ const [isMuted, setIsMuted] = useState(false)
 const [savedChats, setSavedChats] = useState([])
 const [showOptionsModal, setShowOptionsModal] = useState(false);
 const [voiceSpeed, setVoiceSpeed] = useState(1)
+const [showSuggestionBar, setShowSuggestionBar] = useState(true)
+const [progressPercentage, setProgressPercentage] = useState(0)
+const [streakCount, setStreakCount] = useState(0);
+const [longestStreak, setLongestStreak] = useState(0);
+const [lastChatDate, setLastChatDate] = useState(null);
+const [todaysChatTime, setTodaysChatTime] = useState(0);
 
 
 
@@ -55,10 +61,10 @@ const [formData, setFormData] = useState({
  
 const levelThresholds = Array(100).fill(0).reduce((thresholds, _, index) => {
   if (index === 0) thresholds.push(0); // Level 1 starts at 0
-  else if (index < 10) thresholds.push(thresholds[index - 1] + 5); // Levels 1–10: +5 points
-  else if (index < 30) thresholds.push(thresholds[index - 1] + 10); // Levels 11–30: +10 points
-  else if (index < 60) thresholds.push(thresholds[index - 1] + 20); // Levels 31–60: +20 points
-  else thresholds.push(thresholds[index - 1] + 30); // Levels 61–100: +30 points
+  else if (index < 10) thresholds.push(thresholds[index - 1] + 10); // Levels 1–10: +5 points
+  else if (index < 30) thresholds.push(thresholds[index - 1] + 20); // Levels 11–30: +10 points
+  else if (index < 60) thresholds.push(thresholds[index - 1] + 30); // Levels 31–60: +20 points
+  else thresholds.push(thresholds[index - 1] + 50); // Levels 61–100: +30 points
   return thresholds;
 }, []);
 
@@ -71,14 +77,23 @@ useEffect(() => {
   const newLevel = calculateLevel(progressScore);
   setProgressLevel(newLevel);
   
+  const currentThreshold = levelThresholds[progressLevel - 1]
+  const nextThreshold = levelThresholds[progressLevel]
+  const newProgressPercentage = ((progressScore - currentThreshold) / (nextThreshold - currentThreshold)) * 100
+  setProgressPercentage(newProgressPercentage)
+
   // Update Firebase
   if (auth.currentUser) {
     const userDocRef = doc(db, "users", auth.currentUser.uid);
     updateDoc(userDocRef, {
       progressScore: progressScore,
-      progressLevel: newLevel
+      progressLevel: newLevel,
+      progressPercentage: progressPercentage
     });
   }
+
+  
+
 }, [progressScore]);
 
 
@@ -116,6 +131,11 @@ useEffect(() => {
           setLearningGoal(userDoc.data().goal)
           setLearningReason(userDoc.data().reason)
           setSavedChats(userDoc.data().savedChats)
+          setProgressPercentage(userDoc.data().progressPercentage)
+          setStreakCount(userDoc.data().streakCount || 0)
+          setLongestStreak(userDoc.data().longestStreak || 0)
+          setLastChatDate(userDoc.data().lastChatDate || null)
+          
           
 
           
@@ -142,7 +162,7 @@ useEffect(() => {
 
   const renderPage = () => {
     if (!isAuthenticated) {
-        if (isRegistering) return <Registration savedChats={savedChats} setSavedChats={setSavedChats} setLearningGoal={setLearningGoal} setLearningReason={setLearningReason} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
+        if (isRegistering) return <Registration progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} savedChats={savedChats} setSavedChats={setSavedChats} setLearningGoal={setLearningGoal} setLearningReason={setLearningReason} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setProgressLevel={setProgressLevel} setUserData={setUserData}/>
         if (isLogingIn) return <Login setIsAuthenticated={setIsAuthenticated} 
@@ -152,7 +172,7 @@ useEffect(() => {
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
     }
-    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} />;
+    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime}  />;
   };
 
   return <>{renderPage()}</>

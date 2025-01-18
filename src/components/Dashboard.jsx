@@ -11,9 +11,9 @@ export default function Dashboard(props) {
     
 
     return (
-        <div className="dashboard-div">
+        <div className={`dashboard-div ${selectedMode === 'progress' ? 'dashboard-progress' : ''}`}>
             <div className="dashboard-header">
-                <h1>Overview</h1>
+                <h1>{selectedMode === 'progress' ? 'Popular modes' : 'Dashboard'}</h1>
             </div>
             <div className="dashboard-info">
                 <div className="dashboard-greeting">

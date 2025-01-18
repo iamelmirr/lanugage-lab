@@ -132,11 +132,11 @@ body {
 /* MAIN DIV */
 
 .main-div {
-    background: var(--light-blue-background);
+    background: rgb(255, 251, 244);
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 24px;
+    padding-inline: 24px;
     align-items: center;
     gap: 20px;
     height: 100vh;
@@ -146,6 +146,7 @@ body {
 .mode-nav {
     display: flex;
     gap: 30px;
+    padding-top: 24px;
 }
 
 .mode-nav button {
@@ -219,12 +220,16 @@ body {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 34%;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     position: sticky;
     top: 0;
     height: 100vh;
     
+}
+
+.dashboard-div.dashboard-progress {
+    width: 200px;
 }
 
 .dashboard-div .dashboard-header {
@@ -556,6 +561,9 @@ body {
     gap: 20px;
 }
 
+
+
+
 .assistant-options span {
     display: flex;
     padding-inline: 14px;
@@ -563,6 +571,10 @@ body {
     padding-block: 8px;
     border-radius: 16px;
     font-size: 11px;
+}
+
+.assistant-options.hidden {
+    display: none;
 }
 
 .input-wrapper {
@@ -1156,3 +1168,184 @@ body {
   .select-header .fa-chevron-down {
     margin-left: auto;
   }
+
+
+
+
+
+  /* PROGRESS */
+
+.progress-header{
+    display: flex;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding-block: 24px;
+    border-bottom: 1px solid lightgray;
+}
+
+
+.progress-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 19px;
+}
+
+.progress-stat-large {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    background: rgb(219, 99, 19);
+    border-radius: 20px;
+    padding: 24px;
+    height: 346px;
+    border: 1px solid rgb(230, 230, 230)
+}
+
+.progress-level-subdiv {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.font-medium {
+    color: #E8F5E9;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.font-light-small {
+    font-size: 15px;
+    color: #b1b1b1;
+    font-weight: 450;
+}
+
+.border-div {
+    border-top: 1px solid lightgray;
+}
+
+.level-track {
+    display: flex;
+    width: 100%;
+    background: #E8F5E9;
+    padding-inline: 16px;
+    padding-block: 8px;
+    border-radius: 16px;
+    gap: 12px;
+    align-items: center;
+}
+
+.level-track-inside {
+    position: relative;
+    flex: 1;
+    background: rgb(231, 216, 193);
+    height: 8px;
+    border-radius: 14px;
+}
+
+.level-track-outside {
+    position: absolute;
+    height: 8px;
+    background: rgb(219, 99, 19);
+    width: 33%;
+    border-top-left-radius: 14px;
+    border-bottom-left-radius: 14px;
+}
+
+.font-medium.level-current {
+    color: rgb(219, 99, 19);
+    font-size: 22px;
+}
+
+.font-medium.level-next {
+    color: rgb(253, 187, 89);
+    font-size: 22px;
+}
+
+.progress-streak-subdiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-stat-large.progress-light-stat{
+    background: #ffffff;
+    
+}
+
+.font-medium.dark {
+    color: #282828
+}
+
+.font-light-small.dark {
+    color: #8f8f8f  
+}
+
+.streak-number-dark {
+    background: rgb(219, 99, 19);
+    padding: 12px;
+    border-radius: 40px;
+
+}
+
+.streak-number-dark p {
+    color: #E8F5E9;
+    font-weight: 450;
+}
+
+.streak-number-light {
+    background: rgb(250, 230, 193);
+    padding: 12px;
+    border-radius: 40px;
+}
+
+.streak-number-light p {
+    color: rgb(219, 99, 19);
+    font-weight: 450;
+    
+    
+}
+
+
+.progress-stat-small {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgb(230, 230, 230);
+}
+
+
+.stat-subdiv {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-icon-div {
+    display: grid;
+    height: 60px;
+    width: 60px;
+    background: #ffdb63;
+    padding-top: 16px;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.stat-icon-div span {
+    
+    font-size: 27px;
+    color: rgb(185, 121, 0);
+    
+}
+
+.stat-icon-div.messages {
+    background: rgb(180, 245, 142);
+}
+
+.stat-icon-div.messages span {
+    color: rgb(72, 134, 0);
+}

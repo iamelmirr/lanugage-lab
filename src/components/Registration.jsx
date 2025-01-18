@@ -4,7 +4,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signInWithPopup } from 'firebase/auth';
 
 export default function Registration(props) {
-    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel, setLearningReason, setLearningGoal, savedChats, setSavedChats } = props
+    const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel, setLearningReason, setLearningGoal, savedChats, setSavedChats, progressPercentage, setProgressPercentage } = props
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
@@ -34,7 +34,12 @@ export default function Registration(props) {
             progressScore: 0,
             lastChatTime: new Date(),
             createdAt: new Date(),
-            savedChats: []
+            savedChats: [],
+            progressPercentage: 0,
+            streakCount: 0,
+            longestStreak: 0,
+            lastChatDate: null,
+            todaysChatTime: 0,
           });
 
           setUserEmail(googleUser.email);
@@ -56,6 +61,7 @@ export default function Registration(props) {
             setTargetLanguageLevel(userDoc.data().level);
             setLearningGoal(userDoc.data().goal);
             setLearningReason(userDoc.data().reason);
+            setProgressPercentage(userDoc.data().progressPercentage)
         }
           
 
@@ -121,6 +127,11 @@ export default function Registration(props) {
               lastChatTime: new Date(),
               createdAt: new Date(),
               savedChats: [],
+              progressPercentage: 0,
+              streakCount: 0,
+              longestStreak: 0,
+              lastChatDate: null,
+              todaysChatTime: 0,
               
             })
 
@@ -150,6 +161,9 @@ export default function Registration(props) {
                     setLearningGoal(userDoc.data().goal)
                     setLearningReason(userDoc.data().reason)
                     setSavedChats(userDoc.data().savedChats)
+                    setProgressPercentage(userDoc.data().progressPercentage)
+                    
+                    
                       
                       console.log(userDoc)
             

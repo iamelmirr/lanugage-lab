@@ -87,6 +87,22 @@ export default function ProfileMode(props) {
 
     const CustomLevelSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
+        const selectRef = useRef(null);
+
+
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (selectRef.current && !selectRef.current.contains(event.target)) {
+                    setIsOpen(false);
+                }
+            };
+    
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, []);
+
 
         const handleLevelChange = async (newLevel) => {
             try {
@@ -110,7 +126,7 @@ export default function ProfileMode(props) {
         };
         
         return (
-            <div className="select-container">
+            <div className="select-container" ref={selectRef}>
                 <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
                     <span>{value}</span>
                     <span className="fa-solid fa-chevron-down"></span>
@@ -140,12 +156,27 @@ export default function ProfileMode(props) {
 
     const CustomSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
+        const selectRef = useRef(null);
 
-        const selectedLanguage = options.find(lang => lang.name === value)
+        
 
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (selectRef.current && !selectRef.current.contains(event.target)) {
+                    setIsOpen(false);
+                }
+            };
+
+            document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const selectedLanguage = options.find(lang => lang.name === value)
 
         return (
-            <div className="select-container">
+            <div className="select-container" ref={selectRef}>
             <div className="select-header" onClick={() => setIsOpen(!isOpen)}>
             {selectedLanguage && <img src={selectedLanguage.flag} alt={value} />}
               

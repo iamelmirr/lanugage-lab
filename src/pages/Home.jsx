@@ -12,7 +12,7 @@ import ProfileMode from "../components/ProfileMode";
 
 
 export default function Home(props) {
-    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, translationLanguage, targetLanguage, targetLanguageLevel, setTargetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, voiceSpeed, setVoiceSpeed} = props
+    const {userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, selectedMode, setSelectedMode, setProgressScore, progressScore, progressLevel, levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setIsAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, translationLanguage, targetLanguage, targetLanguageLevel, setTargetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, progressPercentage, setProgressPercentage, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime} = props
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
@@ -59,7 +59,7 @@ export default function Home(props) {
         <>
         <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}></Nav>
 
-        {(selectedMode === 'main' || selectedMode === 'progress') && <Main selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange}></Main>}
+        {(selectedMode === 'main' || selectedMode === 'progress') && <Main levelThresholds={levelThresholds} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange} progressLevel={progressLevel} progressScore={progressScore} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} longestStreak={longestStreak} savedChats={savedChats} ></Main>}
 
         {selectedMode === 'dialogue-modes' && <DialogueModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DialogueModes>}
 
@@ -69,7 +69,7 @@ export default function Home(props) {
 
         {selectedMode === 'scenario-modes' && <ScenarioModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></ScenarioModes>}
 
-        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} setTargetLanguageLevel={setTargetLanguageLevel} setTranslationLanguage={setTranslationLanguage} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed}/>}
+        {chatModes.includes(selectedMode) && <Chat  selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} progressScore={progressScore} setProgressScore={setProgressScore} targetLanguage={targetLanguage} translationLanguage={translationLanguage} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} setTargetLanguageLevel={setTargetLanguageLevel} setTranslationLanguage={setTranslationLanguage} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime} />}
 
         
 

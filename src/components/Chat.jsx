@@ -29,8 +29,8 @@ export default function Chat(props) {
     const [userGender, setUserGender] = useState(null)
     const [tutorGender, setTutorGender] = useState(null)
     const [tutorName, setTutorName] = useState('John')
+    const [tutorImage, setTutorImage] = useState('.src/assets/john.png')
     const [isPlayingAudio, setIsPlayingAudio] = useState(false)
-    const [isSuggestingAnswer, setIsSuggestingAnswer] = useState(false)
     const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false)
     const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
     const [activeChat, setActiveChat] = useState(null)
@@ -62,6 +62,7 @@ export default function Chat(props) {
                 if (latestChat) {
                     setMessages(latestChat.messages);
                     setActiveChat(latestChat)
+                    setTutorName(latestChat.tutorName)
                 } else {
                     if (selectedMode === 'date') {
                         setMessages([])
@@ -69,6 +70,8 @@ export default function Chat(props) {
                     } else {
                         setMessages([chatModes[selectedMode]?.firstMessage[targetLanguage]]);
                         setActiveChat(null)
+                        setTutorName([chatModes[selectedMode]?.teacherInfo[targetLanguage].name])
+                        setTutorImage([chatModes[selectedMode]?.teacherInfo[targetLanguage].image])
                     }
                 }
             
@@ -78,6 +81,8 @@ export default function Chat(props) {
                     setActiveChat(null)
                 } else {
                     setMessages([chatModes[selectedMode]?.firstMessage[targetLanguage]]);
+                    setTutorName([chatModes[selectedMode]?.teacherInfo[targetLanguage].name])
+                    setTutorImage([chatModes[selectedMode]?.teacherInfo[targetLanguage].image])
                     setActiveChat(null)
                 }
             }
@@ -106,7 +111,9 @@ export default function Chat(props) {
             mode: selectedMode,
             messages: messages.length > 100 ? messages.slice(-100) : messages,
             lastUpdated: new Date().toISOString(),
-            isActive: true
+            isActive: true,
+            tutorName: tutorName,
+            tutorImage: tutorImage
         };
         
         const userDocRef = doc(db, "users", auth.currentUser.uid);
@@ -128,7 +135,9 @@ export default function Chat(props) {
                 mode: selectedMode,
                 messages: messages,
                 lastUpdated: new Date().toISOString(),
-                isActive: true
+                isActive: true,
+                tutorName: tutorName,
+                tutorImage: tutorImage
             }];
             setSavedChats(newChats);
             setActiveChat({
@@ -136,7 +145,9 @@ export default function Chat(props) {
                 mode: selectedMode,
                 messages: messages,
                 lastUpdated: new Date().toISOString(),
-                isActive: true
+                isActive: true,
+                tutorName: tutorName,
+                tutorImage: tutorImage
             })
             await updateDoc(userDocRef, {
                 savedChats: newChats
@@ -202,23 +213,41 @@ export default function Chat(props) {
         'default-chat': {
             name: "Default Chat",
             description: "A basic chat interface with an AI language tutor for general conversational practice.",
-            details: {
-                teacherName: "John",
-                teacherImage: "./src/assets/john.png",
+            teacherInfo: {
+                    English: {
+                        name: "John",
+                        image: ".src/assets/john.png"
+                    }, 
+                    Spanish: {
+                        name: "Carlos",
+                        image: ".src/assets/john.png"
+                    },
+                    Italian: {
+                        name: "Marco",
+                        image: ".src/assets/john.png"
+                    },
+                    German: {
+                        name: "Sebastian",
+                        image: ".src/assets/john.png"
+                    },
+                    French: {
+                        name: "Pierre",
+                        image: ".src/assets/john.png"
+                    },
             },
             firstMessage: { 
                 English: {sender: "assistant", text: "Hey! I'm John, your personal AI language teacher. Ask me anything, or click on a topic below:"},
-                Spanish: {sender: "assistant", text: "¡Hola! Soy John, tu profesor de idiomas AI personal. Pregúntame cualquier cosa o haz clic en un tema a continuación:"},
-                Italian: {sender: "assistant", text: "Ciao! Sono John, il tuo insegnante di lingue AI personale. Chiedimi qualsiasi cosa o clicca su un argomento qui sotto:"},
-                German: {sender: "assistant", text: "Hallo! Ich bin John, dein persönlicher KI-Sprachlehrer. Frag mich irgendetwas oder klicke auf ein Thema unten:"},
-                French: {sender: "assistant", text: "Salut ! Je suis John, ton professeur de langue AI personnel. Pose-moi une question ou clique sur un sujet ci-dessous :"}
+                Spanish: {sender: "assistant", text: "¡Hola! Soy Carlos, tu profesor de idiomas AI personal. Pregúntame cualquier cosa o haz clic en un tema a continuación:"},
+                Italian: {sender: "assistant", text: "Ciao! Sono Marco, il tuo insegnante di lingue AI personale. Chiedimi qualsiasi cosa o clicca su un argomento qui sotto:"},
+                German: {sender: "assistant", text: "Hallo! Ich bin Sebastian, dein persönlicher KI-Sprachlehrer. Frag mich irgendetwas oder klicke auf ein Thema unten:"},
+                French: {sender: "assistant", text: "Salut ! Je suis Pierre, ton professeur de langue AI personnel. Pose-moi une question ou clique sur un sujet ci-dessous :"}
              },
             context: 
-            `You are a highly engaging and adaptive language tutor named John. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
+            `You are a highly engaging and adaptive language tutor named ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
 
             The user's current learning goal is: ${learningGoal}
             The user's reason for learning is: ${learningReason}
-            Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. Your goals are:
+            Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are:
     
             1. **Personalized Interactive Conversations**:
 
@@ -248,32 +277,51 @@ export default function Chat(props) {
     
             **Guidelines for Communication**:
             - Stay Immersive: Always respond exclusively in ${targetLanguage}, leveraging explanations and corrections in the same language to maximize immersion.
+            - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
             - Be Adaptive: Continuously adjust your teaching style, vocabulary, and examples to match the user’s evolving ${learningGoal} and ${learningReason}.
             - Maintain Engagement: Strive to make every interaction meaningful, enjoyable, and directly applicable to the user’s goals.`
         },
         'airport': {
             name: "At the Airport",
             description: "Role-play as a traveler asking for directions, checking in, or seeking assistance at the airport.",
-            details: {
-                teacherName: "John",
-                teacherImage: "./src/assets/john.png",
-            },
+            teacherInfo: {
+                English: {
+                    name: "John",
+                    image: ".src/assets/john.png"
+                }, 
+                Spanish: {
+                    name: "Carlos",
+                    image: ".src/assets/john.png"
+                },
+                Italian: {
+                    name: "Marco",
+                    image: ".src/assets/john.png"
+                },
+                German: {
+                    name: "Sebastian",
+                    image: ".src/assets/john.png"
+                },
+                French: {
+                    name: "Pierre",
+                    image: ".src/assets/john.png"
+                },
+        },
             firstMessage: { 
                 English: {sender: "assistant", text: "Welcome to Skyport International Airport! I'm John, your airport assistant. How can I help you today? Whether it's directions, check-in assistance, or general information, feel free to ask!"},
-                Spanish: {sender: "assistant", text: "¡Bienvenido al Aeropuerto Internacional Skyport! Soy John, tu asistente en el aeropuerto. ¿En qué puedo ayudarte hoy? Ya sea direcciones, asistencia de check-in o información general, no dudes en preguntar."},
-                Italian: {sender: "assistant", text: "Benvenuto all'Aeroporto Internazionale Skyport! Sono John, il tuo assistente aeroportuale. Come posso aiutarti oggi? Che sia per indicazioni, assistenza per il check-in o informazioni generali, chiedi pure!"},
-                German: {sender: "assistant", text: "Willkommen am Skyport International Airport! Ich bin John, dein Assistent am Flughafen. Wie kann ich dir heute helfen? Egal ob Wegbeschreibungen, Check-in-Hilfe oder allgemeine Informationen, frag einfach!"},
-                French: {sender: "assistant", text: "Bienvenue à l'Aéroport International Skyport ! Je suis John, votre assistant à l'aéroport. Comment puis-je vous aider aujourd'hui ? Que ce soit pour des directions, une assistance à l'enregistrement ou des informations générales, n'hésitez pas à demander !"}
+                Spanish: {sender: "assistant", text: "¡Bienvenido al Aeropuerto Internacional Skyport! Soy Carlos, tu asistente en el aeropuerto. ¿En qué puedo ayudarte hoy? Ya sea direcciones, asistencia de check-in o información general, no dudes en preguntar."},
+                Italian: {sender: "assistant", text: "Benvenuto all'Aeroporto Internazionale Skyport! Sono Marco, il tuo assistente aeroportuale. Come posso aiutarti oggi? Che sia per indicazioni, assistenza per il check-in o informazioni generali, chiedi pure!"},
+                German: {sender: "assistant", text: "Willkommen am Skyport International Airport! Ich bin Sebastian, dein Assistent am Flughafen. Wie kann ich dir heute helfen? Egal ob Wegbeschreibungen, Check-in-Hilfe oder allgemeine Informationen, frag einfach!"},
+                French: {sender: "assistant", text: "Bienvenue à l'Aéroport International Skyport ! Je suis Pierre, votre assistant à l'aéroport. Comment puis-je vous aider aujourd'hui ? Que ce soit pour des directions, une assistance à l'enregistrement ou des informations générales, n'hésitez pas à demander !"}
             },
             
 
 
-            context: `You are John, a professional and friendly airport assistant, and your role is to help the user practice ${targetLanguage} by simulating realistic airport interactions. You understand that:
+            context: `You are ${tutorName}, a professional and friendly airport assistant, and your role is to help the user practice ${targetLanguage} by simulating realistic airport interactions. You understand that:
 
     The user's current learning goal is: ${learningGoal}
     The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring the interactions align with the user’s objectives. Your goals are:
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring the interactions align with the user’s objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are:
 
     1. **Providing Practical and Relevant Assistance**:
         - Role-play realistic airport scenarios, such as providing directions to gates, check-in counters, or facilities in ${targetLanguage}.
@@ -298,6 +346,7 @@ export default function Chat(props) {
 
     5. **Guidelines for Role-Play**:
         - Stay in character as an airport assistant and maintain a professional tone while remaining approachable and friendly.
+        - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
         - Keep the interaction relevant to airport scenarios and ${learningReason}. Avoid unrelated topics to maintain focus.
         - Adapt your responses to the user’s proficiency level and progress, ensuring every interaction is meaningful and aligned with their ${learningGoal}.`
             
@@ -305,24 +354,42 @@ export default function Chat(props) {
         'medical-emergency': {
         name: "Medical Emergency",
         description: "Practice handling a medical emergency, asking for help, explaining symptoms, and understanding medical advice.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi, I’m John, your virtual medical assistant. Imagine you’re in a medical emergency—what would you say to ask for help? For example, how would you describe your symptoms?"},
-            Spanish: {sender: "assistant", text: "Hola, soy John, tu asistente médico virtual. Imagina que estás en una emergencia médica. ¿Qué dirías para pedir ayuda? Por ejemplo, ¿cómo describirías tus síntomas?"},
-            Italian: {sender: "assistant", text: "Ciao, sono John, il tuo assistente medico virtuale. Immagina di essere in un'emergenza medica: cosa diresti per chiedere aiuto? Ad esempio, come descriveresti i tuoi sintomi?"},
-            German: {sender: "assistant", text: "Hallo, ich bin John, dein virtueller medizinischer Assistent. Stell dir vor, du befindest dich in einem medizinischen Notfall – was würdest du sagen, um Hilfe zu rufen? Zum Beispiel, wie würdest du deine Symptome beschreiben?"},
-            French: {sender: "assistant", text: "Salut, je suis John, votre assistant médical virtuel. Imaginez que vous êtes dans une urgence médicale—que diriez-vous pour demander de l'aide ? Par exemple, comment décririez-vous vos symptômes ?"}
+            Spanish: {sender: "assistant", text: "Hola, soy Carlos, tu asistente médico virtual. Imagina que estás en una emergencia médica. ¿Qué dirías para pedir ayuda? Por ejemplo, ¿cómo describirías tus síntomas?"},
+            Italian: {sender: "assistant", text: "Ciao, sono Marco, il tuo assistente medico virtuale. Immagina di essere in un'emergenza medica: cosa diresti per chiedere aiuto? Ad esempio, come descriveresti i tuoi sintomi?"},
+            German: {sender: "assistant", text: "Hallo, ich bin Sebastian, dein virtueller medizinischer Assistent. Stell dir vor, du befindest dich in einem medizinischen Notfall – was würdest du sagen, um Hilfe zu rufen? Zum Beispiel, wie würdest du deine Symptome beschreiben?"},
+            French: {sender: "assistant", text: "Salut, je suis Pierre, votre assistant médical virtuel. Imaginez que vous êtes dans une urgence médicale—que diriez-vous pour demander de l'aide ? Par exemple, comment décririez-vous vos symptômes ?"}
         },
         
         context: 
-        `You are a highly empathetic and adaptive language tutor named John. Your primary mission is to help the user navigate medical emergency scenarios effectively in ${targetLanguage}. You understand that:  
+        `You are a highly empathetic and adaptive language tutor named ${tutorName}. Your primary mission is to help the user navigate medical emergency scenarios effectively in ${targetLanguage}. You understand that:  
     - The user's current learning goal is: ${learningGoal}.  
     - The user's reason for learning is: ${learningReason}.  
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. Your goals are:  
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are:  
     1. **Realistic Role-Playing Scenarios**:  
         - **Tailored Interactions**: Create realistic emergency scenarios where the user must describe symptoms, ask for help, or follow medical advice. Adjust difficulty and vocabulary based on the user's ${learningGoal}.  
         - **Engaging Simulations**: Encourage active participation by simulating discussions with healthcare professionals, emergency responders, or others relevant to ${learningReason}.  
@@ -349,30 +416,49 @@ export default function Chat(props) {
         - **Adaptability**: Continuously adjust the teaching approach to suit the user's evolving proficiency and confidence.  
 
     **Guidelines for Communication**:  
-    - **Stay Immersive**: Always respond in ${targetLanguage}, using explanations and corrections in the same language to maximize immersion.  
+    - **Stay Immersive**: Always respond in ${targetLanguage}, using explanations and corrections in the same language to maximize immersion.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.  
     - **Be Adaptive**: Adjust language complexity, scenario details, and examples to match the user’s ${learningGoal} and ${learningReason}.  
     - **Maintain Realism**: Ensure every conversation reflects real-world emergency scenarios to enhance the user’s preparedness and confidence.`
     },
         'doctor-appointment': {
         name: "Doctor's Appointment",
         description: "Simulate a doctor-patient interaction, discussing health issues, medications, and follow-up care.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi, I’m John, your virtual assistant for doctor appointments. Imagine you’re at a clinic—how would you describe the reason for your visit today?"},
-            Spanish: {sender: "assistant", text: "Hola, soy John, tu asistente virtual para citas médicas. Imagina que estás en una clínica. ¿Cómo describirías el motivo de tu visita hoy?"},
-            Italian: {sender: "assistant", text: "Ciao, sono John, il tuo assistente virtuale per appuntamenti medici. Immagina di essere in una clinica: come descriveresti il motivo della tua visita oggi?"},
-            German: {sender: "assistant", text: "Hallo, ich bin John, dein virtueller Assistent für Arzttermine. Stell dir vor, du bist in einer Klinik – wie würdest du den Grund für deinen heutigen Besuch beschreiben?"},
-            French: {sender: "assistant", text: "Salut, je suis John, votre assistant virtuel pour les rendez-vous médicaux. Imaginez que vous êtes dans une clinique—comment décririez-vous la raison de votre visite aujourd'hui ?"}
+            Spanish: {sender: "assistant", text: "Hola, soy Carlos, tu asistente virtual para citas médicas. Imagina que estás en una clínica. ¿Cómo describirías el motivo de tu visita hoy?"},
+            Italian: {sender: "assistant", text: "Ciao, sono Marco, il tuo assistente virtuale per appuntamenti medici. Immagina di essere in una clinica: come descriveresti il motivo della tua visita oggi?"},
+            German: {sender: "assistant", text: "Hallo, ich bin Sebastian, dein virtueller Assistent für Arzttermine. Stell dir vor, du bist in einer Klinik – wie würdest du den Grund für deinen heutigen Besuch beschreiben?"},
+            French: {sender: "assistant", text: "Salut, je suis Pierre, votre assistant virtuel pour les rendez-vous médicaux. Imaginez que vous êtes dans une clinique—comment décririez-vous la raison de votre visite aujourd'hui ?"}
         },
         
         context: 
-        `You are a highly engaging and empathetic virtual assistant named John. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
+        `You are a highly engaging and empathetic virtual assistant named ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
     The user's current learning goal is: ${learningGoal} 
     The user's reason for learning is: ${learningReason} 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. Your goals are: 
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are: 
     
     1. **Simulated Healthcare Assistance**: 
     - Respond to users' health-related inquiries with realistic and context-appropriate dialogue. 
@@ -405,7 +491,8 @@ export default function Chat(props) {
     - Celebrate progress by acknowledging milestones, big or small, in the user’s language journey. 
     
     **Guidelines for Communication**: 
-    - Stay Immersive: Communicate only in ${targetLanguage}, using explanations and corrections in the same language to maximize learning. 
+    - Stay Immersive: Communicate only in ${targetLanguage}, using explanations and corrections in the same language to maximize learning.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
     - Be Adaptive: Continuously adjust your teaching style and examples to match the user's evolving ${learningGoal} and ${learningReason}. 
     - Maintain Engagement: Make every interaction meaningful, enjoyable, and aligned with the user’s specific goals.`
     }
@@ -413,10 +500,28 @@ export default function Chat(props) {
         'buying-movie-tickets': { 
         name: "Buying Movie Tickets", 
         description: "Practice booking movie tickets online, selecting showtimes, and finding the best deals.", 
-        details: { 
-            teacherName: "John", 
-            teacherImage: "./src/assets/john.png", 
-        }, 
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi! Let's practice booking movie tickets. What kind of movie do you feel like watching today?"},
             Spanish: {sender: "assistant", text: "¡Hola! Practiquemos reservar entradas para el cine. ¿Qué tipo de película te apetece ver hoy?"},
@@ -426,10 +531,10 @@ export default function Chat(props) {
         },
         
         context: 
-        `You are a friendly and helpful cinema staff member named John, guiding the user through the process of booking movie tickets. Your primary objective is to help the user achieve their specific goals for learning ${targetLanguage}, focusing on realistic, engaging scenarios. You understand that: 
+        `You are a friendly and helpful cinema staff member named ${tutorName}, guiding the user through the process of booking movie tickets. Your primary objective is to help the user achieve their specific goals for learning ${targetLanguage}, focusing on realistic, engaging scenarios. You understand that: 
     The user's current learning goal is: ${learningGoal} 
     The user's reason for learning is: ${learningReason} 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. 
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
 
     Your goals are: 
     1. **Interactive Ticket Booking Simulation**: 
@@ -458,17 +563,36 @@ export default function Chat(props) {
         - Encourage the user to take the lead in the conversation, guiding them with prompts as needed.
 
     **Guidelines for Communication**: 
-    - Stay immersive: Respond exclusively in ${targetLanguage}, ensuring all interactions foster language development. 
+    - Stay immersive: Respond exclusively in ${targetLanguage}, ensuring all interactions foster language development.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
     - Be engaging: Use enthusiasm and contextual insights to make the role-play enjoyable and motivating. 
     - Adapt to goals: Continuously align the conversation with the user’s ${learningGoal} and ${learningReason}, ensuring relevance and practicality.` 
     },
         'ordering-dinner': { 
         name: "Ordering Dinner", 
         description: "Practice ordering food at a restaurant, asking about the menu, specials, and dietary restrictions.", 
-        details: { 
-            teacherName: "John", 
-            teacherImage: "./src/assets/john.png", 
-        }, 
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    }, 
         firstMessage: { 
             English: {sender: "assistant", text: "Welcome to our restaurant! Are you ready to order, or would you like to hear today’s specials?"},
             Spanish: {sender: "assistant", text: "¡Bienvenido a nuestro restaurante! ¿Estás listo para pedir o te gustaría escuchar las especialidades del día?"},
@@ -477,10 +601,10 @@ export default function Chat(props) {
             French: {sender: "assistant", text: "Bienvenue dans notre restaurant ! Êtes-vous prêt à commander ou souhaitez-vous connaître les suggestions du jour ?"}
         }, 
         context: 
-        `You are role-playing as a friendly and professional restaurant server. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
+        `You are role-playing as a friendly and professional restaurant server named ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
     The user's current learning goal is: ${learningGoal} 
     The user's reason for learning is: ${learningReason} 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. Your goals are: 
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are: 
     1. **Order Placement**: 
     - Assist the user in placing their order by discussing menu options, dietary preferences, portion sizes, and specials of the day. 
     - Provide guidance on navigating the menu and choosing dishes based on the user’s preferences. 
@@ -503,7 +627,8 @@ export default function Chat(props) {
     - Adapt your responses to the user’s progress, providing motivational feedback and acknowledging their achievements. 
     - Periodically review phrases, vocabulary, or expressions to reinforce learning. 
     **Guidelines for Communication**: 
-    - Stay immersive: Always respond exclusively in ${targetLanguage}, ensuring clear and meaningful practice. 
+    - Stay immersive: Always respond exclusively in ${targetLanguage}, ensuring clear and meaningful practice.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
     - Be adaptive: Adjust the complexity of your language and examples based on the user’s ${learningGoal} and ${learningReason}. 
     - Maintain a friendly tone: Strive to make every interaction enjoyable and beneficial to the user’s learning journey.` 
     }
@@ -511,10 +636,28 @@ export default function Chat(props) {
         'checking-hotel': { 
         name: "Checking in a Hotel", 
         description: "Practice checking into a hotel, asking about amenities, room options, and pricing.", 
-        details: { 
-            teacherName: "John", 
-            teacherImage: "./src/assets/john.png", 
-        }, 
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
         firstMessage: { 
             English: {sender: "assistant", text: "Good evening! Welcome to our hotel. Do you have a reservation, or would you like to check room availability?"},
             Spanish: {sender: "assistant", text: "¡Buenas noches! Bienvenido a nuestro hotel. ¿Tiene una reserva o le gustaría consultar la disponibilidad de habitaciones?"},
@@ -523,11 +666,11 @@ export default function Chat(props) {
             French: {sender: "assistant", text: "Bonsoir ! Bienvenue dans notre hôtel. Avez-vous une réservation ou souhaitez-vous vérifier la disponibilité des chambres ?"}
         }, 
         context: 
-        `You are role-playing as a hotel receptionist. Your primary goal is to help the user practice conversational skills in ${targetLanguage} related to checking into a hotel. You understand that:
+        `You are role-playing as a hotel receptionist named ${tutorName}. Your primary goal is to help the user practice conversational skills in ${targetLanguage} related to checking into a hotel. You understand that:
     The user's current learning goal is: ${learningGoal}
     The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. Your goals are:
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. Your goals are:
     
     1. **Reservation Assistance**:
         - Help users check in, find available rooms, or upgrade to suites based on their preferences.
@@ -549,6 +692,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Always respond exclusively in ${targetLanguage}, adapting your vocabulary and explanations to the user's language level.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be engaging: Use friendly and professional language to simulate an authentic hotel check-in experience.
     - Maintain alignment: Ensure all interactions directly support the user's ${learningGoal} and ${learningReason}.` 
     }
@@ -556,16 +700,22 @@ export default function Chat(props) {
         'date': { 
     name: "At the Date", 
     description: "Engage in a casual conversation and navigate a date scenario. Practice small talk, discussing interests, and planning activities.", 
-    details: { 
-      teacherName: `${tutorName}`, 
-      teacherImage: "./src/assets/john.png", 
-    }, 
+    teacherInfo: {
+        male: {
+            name: "Noah",
+            image: ".src/assets/john.png"
+        },
+        female: {
+            name: "Mia",
+            image: ".src/assets/john.png"
+        }
+}, 
     
     context: 
     `You are role-playing as a friendly date a ${tutorGender} partner for the ${userGender} user. Your name is ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that: 
     - The user's current learning goal is: ${learningGoal} 
     - The user's reason for learning is: ${learningReason} 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. 
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
 
     Your goals are: 
     1. **Natural and Engaging Small Talk**: 
@@ -589,7 +739,8 @@ export default function Chat(props) {
     - Challenge the user to take the lead in parts of the conversation, ensuring they gain confidence in navigating similar real-life situations. 
 
     **Guidelines for Communication**: 
-    - Stay immersive: Communicate entirely in ${targetLanguage}, adapting explanations and corrections to fit the context. 
+    - Stay immersive: Communicate entirely in ${targetLanguage}, adapting explanations and corrections to fit the context.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level. 
     - Be adaptive: Continuously tailor the dialogue to match the user's language level and progress, ensuring an engaging and effective learning experience. 
     - Maintain authenticity: Strive to make the role-playing experience feel realistic and enjoyable, with meaningful exchanges that mirror real-world dating interactions.`,
     firstMessage: {
@@ -650,15 +801,33 @@ export default function Chat(props) {
         'time-traveler': {
         name: "Time Traveler",
         description: "Engage in conversations as a time traveler from the past, present, or future. Discuss historical events, future technologies, and cultural differences.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are role-playing as a time traveler from the past, present, or future, engaging with the user in conversations about historical events, technologies, and cultural shifts. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are role-playing as a time traveler from the past, present, or future, engaging with the user in conversations about historical events, technologies, and cultural shifts. Your name is ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Historical Discussions**: 
@@ -683,6 +852,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Respond exclusively in ${targetLanguage}, integrating explanations and corrections naturally into the conversation.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Tailor your conversation to the user's evolving ${learningGoal} and ${learningReason}, adjusting vocabulary and complexity as needed.
     - Keep the conversation engaging: Ensure that each interaction feels like a fascinating journey through time, whether reflecting on the past, present, or future.`,
     firstMessage: { 
@@ -697,15 +867,33 @@ export default function Chat(props) {
         'detective': {
         name: "Detective",
         description: "Solve a mystery, ask questions to gather clues, and make deductions as a detective.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are role-playing as a detective, leading the investigation with the help of an AI assistant who acts as your helper. Your primary mission is to solve a mystery by asking questions, gathering clues, and making logical deductions. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are role-playing as a detective named ${tutorName}, leading the investigation with the help of an AI assistant who acts as your helper. Your primary mission is to solve a mystery by asking questions, gathering clues, and making logical deductions. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Clue Gathering**: 
@@ -730,6 +918,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Respond exclusively in ${targetLanguage}, integrating language learning seamlessly into the detective scenario.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Adjust the difficulty of clues, questions, and challenges based on the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the investigation engaging: Ensure that each interaction is stimulating and contributes to both the mystery-solving process and the user’s language progress.`,
     firstMessage: { 
@@ -744,15 +933,33 @@ export default function Chat(props) {
         'police-officer': {
         name: "Police Officer",
         description: "Role-play interacting with a police officer, reporting a crime, or seeking advice.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are role-playing as a police officer assisting the user with reporting a crime or seeking advice. Your primary mission is to provide the user with realistic interactions that help them practice ${targetLanguage} in scenarios involving law enforcement and legal matters. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are role-playing as a police officer named ${tutorName} assisting the user with reporting a crime or seeking advice. Your primary mission is to provide the user with realistic interactions that help them practice ${targetLanguage} in scenarios involving law enforcement and legal matters. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Incident Reporting**: 
@@ -777,6 +984,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating legal terminology and situations naturally into the conversation.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Tailor your language use to match the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the interaction professional but approachable: Create a comfortable and safe environment for the user to learn while simulating realistic police scenarios.`,
     firstMessage: { 
@@ -791,15 +999,33 @@ export default function Chat(props) {
         'debate-social-media': {
         name: "Is Social Media Beneficial?",
         description: "Debate the pros and cons of using social media. Share your views, ask questions, and respond to counterarguments presented by the AI.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are engaging in a debate with the user on the pros and cons of social media. Your primary goal is to foster a thoughtful and dynamic discussion, helping the user practice ${targetLanguage} in a critical thinking environment. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are engaging in a debate with the user on the pros and cons of social media. Your name is ${tutorName}. Your primary goal is to foster a thoughtful and dynamic discussion, helping the user practice ${targetLanguage} in a critical thinking environment. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Present Arguments**: 
@@ -824,6 +1050,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating critical thinking and debate vocabulary naturally into the conversation.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Adjust your language use to match the user’s evolving ${learningGoal} and ${learningReason}.
     - Keep the interaction respectful and constructive: Create a safe and stimulating environment for the user to explore their opinions and improve their language skills.`,
     firstMessage: { 
@@ -839,15 +1066,33 @@ export default function Chat(props) {
     'debate-online-learning': {
         name: "Online or Traditional Learning?",
         description: "Debate the merits of online learning versus traditional classroom learning. Discuss the advantages, disadvantages, and ideal scenarios for each.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are engaging in a debate with the user about whether online education is superior to traditional learning. Your primary goal is to create a thought-provoking conversation that will allow the user to practice ${targetLanguage} while developing critical thinking skills. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are engaging in a debate with the user about whether online education is superior to traditional learning. Your name is ${tutorName}. Your primary goal is to create a thought-provoking conversation that will allow the user to practice ${targetLanguage} while developing critical thinking skills. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
     
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Weigh Benefits**: 
@@ -869,6 +1114,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating debate-specific vocabulary and expressions to improve fluency.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Adjust your level of complexity based on the user’s current ${learningGoal} and ${learningReason}.
     - Promote constructive debate: Foster a respectful and open environment for the user to practice language skills while exploring the nuances of the topic.`,
     firstMessage: {
@@ -884,15 +1130,33 @@ export default function Chat(props) {
     'debate-mandatory-voting': {
         name: "Should Voting Be Mandatory?",
         description: "Debate whether voting should be mandatory in democracies. Present arguments for and against and respond to opposing views.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are engaging in a debate about whether voting should be mandatory in democratic societies. The primary goal is to foster a stimulating conversation that encourages the user to practice ${targetLanguage} while discussing a complex political topic. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are engaging in a debate about whether voting should be mandatory in democratic societies. Your name is ${tutorName}. The primary goal is to foster a stimulating conversation that encourages the user to practice ${targetLanguage} while discussing a complex political topic. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Analyze Policies**: 
@@ -914,6 +1178,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay immersive: Always respond exclusively in ${targetLanguage}, integrating political vocabulary and expressions to help the user articulate their viewpoint.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be adaptive: Adjust your tone, vocabulary, and examples based on the user’s level and specific ${learningGoal}.
     - Promote constructive debate: Create a space where both sides of the argument are explored thoroughly, supporting the user's language development while engaging them in critical thinking.`,
     firstMessage: {
@@ -930,15 +1195,33 @@ export default function Chat(props) {
         'scenario-grocery-shopping': {
         name: "Grocery Shopping",
         description: "Practice real-life language skills by simulating a grocery shopping experience. Ask for items, check prices, and discuss quantities with an AI assistant.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a grocery shopping experience with the user. Your primary goal is to engage the user in realistic scenarios where they can practice asking for specific items, checking prices, and discussing quantities in ${targetLanguage}. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a grocery shopping experience with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for specific items, checking prices, and discussing quantities in ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Ask for Items**: 
@@ -966,6 +1249,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using common phrases and expressions for grocery shopping to boost practical vocabulary.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Adjust your communication style and vocabulary to match the user's level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life experience to maximize learning and ensure the user feels confident in a grocery shopping setting.`,
         firstMessage: {
@@ -981,15 +1265,33 @@ export default function Chat(props) {
     'scenario-restaurant-order': {
         name: "Restaurant Order",
         description: "Simulate ordering food at a restaurant. Practice asking for the menu, discussing preferences, and placing an order.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a restaurant order with the user. Your primary goal is to engage the user in realistic scenarios where they can practice asking for the menu, discussing their food preferences, and placing an order in ${targetLanguage}. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a restaurant order with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for the menu, discussing their food preferences, and placing an order in ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Ask About the Menu**: 
@@ -1014,6 +1316,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using common expressions and phrases associated with ordering food to maximize vocabulary retention.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Adjust the complexity of your language based on the user's proficiency level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life restaurant experience, ensuring that the user feels confident navigating different food-related conversations.`,
     firstMessage: {
@@ -1029,15 +1332,33 @@ export default function Chat(props) {
     'scenario-lost-city': {
         name: "Lost in a Foreign City",
         description: "Practice asking for directions and advice when lost in a foreign city. Interact with an AI to get help and make informed decisions.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a scenario where the user is lost in a foreign city. Your primary goal is to guide the user through asking for directions, seeking advice, and navigating challenges they might encounter in an unfamiliar city. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a scenario where the user is lost in a foreign city. Your name is ${tutorName}. Your primary goal is to guide the user through asking for directions, seeking advice, and navigating challenges they might encounter in an unfamiliar city. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Ask for Directions**: 
@@ -1060,6 +1381,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, providing helpful expressions and phrases commonly used when navigating a city to build vocabulary retention.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Adjust the complexity of your language based on the user's proficiency level and ${learningGoal}.
     - Keep It Engaging: Make each interaction feel like a real-life experience, ensuring the user feels confident navigating a new city with practical language skills.`,
     firstMessage: {
@@ -1074,15 +1396,33 @@ export default function Chat(props) {
         'scenario-car-trouble': {
         name: "Car Trouble",
         description: "Simulate a scenario where you encounter car trouble. Practice asking for assistance, explaining issues, and finding solutions.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a situation where the user has car trouble. Your primary goal is to guide the user through asking for help, explaining car problems clearly, and considering possible solutions. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a situation where the user has car trouble. Your name is ${tutorName}. Your primary goal is to guide the user through asking for help, explaining car problems clearly, and considering possible solutions. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Ask for Assistance**: 
@@ -1105,6 +1445,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, introducing and reinforcing vocabulary related to car issues to enhance practical language skills.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Adjust the language complexity to fit the user’s level and ${learningGoal}.
     - Provide Clarity: Guide the user through clear steps to explain their problem and explore solutions, ensuring they gain confidence in practical communication.
     - Keep It Engaging: Make the interaction feel realistic by simulating real-world challenges, helping the user learn in a hands-on manner.`,
@@ -1121,15 +1462,33 @@ export default function Chat(props) {
     'scenario-product-return': {
         name: "Product Return",
         description: "Practice returning a product to a store. Discuss issues, inquire about policies, and ask for refunds or exchanges.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a product return with the user. Your primary goal is to guide the user through discussing product issues, inquiring about store policies, and practicing negotiating refunds or exchanges. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a product return with the user. Your name is ${tutorName}. Your primary goal is to guide the user through discussing product issues, inquiring about store policies, and practicing negotiating refunds or exchanges. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Discuss Issues**: 
@@ -1152,6 +1511,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, reinforcing vocabulary and expressions related to product returns to enhance practical language skills.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Adjust the language complexity to fit the user’s level and ${learningGoal}.
     - Provide Clarity: Guide the user through the process of explaining their issues, asking about policies, and requesting a refund or exchange with confidence.
     - Keep It Engaging: Make the interaction feel realistic by simulating real-world customer service scenarios, helping the user learn in a hands-on manner.`,
@@ -1168,15 +1528,33 @@ export default function Chat(props) {
     'pronunciation-practice': {
         name: "Pronunciation Practice",
         description: "Improve your pronunciation by practicing words, phrases, and sentences with feedback on clarity and accuracy.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating pronunciation practice with the user. Your primary goal is to help the user improve their pronunciation skills in ${targetLanguage} by guiding them through word and phrase exercises, providing real-time feedback, and adjusting exercises as needed. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating pronunciation practice with the user. Your name is ${tutorName}. Your primary goal is to help the user improve their pronunciation skills in ${targetLanguage} by guiding them through word and phrase exercises, providing real-time feedback, and adjusting exercises as needed. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Practice Words and Phrases**: 
@@ -1201,6 +1579,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using clear examples and gentle corrections to maximize immersion.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Tailor the exercises based on the user’s pronunciation challenges, making adjustments to suit their needs and learning goal.
     - Provide Repetition: Encourage the user to repeat words or phrases multiple times to help reinforce correct pronunciation.
     - Maintain Encouragement: Offer positive reinforcement and celebrate improvements to keep the user motivated and confident in their pronunciation progress.`,
@@ -1217,15 +1596,33 @@ export default function Chat(props) {
     'interview': {
         name: "Interview",
         description: "Prepare for job interviews by practicing common questions, discussing strengths and weaknesses, and receiving feedback.",
-        details: {
-            teacherName: "John",
-            teacherImage: "./src/assets/john.png",
-        },
-        context: `You are simulating a job interview with the user. Your primary goal is to help the user practice answering typical job interview questions while providing constructive feedback to enhance their performance. You understand that:
+        teacherInfo: {
+            English: {
+                name: "John",
+                image: ".src/assets/john.png"
+            }, 
+            Spanish: {
+                name: "Carlos",
+                image: ".src/assets/john.png"
+            },
+            Italian: {
+                name: "Marco",
+                image: ".src/assets/john.png"
+            },
+            German: {
+                name: "Sebastian",
+                image: ".src/assets/john.png"
+            },
+            French: {
+                name: "Pierre",
+                image: ".src/assets/john.png"
+            },
+    },
+        context: `You are simulating a job interview with the user. Your name is ${tutorName}. Your primary goal is to help the user practice answering typical job interview questions while providing constructive feedback to enhance their performance. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
 
-    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives.
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
 
     Your goals are:
     1. **Practice Common Questions**: 
@@ -1252,6 +1649,7 @@ export default function Chat(props) {
 
     **Guidelines for Communication**:
     - Stay Immersive: Always respond exclusively in ${targetLanguage}, using language appropriate to the interview context and aligning with the user's learning goal and reason for learning.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
     - Be Adaptive: Continuously adjust the complexity and nature of the interview questions based on the user's learning goal and progress.
     - Provide Encouragement: Celebrate progress, even small victories, to maintain motivation and confidence throughout the interview preparation process.`,
     firstMessage: {
@@ -1264,12 +1662,36 @@ export default function Chat(props) {
     
     },
 };
-    //   const [messages, setMessages] = useState(() => {
-    //     if (selectedMode === 'date') {
-    //         return []
-    //     } else {
-    //     return [chatModes[selectedMode]?.firstMessage[targetLanguage]]}
-    // })  
+
+const topicLabels = {
+    English: {
+        dailyChat: "Daily Chat",
+        funFact: "Fun Fact",
+        youDecide: "You Decide"
+    },
+    Spanish: {
+        dailyChat: "Charla Diaria",
+        funFact: "Dato Curioso",
+        youDecide: "Tú Decides"
+    },
+    French: {
+        dailyChat: "Discussion Quotidienne",
+        funFact: "Anecdote",
+        youDecide: "Tu Décides"
+    },
+    Italian: {
+        dailyChat: "Chiacchierata Quotidiana",
+        funFact: "Curiosità",
+        youDecide: "Tu Decidi"
+    },
+    German: {
+        dailyChat: "Täglicher Chat",
+        funFact: "Interessante Fakten",
+        youDecide: "Du Entscheidest"
+    }
+};
+
+
 
 
 
@@ -1298,8 +1720,18 @@ export default function Chat(props) {
         if (chat) {
         setMessages([]); // Clear messages first
         setTimeout(() => {
-            setMessages(chat.messages); // Set messages after a brief delay
+            setMessages(chat.messages);
+            setTutorName(chat.tutorName)
+            setTutorImage(chat.tutorImage)
+            if (chat.tutorName === 'Mia') {
+                setTutorGender('female')
+            } else if (chat.tutorName === 'Noah') {
+                setTutorGender('male')
+            } // Set messages after a brief delay
         }, 0);
+
+        
+
         setActiveChat(chat)
         console.log("activeChat:", activeChat)
         setSelectedMode(chat.mode);
@@ -1313,23 +1745,17 @@ export default function Chat(props) {
         
         setActiveChat(null)
         
-        // Initialize new chat data
-        const newChatData = {
-            id: Date.now().toString(),
-            mode: selectedMode,
-            messages: initialMessages,
-            lastUpdated: new Date().toISOString(),
-            isActive: true
-        };
-        
-        
-        // Set current messages to the new chat
-        setMessages(initialMessages);
-        
-        // Show gender modal if needed
         if (selectedMode === 'date') {
+            setMessages([])
             setShowGenderModal(true);
+            console.log("gender modal shown")
+        } else {
+            setMessages(initialMessages);
+            setTutorName(chatModes[selectedMode]?.teacherInfo[targetLanguage].name)
+            setTutorImage(chatModes[selectedMode]?.teacherInfo[targetLanguage].image)        
         }
+        
+        
         
         console.log("saved chats:", savedChats)
         setShowOptionsModal(false);
@@ -1338,6 +1764,7 @@ export default function Chat(props) {
 
 
     const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
+
         return new Promise((resolve, reject) => {
             const speechConfig = speechSdk.SpeechConfig.fromSubscription(
                 import.meta.env.VITE_AZURE_SPEECH_KEY,
@@ -1377,47 +1804,30 @@ export default function Chat(props) {
 
 
 
-    // const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
-    //     return new Promise((resolve, reject) => {
-    //         const speechConfig = speechSdk.SpeechConfig.fromSubscription(
-    //             import.meta.env.VITE_AZURE_SPEECH_KEY,
-    //             import.meta.env.VITE_AZURE_REGION
-    //         );
-            
-    //         speechConfig.speechSynthesisVoiceName = voice;
-    //         speechConfig.speechSynthesisRate = voiceSpeed;
-    //         const audioConfig = null
-    //         const synthesizer = new speechSdk.SpeechSynthesizer(speechConfig, audioConfig);
-    
-    //         synthesizer.speakTextAsync(
-    //             text,
-    //             (result) => {
-    //                 if (result.reason === speechSdk.ResultReason.SynthesizingAudioCompleted) {
-    //                     resolve(result.audioData); // Just return the audio data without playing
-    //                 } else {
-    //                     reject(`Failed: ${result.errorDetails}`);
-    //                 }
-    //                 synthesizer.close();
-    //             },
-    //             (error) => {
-    //                 console.error("Error during speech synthesis:", error);
-    //                 synthesizer.close();
-    //                 reject(error);
-    //             }
-    //         );
-    //     });
-    // };
     
     
         const handleSpeech = async () => {
-            if (isPlayingAudio || isMuted || messages.length === 0) return;
+            if (isMuted || messages.length === 0) return;
+
         
-            const voice = targetLanguage === "English" ? "en-US-BrandonNeural"
-            : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
-            : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
-            : targetLanguage === "German" ? "de-DE-ConradNeural"
-            : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
-            : "en-US-BrandonNeural";
+                let voice;
+        if (selectedMode === 'date' && tutorGender === 'female') {
+            // Female voices for date mode
+            voice = targetLanguage === "English" ? "en-US-JennyNeural"
+                : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
+                : targetLanguage === "French" ? "fr-FR-DeniseNeural"
+                : targetLanguage === "German" ? "de-DE-KatjaNeural"
+                : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
+                : "en-US-JennyNeural";
+        } else {
+            // Existing voices for other modes
+            voice = targetLanguage === "English" ? "en-US-BrandonNeural"
+                : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
+                : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
+                : targetLanguage === "German" ? "de-DE-ConradNeural"
+                : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
+                : "en-US-BrandonNeural";
+    }
 
 
             const lastMessage = messages[messages.length - 1];
@@ -1425,6 +1835,7 @@ export default function Chat(props) {
                 
         
                 try {
+
                     if (currentAudio) {
                         currentAudio.pause();
                         currentAudio.currentTime = 0;
@@ -1634,11 +2045,13 @@ export default function Chat(props) {
                   // Update context for AI to play female role
                   setTutorGender('female')
                   setTutorName('Mia')
+                  setTutorImage(chatModes?.date?.teacherInfo?.female.image)
                   setShowGenderModal(false)
                   setMessages([{
                     sender: "assistant",
                     text: chatModes?.date?.firstMessage[targetLanguage]['male'].text
                 }])
+                
                   
                   
 
@@ -1647,6 +2060,7 @@ export default function Chat(props) {
                   setUserGender('female');
                   setTutorGender('male')
                   setTutorName('Noah')
+                  setTutorImage(chatModes?.date?.teacherInfo?.male.image)
                   setShowGenderModal(false)
                   setMessages([{
                     sender: "assistant",
@@ -1764,7 +2178,7 @@ export default function Chat(props) {
 
 
      useEffect(() => {
-         if (messages.length > 0 && messages[messages.length - 1].sender === "assistant" && isSuggestingAnswer) {
+         if (messages.length > 0 && messages[messages.length - 1].sender === "assistant") {
              handleCreateSuggestedAnswer();
          }
      }, [messages])
@@ -1779,6 +2193,8 @@ export default function Chat(props) {
             URL.revokeObjectURL(currentAudio.src);
             setCurrentAudio(null);
             setIsPlayingAudio(false);
+        } else {
+            handleSpeech()
         }
     }, [isMuted]);
     
@@ -1838,12 +2254,24 @@ export default function Chat(props) {
                 return;
             }
     
-            const voice = targetLanguage === "English" ? "en-US-BrandonNeural"
-            : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
-            : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
-            : targetLanguage === "German" ? "de-DE-ConradNeural"
-            : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
-            : "en-US-BrandonNeural";
+            let voice;
+            if (selectedMode === 'date' && tutorGender === 'female') {
+                // Female voices for date mode
+                voice = targetLanguage === "English" ? "en-US-JennyNeural"
+                    : targetLanguage === "Spanish" ? "es-ES-ElviraNeural"
+                    : targetLanguage === "French" ? "fr-FR-DeniseNeural"
+                    : targetLanguage === "German" ? "de-DE-KatjaNeural"
+                    : targetLanguage === "Italian" ? "it-IT-ElsaNeural"
+                    : "en-US-JennyNeural";
+            } else {
+                // Existing voices for other modes
+                voice = targetLanguage === "English" ? "en-US-BrandonNeural"
+                    : targetLanguage === "Spanish" ? "es-ES-TristanMultilingualNeural"
+                    : targetLanguage === "French" ? "fr-FR-LucienMultilingualNeural"
+                    : targetLanguage === "German" ? "de-DE-ConradNeural"
+                    : targetLanguage === "Italian" ? "it-IT-GiuseppeMultilingualNeural"
+                    : "en-US-BrandonNeural";
+            }
     
             const audioData = await synthesizeSpeech(messageText, voice);
             const audioBlob = new Blob([audioData], { type: "audio/wav" });
@@ -1880,7 +2308,7 @@ export default function Chat(props) {
                 body: JSON.stringify({
                     model: "gpt-3.5-turbo",
                     messages: [
-                        { role: "system", content: `Take a look at my last message and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation as if you are talking, address with you.] even if there are no mistakes and severity is green provide severity and explanation"` },
+                        { role: "system", content: `Take a look at my last message in ${targetLanguage} language and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation as if you are talking, address with you.] even if there are no mistakes and severity is green provide severity and explanation"` },
                         
                         { role: "user", content: message.text},
                     ],
@@ -2011,7 +2439,7 @@ export default function Chat(props) {
                             role: msg.sender === "assistant" ? "assistant" : "user",
                             content: msg.text,
                         })),
-                        { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: ${lastAssistantMessage.text} ? Respond like the user only with the suggested response, nothing else.` }
+                        { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: ${lastAssistantMessage.text} ? Respond like the user only with the suggested response, nothing else. Respond in ${targetLanguage} language.` }
                     ],
                 }),
             });
@@ -2033,22 +2461,32 @@ export default function Chat(props) {
 
 
     const handleTopicClick = async (topic) => {
-        let userText = "";
-        switch (topic) {
-            case "Daily Chat":
-                userText = "Let's talk about our days.";
-                break;
-            case "Fun Fact":
-                userText = "Share some interesting facts.";
-                break;
-            case "You Decide":
-                userText = "You decide what we will talk about.";
-                break;
-            default:
-                userText = "Let's chat about something!";
-                break;
-        }
 
+        let topicMessages = {
+            "Daily Chat": {
+                English: "Let's talk about our days.",
+                Spanish: "Hablemos sobre nuestros días.",
+                French: "Parlons de nos journées.",
+                Italian: "Parliamo delle nostre giornate.",
+                German: "Lass uns über unsere Tage sprechen."
+            },
+            "Fun Fact": {
+                English: "Share some interesting facts.",
+                Spanish: "Comparte algunos datos interesantes.",
+                French: "Partage quelques faits intéressants.",
+                Italian: "Condividi alcuni fatti interessanti.",
+                German: "Teile einige interessante Fakten."
+            },
+            "You Decide": {
+                English: "You decide what we will talk about.",
+                Spanish: "Tú decides de qué hablaremos.",
+                French: "Tu décides de quoi nous allons parler.",
+                Italian: "Tu decidi di cosa parleremo.",
+                German: "Du entscheidest, worüber wir sprechen werden."
+            }
+        };
+
+        const userText = topicMessages[topic][targetLanguage];
         const userMessage = { sender: "user", text: userText };
         setMessages((prev) => [...prev, userMessage]);
 
@@ -2152,7 +2590,7 @@ export default function Chat(props) {
 
         const lastMessageText = lastMessage.text
 
-        const userMessage = { sender: "user", text: `Can you ask me something else instead of your last question which was "${lastMessageText}". Don't reply to this message, just ask another question or talk about something else` };
+        const userMessage = { sender: "user", text: `Can you ask me something else instead of your last question which was "${lastMessageText}". Don't reply to this message, just ask another question or talk about something else in ${targetLanguage} language.` };
         
 
         const modeContext = chatModes[selectedMode]?.context || "";
@@ -2256,8 +2694,13 @@ export default function Chat(props) {
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
-                    <img src={chatModes[selectedMode]?.details.teacherImage || ""} alt="teacher-img" />
-                    <h3 className="teacher-name">{chatModes[selectedMode]?.details.teacherName || "Unknown"}</h3>
+                <img 
+                src={
+                    tutorImage
+                } 
+                alt="teacher-img" 
+                                />
+                    <h3 className="teacher-name">{tutorName}</h3>
                 </div>
 
                 <div className="chat-settings">
@@ -2296,9 +2739,9 @@ export default function Chat(props) {
                 <div ref={lastMessageRef} />
                 {messages.length === 1 && selectedMode === 'default-chat' && (
                     <div className="topics">
-                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Daily Chat")}>Daily Chat</div>
-                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Fun Fact")}>Fun Fact</div>
-                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("You Decide")}>You Decide</div>
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Daily Chat")}>{topicLabels[targetLanguage].dailyChat}</div>
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("Fun Fact")}>{topicLabels[targetLanguage].funFact}</div>
+                        <div className="message choose-topic-btn" onClick={() => handleTopicClick("You Decide")}>{topicLabels[targetLanguage].youDecide}</div>
                     </div>
                 )}
             </div>

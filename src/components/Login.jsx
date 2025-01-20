@@ -45,17 +45,45 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
     };
 
     return (
-        <div className="registration-container">
-            <div className="registration-content">
-                <h2>Welcome Back</h2>
+        <div className="login-container">
+            <div className='header-auth-div'>
+                <img src="./public/header-logo.png" alt="" />
+            </div>
+            <div className="login-content">
+                <div className="login-header-options">
+                    <span onClick={() => {
+                        setIsLogingIn(false);
+                        setIsRegistering(true);
+                    }} className="fa-solid fa-arrow-left"></span>
+                    <h2>Login</h2>
+                </div>
+
+                <button className="reg-btn-action google-btn" onClick={handleGoogleLogin}>
+                       <img src="./public/google-logo.webp" alt="" /> Continue with Google
+                    </button>
+
+
+                <div className='or-div'>
+                    <div className='first-or-div'></div>
+
+                    <p>or</p>
+
+                    <div className='second-or-div'></div>    
+                </div>    
+
                 <form onSubmit={handleLogin} className="registration-form">
+                    <div className='login-label-div'>
+                    <label htmlFor="email">Your email address</label>    
                     <input
                         type="email"
                         name="email"
-                        placeholder="Email"
+                        placeholder="Your email address"
                         value={formData.email}
                         onChange={handleInputChange}
                     />
+                    </div>
+                    <div className='login-label-div password-div'>
+                    <label htmlFor="password">Password</label>  
                     <input
                         type="password"
                         name="password"
@@ -63,11 +91,11 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         value={formData.password}
                         onChange={handleInputChange}
                     />
+                    <span className="fa-regular fa-eye"></span>
+                    </div>
                     <a href="#" className="forgot-password">Forgot password?</a>
                     
-                    <button className="reg-btn-action" onClick={handleGoogleLogin}>
-                        Continue with Google
-                    </button>
+                    
                     
                     <button 
                         className="reg-btn-action registration-btn" 
@@ -77,15 +105,16 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         Log in
                     </button>
                     
-                    <p className="login-anc">
+                    
+                </form>
+            </div>
+                <p className="login-anc">
                         Not a member yet? <a href="#" onClick={(e) => {
                         e.preventDefault();
                         setIsLogingIn(false);
                         setIsRegistering(true);
                         }}>Sign up</a>
                     </p>
-                </form>
-            </div>
         </div>
     );
 }

@@ -406,9 +406,15 @@ export default function Registration(props) {
         <div className="registration-container">
             {step === -1 ? (
                 <div className="registration-content">
-                    <h1>The most efficient way to learn a language</h1>
-                    <h3>Learn languages with an AI-powered language teacher using immersive, fun and engaging methods.</h3>
-                    <img className='teacherfullimg' src="./src/assets/teacherfullimg.png" alt="teacherfullimg" />
+                    <div className='mobile-get-started-reg-div'>
+                        <img src="./src/assets/aiimages/default-chat-mode.png" alt="chat-avatar" />
+                    </div>
+                    <div className='get-started-info'>
+                    <div className='get-started-text'>    
+                    <h1>A Smarter Way to Learn a Language</h1>
+                    <p>Discover how AI can revolutionize your language learning experience with immersive techniques, engaging methods, and personalized teaching for maximum progress.</p>
+                    </div>
+                    <img className='teacherfullimg' src="./src/assets/aiimages/default-chat-mode.png" alt="teacherfullimg" />
                     <div className="action-buttons">
                         <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
                         <a className='reg-btn-action login-btn' href="/login" onClick={(e) =>                                            {e.preventDefault();
@@ -416,6 +422,14 @@ export default function Registration(props) {
                                 setIsRegistering(false);
                                 }}>Log in</a>
                     </div>
+                    <div className='absolute-logo-div'>
+                        <img src="./public/header-logo.png" alt="" />
+                    </div>
+                    <a className='bottom-reg-a' href="/">            
+                        <p>© LanguageLab, Inc.</p>
+                    </a>
+                    </div>
+                    
                 </div>
             ) : (
                 <div className="registration-content step-div">

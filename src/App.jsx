@@ -14,7 +14,7 @@ function App() {
     // Check if user is logged in (e.g., using Firebase Auth)
     return auth.currentUser !== null
   })
-const [isRegistering, setIsRegistering] = useState(true)
+const [isRegistering, setIsRegistering] = useState(false)
 const [isLogingIn, setIsLogingIn] = useState(false)
 const [selectedMode, setSelectedMode] = useState('main')
 
@@ -88,7 +88,7 @@ useEffect(() => {
     updateDoc(userDocRef, {
       progressScore: progressScore,
       progressLevel: newLevel,
-      progressPercentage: progressPercentage
+      progressPercentage: newProgressPercentage
     });
   }
 

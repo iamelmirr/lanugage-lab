@@ -8,6 +8,9 @@ export default function Registration(props) {
 
 
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
+    const [selectedLanguage, setSelectedLanguage] = useState('target language')
+
+    const currentProgress = (step / 6) * 100
     
     
 
@@ -221,55 +224,113 @@ export default function Registration(props) {
         {
             title: "Choose Language",
             component: (
+                <>
+                <div className='reg-progress-animation'>
+                        <div className='reg-progress-inside' style={{ width: `${currentProgress}%` }}></div>
+                </div>
                 <div className="registration-step">
-                    <h2>Choose the language you want to learn</h2>
+                    
+                    <div className='reg-step-header'>
+                        <span onClick={() => setStep(-1)} className="fa-solid fa-arrow-left"></span>
+                        <h2>Which language do you want to learn?</h2>
+                    </div>    
                     <div className="language-options">
                         {languages.map(lang => (
                             <div 
                                 key={lang.code} 
-                                onClick={() => handleInputChange('language', lang.name)}
+                                onClick={() => {
+                                    handleInputChange('language', lang.name)
+                                    setSelectedLanguage(lang.name)     
+                                }}
                                 className={`language-option ${formData.language === lang.name ? 'selected' : ''}`}
                             >
                                 <span className='img-span'><img className='lang-flag' src={lang.flag} alt={lang.name} /></span>
-                                <span>{lang.name}</span>
+                                <span className='lang-name-span'>{lang.name}</span>
                             </div>
                         ))}
                     </div>
-                    <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.language}>Continue</button>
-                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
-                    </div>
+                    
+                    
+                    
+                    
                 </div>
+
+                <div className='reg-step-action-btns'>
+
+                <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.language}>Continue</button>
+
+                <div className='bottom-br-line reg-step'></div>
+
+                <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+
+                </div>    
+                
+                </>
             )
         },
         {
             title: "Language Level",
             component: (
+                <>
+                <div className='reg-progress-animation'>
+                        <div style={{ width: `${currentProgress}%` }} className='reg-progress-inside'></div>
+                </div>
                 <div className="registration-step">
-                    <h2>What's your current level?</h2>
+                    
+                    <div className='reg-step-header'>
+                        <span onClick={() => setStep(0)} className="fa-solid fa-arrow-left"></span>
+                        <h2>What is your {selectedLanguage} level?</h2>
+                    </div>
+
+                    <p className='registration-info-p'>We will personalize conversations based on your language level.</p>
+
                     <div className="level-options">
-                        {["Beginner (A1 - A2)", "Intermediate (B1 - B2)", "Advanced (C1 - C2)"].map(level => (
+                        {[{name: "Beginner (A1 - A2)", desc: "Beginner", langLevel: "A1-A2", levelImage: "./src/assets/signal-weak.svg"}, {name: "Intermediate (B1 - B2)", desc: "Intermediate", langLevel: "B1-B2", levelImage: "./src/assets/signal-medium.svg"}, {name: "Advanced (C1 - C2)", desc: "Advanced", langLevel: "C1-C2", levelImage: "./src/assets/signal-strong.svg"}].map(level => (
                             <button 
-                                key={level} 
-                                onClick={() => handleInputChange('level', level)}
-                                className={formData.level === level ? 'selected' : ''}
+                                key={level.desc} 
+                                onClick={() => handleInputChange('level', level.name)}
+                                className={`lang-level-btn ${formData.level === level.name ? 'selected' : ''}`}
                             >
-                                {level}
+                                <span className='lang-level-name-span'><img src={level.levelImage} alt="signal-image" /> {level.desc}</span> 
+                                <span className='lang-level-span'>{level.langLevel}</span>
                             </button>
                         ))}
                     </div>
-                    <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.level}>Continue</button>
-                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
-                    </div>
+                    
+                    
+                    
+                    
                 </div>
+
+                <div className='reg-step-action-btns'>
+                <div className='bottom-br-line reg-step'></div>
+
+                <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.level}>Continue</button>
+
+                </div>
+
+                </>
             )
         },
         {
             title: "Translation Language",
             component: (
+                <>
+                <div className='reg-progress-animation'>
+                        <div style={{ width: `${currentProgress}%` }} className='reg-progress-inside'></div>
+                </div>
+
                 <div className="registration-step">
-                    <h2>Choose your translation language</h2>
+                    
+                    
+                    <div className='reg-step-header'>
+                        <span onClick={() => setStep(1)} className="fa-solid fa-arrow-left"></span>
+                        <h2>Choose translation language?</h2>
+                    </div>
+
+                    <p className='registration-info-p'>Choose your preferred language for translation.</p>
+
+
                     <div className="language-options">
                     {translationLanguages.filter(lang => lang.name !== formData.language).map(lang => (
                     <div 
@@ -284,9 +345,13 @@ export default function Registration(props) {
                     </div>
                 ))}
             </div>
-            <div className='reg-process-btns'>
+        </div>
+            <div className='reg-step-action-btns'>
+
+            <div className='bottom-br-line'></div>
+
                 <button 
-                    className='reg-btn-action'
+                    className='reg-btn-action skip-btn'
                     onClick={() => handleInputChange('translationLanguage', 'none')}
                 >
                     Skip
@@ -298,77 +363,152 @@ export default function Registration(props) {
                 >
                     Continue
                 </button>
-                <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+
+                
             </div>
-        </div>
+        </>
     )
 },
         {
             title: "Your Goal",
             component: (
+                <>
+                <div className='reg-progress-animation'>
+                        <div style={{ width: `${currentProgress}%` }} className='reg-progress-inside'></div>
+                </div>
+
                 <div className="registration-step">
-                    <h2>What do you want to achieve?</h2>
+                    
+                    <div className='reg-step-header'>
+                        <span onClick={() => setStep(2)} className="fa-solid fa-arrow-left"></span>
+                        <h2>What are you looking to achieve?</h2>
+                    </div>
+
                     <div className="goal-options">
-                        {["Learning basics", "Improve speaking", "Become fluent", "I'm not sure"].map(goal => (
+                        {[{name: "Learning basics", desc: "I want to learn basics", levelImage: "./src/assets/books.webp"}, {name: "Improve speaking", desc: "I want to improve speaking", levelImage: "./src/assets/talking.webp"}, {name: "Become fluent", desc: "I want to become fluent", levelImage: "./src/assets/star.webp"}, {name: "I'm not sure", desc: "I'm not sure yet", levelImage: "./src/assets/unsure.webp"}].map(goal => (
                             <button 
-                                key={goal} 
-                                onClick={() => handleInputChange('goal', goal)}
-                                className={formData.goal === goal ? 'selected' : ''}
+                                key={goal.name} 
+                                onClick={() => handleInputChange('goal', goal.name)}
+                                className={`lang-goal-btn ${formData.goal === goal.name ? 'selected' : ''}`}
                             >
-                                {goal}
+                                <img src={goal.levelImage} alt="level-image" /> 
+                                <span className='lang-goal-span'>{goal.desc}</span>
                             </button>
                         ))}
                     </div>
-                    <div className='reg-process-btns'>
-                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.goal}>Continue</button>
-                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
-                    </div>
+                    
+
+                    
+
+                    
                 </div>
+                    <div className='reg-step-action-btns'>
+                    <div className='bottom-br-line'></div>
+
+                    <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.goal}>Continue</button>
+                    </div>
+                </>
             )
         },
         {
             title: "Your Reason",
             component: (
+                <>
+                <div className='reg-progress-animation'>
+                        <div style={{ width: `${currentProgress}%` }} className='reg-progress-inside'></div>
+                </div>
+
                 <div className="registration-step">
-                    <h2>Why do you want to learn this language?</h2>
+                    <div className='reg-step-header'>
+                        <span onClick={() => setStep(3)} className="fa-solid fa-arrow-left"></span>
+                        <h2>What is your primary reason for learning {selectedLanguage}?</h2>
+                    </div>
+
+
                     <div className="reason-options">
-                        {["Academy and research", "University and education", "Travel and tourism", "Job and career", "Immigration", "Better communication", "Language tests and certificates", "Other"].map(reason => (
+                        {[{name: "Academy and research", image: "./src/assets/books.webp"}, {name: "University and education", image:"./src/assets/student-hat.webp"}, {name: "Travel and tourism", image:"./src/assets/airplane.webp"}, {name:"Job and career", image:"./src/assets/job.webp"}, {name:"Immigration", image:"./src/assets/globe.webp"}, {name:"Better communication", image:"./src/assets/talking.webp"}, {name:"Language tests and certificates", image:"./src/assets/test.webp"}, {name:"Other", image:"./src/assets/perfection.webp"}].map(reason => (
                             <button 
-                                key={reason} 
-                                onClick={() => handleInputChange('reason', reason)}
-                                className={formData.reason === reason ? 'selected' : ''}
+                                key={reason.name} 
+                                onClick={() => handleInputChange('reason', reason.name)}
+                                className={formData.reason === reason.name ? 'selected' : ''}
                             >
-                                {reason}
+                                <img src={reason.image} alt="reason-image" />
+                                <p>{reason.name}</p>
                             </button>
                         ))}
                     </div>
-                    <div className='reg-process-btns'>
+                    
+                    
+                    <div className='reg-step-action-btns reason-learning'>
+                    <div className='bottom-br-line'></div>
+
                     <button className='reg-btn-action registration-btn' type="submit" disabled={!formData.reason}>Continue</button>
-                    <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
                     </div>
                 </div>
+                    
+                </>
             )
         },
         {
             title: "Authentication",
             component: (
+            <>
+
+                <div className='reg-progress-animation'>
+                <div style={{ width: `${currentProgress}%` }} className='reg-progress-inside'></div>
+                </div>
+
                 <div className="registration-step">
-                    <h2>Complete your registration</h2>
+                    
+                <div className='reg-step-header'>
+                        <span onClick={() => setStep(4)} className="fa-solid fa-arrow-left"></span>
+                        <h2>Almost there!</h2>
+                    </div>
+
+                    <p className='registration-info-p'>Just a but more info to set up your LanguageLab account.</p>    
+
+
+                    <div className='registration-auth-div'>
+
+                    <button className='reg-btn-action google-btn auth' onClick={handleGoogleSignIn}>
+                    <img src="./public/google-logo.webp" alt="" /> Sign up with Google
+                        </button>
+
+                    <div className='or-div signup-or'>
+                    <div className='first-or-div'></div>
+
+                    <p>or</p>
+
+                    <div className='second-or-div'></div>    
+                    </div>    
+
+                    <div className='registration-form'>
+
+                    <div className='login-label-div'>
+                    <label htmlFor="text">First name</label>    
                     <input
                         type="text"
                         name="firstName"
-                        placeholder="First Name"
+                        placeholder="First name"
                         value={formData.firstName}
                         onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-
                     />
+                    </div>    
+                    
+                    <div className='login-label-div'>
+                    <label htmlFor="text">Last name</label>    
                     <input
                         type="text"
                         name="lastName"
-                        placeholder="Last Name"
+                        placeholder="Last name"
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
                     />
+                    </div>    
+
+                    
+                    <div className='login-label-div'>
+                    <label htmlFor="email">Your email address</label>    
                     <input
                         type="email"
                         name="email"
@@ -376,6 +516,11 @@ export default function Registration(props) {
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                     />
+                    </div>    
+
+
+                    <div className='login-label-div'>
+                    <label htmlFor="password">Password</label>    
                     <input
                         type="password"
                         name="password"
@@ -383,19 +528,37 @@ export default function Registration(props) {
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
                     />
+                    </div> 
+                    
+                    <div className='login-label-div'>
+                    <label htmlFor="password">Repeat password</label>    
                     <input
                         type="password"
                         name="confirmPassword"
-                        placeholder="Repeat Password"
+                        placeholder="Password"
                         value={formData.confirmPassword}
+                        
                     />
-                    <button onClick={() => handleRegistration(formData.email, formData.password)}>Register</button>
-                    <div className="auth-options">
-                        <button onClick={handleGoogleSignIn}>Sign up with Google</button>                      
+                    </div> 
+                    
+                
+                    <button className='reg-btn-action registration-btn auth' onClick={() => handleRegistration(formData.email, formData.password)}>Register</button>
+
                     </div>
+                    </div>
+
+                    <div className='bottom-br-line auth'></div>
+
+                    
                     <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+
+                    <p className='terms-p'>
+                    By signing up, you accept our Terms and Conditions and Privacy Policy. Occasionally, we’ll send you our newsletters, with learning tips and special offers. You can unsubscribe anytime.
+                    </p>
                     
                 </div>
+
+                </>
             )
         }
     ];
@@ -405,7 +568,7 @@ export default function Registration(props) {
     return (
         <div className="registration-container">
             {step === -1 ? (
-                <div className="registration-content">
+                <div className="registration-content null-step">
                     <div className='mobile-get-started-reg-div'>
                         <img src="./src/assets/aiimages/default-chat-mode.png" alt="chat-avatar" />
                     </div>
@@ -431,13 +594,30 @@ export default function Registration(props) {
                     </div>
                     
                 </div>
-            ) : (
+            ) : step === 0 ? ( 
+            <>    
+                <div className='header-auth-div registration'>
+                <img src="./public/header-logo.png" alt="" />
+                </div>
                 <div className="registration-content step-div">
                 <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
                     {steps[step].component}
                     {step < steps.length - 1}
                 </form>
                 </div>
+            </>    
+            ) : (
+                <>    
+                <div className='header-auth-div registration'>
+                <img src="./public/header-logo.png" alt="" />
+                </div>
+                <div className="registration-content step-div">
+                <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
+                    {steps[step].component}
+                    {step < steps.length - 1}
+                </form>
+                </div>
+            </>    
             )}
         </div>
     );

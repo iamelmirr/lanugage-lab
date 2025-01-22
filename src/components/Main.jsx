@@ -34,7 +34,8 @@ export default function Main(props) {
             isDown = true;
             dragged = false;
             sliderWrapper.classList.add("active");
-            startX = e.pageX - sliderWrapper.offsetLeft;
+            const paddingLeft = parseInt(getComputedStyle(sliderWrapper).paddingLeft, 10);
+            startX = e.pageX - sliderWrapper.offsetLeft - paddingLeft;
             scrollLeft = sliderWrapper.scrollLeft;
         };
 
@@ -229,6 +230,7 @@ export default function Main(props) {
 
                     <div className="slider-horizontal">
                         <div className="slider-wrapper" ref={sliderWrapperRef}>
+                        
                             <div className="slider-item-swipe">
                                 <div className="slider-item slider-item-one">
                                     <p className="slider-big-text">Hello, Elmir!</p>
@@ -256,6 +258,9 @@ export default function Main(props) {
                         </div>
                     </div>
 
+                    <div className="main-label-div">
+                        <p>Learning modes</p>
+                    </div>
 
                     <div className={`chats-options ${activeTab === 'chats' ? 'active-tab' : ''}`}>
                         <ChatCard

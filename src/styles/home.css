@@ -222,28 +222,31 @@ body {
 .slider-horizontal {
 
     min-height: 274px;
-    
+    position: relative;
     width: 100%;
     overflow-x: hidden;
-    
-    
 }
 
 .slider-wrapper {
+    box-sizing: border-box;
     display: flex;
     overflow-x: auto;
-    width: auto;
     height: 100%;
     gap: 22px;
     scrollbar-width: none;
-    padding-left: 12px;
-    padding-top: 24px;
+    padding: 24px 12px 0 12px;
+    margin-left: 12px;
     cursor: grab; /* Add this */
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     user-select: none;
     scroll-snap-type: x mandatory;
+    transition: transform 0.2s ease-in-out;
     
+}
+
+.slider-item-swipe {
+    display: flex;
 }
 
 .slider-wrapper:active {
@@ -266,7 +269,10 @@ body {
     width: 380px;
     scroll-snap-align: start;
     flex-shrink: 0;
+    
 }
+
+
 
 .slider-item-one {
     background-image: url("/src/assets/design-pink.png");;
@@ -311,6 +317,19 @@ body {
 }
 
 
+
+
+.main-label-div {
+    display: flex;
+    padding: 24px 12px 24px 12px;
+}
+
+.main-label-div p {
+    font-size: 23px;
+    font-weight: 500;
+}
+
+
 .chats-options {
     display: none;
     flex-direction: column;
@@ -319,25 +338,76 @@ body {
     gap: 12px;
     scrollbar-width: none;
     padding-inline: 12px;
+    background: rgb(255, 246, 229);
+    padding-bottom: 90px;
     
 }
 
 
 .chat-card {
+    position: relative;
     background: white;
     border-radius: 20px;
     display: flex;
     width: 100%;
+    border: 1px solid rgb(223 223 223);
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.chat-card .chat-card-img img {
+    
+    
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    
+}
+
+.chat-card .chat-card-img {
+    
+    height: 155px;
+    margin-top: auto;
+    
+    
 }
 
 .chat-card .chat-card-info {
-    padding: 24px 0px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0px 16px 12px;
+    gap: 16px;
+    width: 58.666%;
+}
+
+.chat-card .chat-card-info h2 {
+    font-size: 23px;
+    font-weight: 470;
 }
 
 .chat-card .chat-card-info .card-tags {
     display: flex;
     gap: 10px;
+    font-size: 11px;
+    
 }
+.chat-card .chat-card-info .card-tags .tag {
+    background: #EAEBF9;
+    padding: 4px 8px;
+    border-radius: 24px;
+    opacity: 0.7;
+}
+
+.card-desc {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.card-light-desc {
+    font-size: 11px;
+    color: #868686;
+}
+
 
 .quizzes-options {
     display: none;

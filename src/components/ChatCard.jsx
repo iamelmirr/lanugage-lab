@@ -7,7 +7,7 @@ const chatCards = [
         tags: 'Writing Reading', 
         desc: 'Enhance your language skills by chatting with our AI teacher.', 
         shortDesc: 'Pick a topic and get started.', 
-        imageSrc: './src/assets/img1',
+        imageSrc: './src/assets/aiimages/default-chat-mode.png',
         handleSelectedMode: 'default-chat'
     },
     { 
@@ -15,7 +15,7 @@ const chatCards = [
         tags: 'Writing Reading', 
         desc: 'Enhance your language skills by chatting with our AI teacher.', 
         shortDesc: 'Pick a topic and get started.', 
-        imageSrc: './src/assets/img1',
+        imageSrc: './src/assets/aiimages/dialogue-mode.png',
         handleSelectedMode: 'dialogue-modes'
     },
     { 
@@ -23,7 +23,7 @@ const chatCards = [
         tags: 'Speaking Conversation', 
         desc: 'Engage in roleplay scenarios to practice speaking naturally.', 
         shortDesc: 'Simulate real-life situations with AI characters.', 
-        imageSrc: './src/assets/img2',
+        imageSrc: './src/assets/aiimages/roleplay-mode.png',
         handleSelectedMode: 'roleplay-modes'
     },
     { 
@@ -31,7 +31,7 @@ const chatCards = [
         tags: 'Speaking Argumentation', 
         desc: 'Improve your critical thinking and argumentation skills in debates.', 
         shortDesc: 'Debate on topics and receive AI feedback.', 
-        imageSrc: './src/assets/img3',
+        imageSrc: './src/assets/aiimages/debate-mode.png',
         handleSelectedMode: 'debates-modes'
     },
     { 
@@ -39,7 +39,7 @@ const chatCards = [
         tags: 'Speaking Professional', 
         desc: 'Prepare for interviews by practicing questions with the AI.', 
         shortDesc: 'Build confidence for real-life interviews.', 
-        imageSrc: './src/assets/img4',
+        imageSrc: './src/assets/aiimages/interview-mode.png',
         handleSelectedMode: 'interview'
     },
     { 
@@ -47,7 +47,7 @@ const chatCards = [
         tags: 'Pronunciation Speaking', 
         desc: 'Perfect your pronunciation with AI feedback on your speech.', 
         shortDesc: 'Speak clearly and confidently in any language.', 
-        imageSrc: './src/assets/img5',
+        imageSrc: './src/assets/aiimages/pronounciation-mode.png',
         handleSelectedMode: 'pronunciation-practice'
     },
     { 
@@ -55,7 +55,7 @@ const chatCards = [
         tags: 'Speaking Listening', 
         desc: 'Practice your language skills in a variety of contextual scenarios.', 
         shortDesc: 'Learn and respond in immersive situations.', 
-        imageSrc: './src/assets/img6',
+        imageSrc: './src/assets/aiimages/scenario-mode.png',
         handleSelectedMode: 'scenario-modes'
     }
 ]

@@ -1,7 +1,7 @@
 import React from "react"
 import ChatCard from "./ChatCard"
 import QuizCard from "./QuizCard"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 
 
@@ -14,6 +14,86 @@ export default function Main(props) {
 
     const totalMessages = savedChats.reduce((total, chat) => 
         total + chat.messages.length, 0);
+
+
+
+    
+    const sliderWrapperRef = useRef(null);
+
+    useEffect(() => {
+        const sliderWrapper = sliderWrapperRef.current;
+        if (!sliderWrapper) return;
+
+        const sliderItems = sliderWrapper.querySelectorAll(".slider-item");
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let dragged = false;
+
+        const handleMouseDown = (e) => {
+            isDown = true;
+            dragged = false;
+            sliderWrapper.classList.add("active");
+            startX = e.pageX - sliderWrapper.offsetLeft;
+            scrollLeft = sliderWrapper.scrollLeft;
+        };
+
+        const handleMouseLeave = () => {
+            if (isDown) snapToNearest();
+            isDown = false;
+            sliderWrapper.classList.remove("active");
+        };
+
+        const handleMouseUp = () => {
+            if (dragged) snapToNearest();
+            isDown = false;
+            sliderWrapper.classList.remove("active");
+        };
+
+        const handleMouseMove = (e) => {
+            if (!isDown) return;
+            dragged = true;
+            e.preventDefault();
+            const x = e.pageX - sliderWrapper.offsetLeft;
+            const walk = (x - startX) * 1.5; // Adjust sensitivity here
+            sliderWrapper.scrollLeft = scrollLeft - walk;
+        };
+
+        const snapToNearest = () => {
+            const sliderWrapperScrollLeft = sliderWrapper.scrollLeft;
+            let nearestItem = sliderItems[0];
+            let minDistance = Math.abs(sliderWrapperScrollLeft - nearestItem.offsetLeft);
+
+            sliderItems.forEach((item) => {
+                const distance = Math.abs(sliderWrapperScrollLeft - item.offsetLeft);
+                if (distance < minDistance) {
+                    nearestItem = item;
+                    minDistance = distance;
+                }
+            });
+
+            sliderWrapper.scrollTo({
+                left: nearestItem.offsetLeft,
+                behavior: "smooth",
+            });
+        };
+
+        sliderWrapper.addEventListener("mousedown", handleMouseDown);
+        sliderWrapper.addEventListener("mouseleave", handleMouseLeave);
+        sliderWrapper.addEventListener("mouseup", handleMouseUp);
+        sliderWrapper.addEventListener("mousemove", handleMouseMove);
+
+        return () => {
+            sliderWrapper.removeEventListener("mousedown", handleMouseDown);
+            sliderWrapper.removeEventListener("mouseleave", handleMouseLeave);
+            sliderWrapper.removeEventListener("mouseup", handleMouseUp);
+            sliderWrapper.removeEventListener("mousemove", handleMouseMove);
+        };
+    }, []);
+
+
+
+
 
 
     return (
@@ -139,22 +219,43 @@ export default function Main(props) {
     </>
             ) : (
                 <>
-                    <div className="mode-nav">
-                        <button
-                            className={`mode-nav-btn ${activeTab === 'chats' ? 'active-btn' : ''}`}
-                            onClick={() => handleTabChange('chats')}
-                        >
-                            Chats
-                        </button>
-                        <button
-                            className={`mode-nav-btn ${activeTab === 'quizzes' ? 'active-btn' : ''}`}
-                            onClick={() => handleTabChange('quizzes')}
-                        >
-                            Quizzes
-                        </button>
+                    
+
+                    <div className="mobile-header">
+                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <span className="fa-regular fa-user"></span>
                     </div>
 
-                    <br />
+
+                    <div className="slider-horizontal">
+                        <div className="slider-wrapper" ref={sliderWrapperRef}>
+                            <div className="slider-item-swipe">
+                                <div className="slider-item slider-item-one">
+                                    <p className="slider-big-text">Hello, Elmir!</p>
+                                    <p className="slider-par">Have you tried our Explore tab? We have interesting things to show you.</p>
+                                    <div className="slider-options-div">
+                                        <p>See your daily pick</p>
+                                        <span className="fa-solid fa-arrow-right"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className="slider-item-swipe">
+                                <div className="slider-item slider-item-two">
+                                    <p className="slider-big-text">Hello, Elmir!</p>
+                                    <p className="slider-par">Have you tried our Explore tab? We have interesting things to show you.</p>
+                                    <div className="slider-options-div">
+                                        <p>See your daily pick</p>
+                                        <span className="fa-solid fa-arrow-right"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
 
                     <div className={`chats-options ${activeTab === 'chats' ? 'active-tab' : ''}`}>
                         <ChatCard

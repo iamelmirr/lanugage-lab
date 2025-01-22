@@ -9,6 +9,7 @@ import RoleplayModes from "../components/RoleplayModes";
 import DebateModes from "../components/DebateModes";
 import ScenarioModes from "../components/ScenarioModes";
 import ProfileMode from "../components/ProfileMode";
+import MobileNav from "../components/MobileNav";
 
 
 export default function Home(props) {
@@ -77,6 +78,8 @@ export default function Home(props) {
 
 
         {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel}/>}
+
+        {selectedMode === 'main' && <MobileNav></MobileNav>}
 
         </>
 

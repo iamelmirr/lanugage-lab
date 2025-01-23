@@ -1,53 +1,54 @@
 import React from "react"
+import { useEffect } from "react"
 
 
 const allDialogueModes = [
     {
         label: 'Airport',
-        tags: 'Speaking Interaction', 
+        tags: 'Basics', 
         desc: 'Role-play as a traveler asking for directions, checking in, or seeking assistance at the airport.', 
         shortDesc: 'Simulate airport experiences and get feedback.', 
-        imageSrc: './src/assets/img-airport',
+        imageSrc: './src/assets/modes-images/airport1.jfif',
         handleSelectedMode: 'airport'
     },
     {
         label: 'Medical Emergency',
-        tags: 'Speaking Interaction', 
+        tags: 'Intermediate', 
         desc: 'Practice handling a medical emergency, asking for help, explaining symptoms, and understanding medical advice.', 
         shortDesc: 'Simulate emergency language skills.', 
-        imageSrc: './src/assets/img-medical-emergency',
+        imageSrc: './src/assets/modes-images/emergency.jfif',
         handleSelectedMode: 'medical-emergency'
     },
     {
         label: 'Doctor\'s Appointment',
-        tags: 'Speaking Interaction', 
+        tags: 'Intermediate', 
         desc: 'Simulate a doctor-patient interaction, discussing health issues, medications, and follow-up care.', 
         shortDesc: 'Practice healthcare-related conversations.', 
-        imageSrc: './src/assets/img-doctor-appointment',
+        imageSrc: './src/assets/modes-images/doctors.jfif',
         handleSelectedMode: 'doctor-appointment'
     },
     {
         label: 'Buying Movie Tickets',
-        tags: 'Speaking Interaction', 
+        tags: 'Basics', 
         desc: 'Practice booking movie tickets online, selecting showtimes, and finding the best deals.', 
         shortDesc: 'Simulate the process of buying movie tickets.', 
-        imageSrc: './src/assets/img-buying-movie-tickets',
+        imageSrc: './src/assets/modes-images/movietickets2.jfif',
         handleSelectedMode: 'buying-movie-tickets'
     },
     {
         label: 'Ordering Dinner',
-        tags: 'Speaking Interaction', 
+        tags: 'Basics', 
         desc: 'Practice ordering food at a restaurant, asking about the menu, specials, and dietary restrictions.', 
         shortDesc: 'Simulate restaurant dining experiences.', 
-        imageSrc: './src/assets/img-ordering-dinner',
+        imageSrc: './src/assets/modes-images/restaurant3.jfif',
         handleSelectedMode: 'ordering-dinner'
     },
     {
         label: 'Checking in a Hotel',
-        tags: 'Speaking Interaction', 
+        tags: 'Basics', 
         desc: 'Practice checking into a hotel, asking about amenities, room options, and pricing.', 
         shortDesc: 'Simulate hotel check-in experiences.', 
-        imageSrc: './src/assets/img-checking-hotel',
+        imageSrc: './src/assets/modes-images/hotel2.jfif',
         handleSelectedMode: 'checking-hotel'
     }
 ]
@@ -66,21 +67,40 @@ const dialogueModesInfo = {
 export default function DialogueModes(props) {
     const {selectedMode, setSelectedMode, handleSelectedMode} = props
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div className="modes-page">
+        <div className="mobile-header modes">
+                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <span className="fa-regular fa-user"></span>
+        </div>    
         <div className="modes-div">
-        <div className="modes-title-wrapper">
+            <div className="modes-title-wrapper">
             <span className="fa-solid fa-arrow-left" onClick={() => {
                 handleSelectedMode('main')
             }}></span>
             <h2>{dialogueModesInfo.title}</h2>
-        </div>
+            </div>
+
+            <div className="chat-mode-info">
+                <p>With the Dialogue Mode, you can practice essential daily vocabulary with pre-scripted conversations. Learn how to speak like a native speaker in various settings.</p>
+                <div className="card-tags">
+                    <span className="tag">Pronunciation</span>
+                    <span className="tag">Speaking</span>
+                </div>    
+            </div>
+
         <div className="card-mode-list">   
         {allDialogueModes.map((card, index) => {
             return (
                 <div key={index} onClick={() => {
                     handleSelectedMode(card.handleSelectedMode)
-                }} className="chat-card">
+                }} className="chat-mode-card" style={{
+                    backgroundImage: `url(${card.imageSrc})`
+                }} >
                     <div className="chat-card-info">
                         <h2>{card.label}</h2>
                         <div className="card-tags">
@@ -90,16 +110,11 @@ export default function DialogueModes(props) {
                                 )
                             })}
                         </div>
-                        <h4 className="card-desc">
-                            {card.desc}
-                        </h4>
-                        <p className="card-light-desc">{card.shortDesc}</p>
+                        
                         
                     </div>
 
-                    <div className="chat-card-img">
-                        <img src={card.imageSrc} alt="" />
-                    </div>
+                    
                 </div>
                 
             )

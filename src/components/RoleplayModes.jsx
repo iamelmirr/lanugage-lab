@@ -5,34 +5,34 @@ import React from "react"
 const allRoleplayModes = [
     {
         label: 'At the Date',
-        tags: 'Casual Conversation',
+        tags: 'Basics',
         desc: 'Engage in a casual conversation and navigate a date scenario. Practice small talk, discussing interests, and planning activities.',
         shortDesc: 'Simulate casual conversations on a date.',
-        imageSrc: './src/assets/img-date',
+        imageSrc: './src/assets/modes-images/at-date2.jfif',
         handleSelectedMode: 'date'
     },
     {
         label: 'Time Traveler',
-        tags: 'Creative Role-Play',
+        tags: 'Intermediate',
         desc: 'Engage in conversations as a time traveler from the past, present, or future. Discuss historical events, future technologies, and cultural differences.',
         shortDesc: 'Explore history, culture, and the future.',
-        imageSrc: './src/assets/img-time-traveler',
+        imageSrc: './src/assets/modes-images/time-traveler2.jfif',
         handleSelectedMode: 'time-traveler'
     },
     {
         label: 'Detective',
-        tags: 'Mystery Solving',
+        tags: 'Intermediate',
         desc: 'Solve a mystery, ask questions to gather clues, and make deductions as a detective.',
         shortDesc: 'Simulate detective work through dialogue.',
-        imageSrc: './src/assets/img-detective',
+        imageSrc: './src/assets/modes-images/detective2.jfif',
         handleSelectedMode: 'detective'
     },
     {
         label: 'Police Officer',
-        tags: 'Law Enforcement Interaction',
+        tags: 'Basics',
         desc: 'Role-play interacting with a police officer, reporting a crime, or seeking advice.',
         shortDesc: 'Practice conversations involving law enforcement.',
-        imageSrc: './src/assets/img-police-officer',
+        imageSrc: './src/assets/modes-images/policer-officer2.jfif',
         handleSelectedMode: 'police-officer'
     }
 ]
@@ -44,13 +44,36 @@ const allRoleplayModes = [
 export default function RoleplayModes(props) {
     const {selectedMode, setSelectedMode, handleSelectedMode} = props
 
-    return (
-        <div> 
+            return (
+                <div className="modes-page">
+        <div className="mobile-header modes">
+                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <span className="fa-regular fa-user"></span>
+        </div>    
+        <div className="modes-div">
+            <div className="modes-title-wrapper">
+            <span className="fa-solid fa-arrow-left" onClick={() => {
+                handleSelectedMode('main')
+            }}></span>
+            <h2>Roleplays</h2>
+            </div>
+
+            <div className="chat-mode-info">
+                <p>With the Roleplay mode practicing language will be fun and exciting. You can pick various settings, modes and fantastic dialogues.</p>
+                <div className="card-tags">
+                    <span className="tag">Vocabulary</span>
+                    <span className="tag">Writing</span>
+                </div>    
+            </div>
+
+        <div className="card-mode-list">   
         {allRoleplayModes.map((card, index) => {
             return (
                 <div key={index} onClick={() => {
                     handleSelectedMode(card.handleSelectedMode)
-                }} className="chat-card">
+                }} className="chat-mode-card" style={{
+                    backgroundImage: `url(${card.imageSrc})`
+                }} >
                     <div className="chat-card-info">
                         <h2>{card.label}</h2>
                         <div className="card-tags">
@@ -60,19 +83,32 @@ export default function RoleplayModes(props) {
                                 )
                             })}
                         </div>
-                        <h4 className="card-desc">
-                            {card.desc}
-                        </h4>
-                        <p className="card-light-desc">{card.shortDesc}</p>
+                        
                         
                     </div>
 
-                    <div className="chat-card-img">
-                        <img src={card.imageSrc} alt="" />
-                    </div>
+                    
                 </div>
+                
             )
         })}
+        </div> 
+        </div>
+        <div className="about-modes-div">
+            <h2>Information</h2>
+            <br />
+            <div className="info-card">
+                <h2>Roleplays</h2>
+                {/* <div className="modes-card-tags">
+                    {allRoleplayModes.infoCardTags.split(" ").map((tag, i) => {
+                        return (
+                            <span key={i} className="tag">{tag}</span>
+                        )
+                    })} 
+                </div> */}
+                <p>Roleplays</p>
+            </div>
+        </div>
         </div>
     )
 }

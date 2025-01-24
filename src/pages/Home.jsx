@@ -10,6 +10,7 @@ import DebateModes from "../components/DebateModes";
 import ScenarioModes from "../components/ScenarioModes";
 import ProfileMode from "../components/ProfileMode";
 import MobileNav from "../components/MobileNav";
+import MobileModal from "../components/MobileModal";
 
 
 export default function Home(props) {
@@ -17,6 +18,9 @@ export default function Home(props) {
 
     const [showChat, setShowChat] = useState(false)
     const [activeChatMode, setActiveChatMode] = useState(null)
+    const [isMobileModalOpen, setIsMobileModalOpen] = useState(false)
+    const [isMobileProfileOpen, setIsMobileProfileOpen] = useState(false)
+    const [accountSelectedOption, setAccountSelectedOption] = useState('unexpanded')
 
     const openChat = (mode) => {
         setActiveChatMode(mode)
@@ -60,7 +64,7 @@ export default function Home(props) {
         <>
         <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}></Nav>
 
-        {(selectedMode === 'main' || selectedMode === 'progress') && <Main levelThresholds={levelThresholds} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange} progressLevel={progressLevel} progressScore={progressScore} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} longestStreak={longestStreak} savedChats={savedChats} ></Main>}
+        {(selectedMode === 'main' || selectedMode === 'progress') && <Main levelThresholds={levelThresholds} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange} progressLevel={progressLevel} progressScore={progressScore} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} longestStreak={longestStreak} savedChats={savedChats} isMobileModalOpen={isMobileModalOpen} setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} ></Main>}
 
         {selectedMode === 'dialogue-modes' && <DialogueModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DialogueModes>}
 
@@ -77,9 +81,11 @@ export default function Home(props) {
         {(selectedMode === 'main' || selectedMode === 'progress') && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
 
 
-        {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel}/>}
+        {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption}/>}
 
         {selectedMode === 'main' && <MobileNav></MobileNav>}
+
+        <MobileModal setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption} isMobileModalOpen={isMobileModalOpen}></MobileModal>
 
         </>
 

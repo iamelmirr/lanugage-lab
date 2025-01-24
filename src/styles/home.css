@@ -646,6 +646,98 @@ body {
 
 
 
+.mobile-modal-underlay {
+    visibility: hidden;
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    align-items: end;
+    background: rgb(80, 80, 80);
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.5s ease;
+}
+
+.mobile-modal-underlay.open {
+    visibility: visible;
+    opacity: 0.4;
+}
+
+.mobile-modal {
+    position: fixed;
+    bottom: -100%;
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    flex-direction: column;
+    background: #ffeed2;
+    padding-bottom: 30px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+    z-index: 55;
+    transition: bottom 0.3s ease-in-out, transform 0.1s ease-out;
+    
+}
+
+.mobile-modal.open {
+    bottom: 0;
+    
+}
+
+.profile-list-div.modal {
+    background: #ffefd4;
+    padding-inline: 12px;
+}
+
+.profile-list-div.modal .profile-header h2 {
+    font-weight: 500;
+}
+
+.profile-list-div.modal .profile-menu {
+    background: #ffefd4;
+}
+
+.profile-menu-btn {
+    background: #ffffff;
+}
+
+.modal-drag-down {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    background: #ffefd4;
+    user-select: none;
+    
+}
+
+.drag-indicator{
+    display: flex;
+    width: 50px;
+    height: 2px;
+    background: black;
+    border-radius: 20px;
+}
+
+.profile-list-div.modal .profile-header{
+    padding-top: 0px;
+    padding-bottom: 20px;
+    border: none;
+}
+
+.profile-list-div.modal .profile-menu {
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+}
+
+
+
+
+
 /* CHAT */
 
 .chat-div {

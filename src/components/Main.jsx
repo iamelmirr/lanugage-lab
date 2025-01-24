@@ -8,7 +8,8 @@ import { useState, useRef, useEffect } from "react"
 
 export default function Main(props) {
 
-    const {selectedMode, setSelectedMode, handleSelectedMode, activeTab, setActiveTab, handleTabChange, progressLevel, progressScore, progressPercentage, levelThresholds, longestStreak, streakCount, savedChats} = props
+    const {selectedMode, setSelectedMode, handleSelectedMode, activeTab, setActiveTab, handleTabChange, progressLevel, progressScore, progressPercentage, levelThresholds, longestStreak, streakCount, savedChats, setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, isMobileModalOpen} = props
+    
 
     const pointsToNextLevel = levelThresholds[progressLevel] - progressScore
 
@@ -224,7 +225,10 @@ export default function Main(props) {
 
                     <div className="mobile-header">
                         <img src="./public/header-logo.png" alt="header-logo" />
-                        <span className="fa-regular fa-user"></span>
+                        <span onClick={() => {
+                            setIsMobileModalOpen(true)
+                            setIsMobileProfileOpen(true)
+                        }}  className="fa-regular fa-user"></span>
                     </div>
 
 

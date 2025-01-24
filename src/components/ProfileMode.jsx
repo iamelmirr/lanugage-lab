@@ -9,7 +9,7 @@ import { updateProfile, updatePassword, updateEmail, sendEmailVerification, send
 
 export default function ProfileMode(props) {
 
-    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel} = props
+    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel, accountSelectedOption, setAccountSelectedOption} = props
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
@@ -21,7 +21,7 @@ export default function ProfileMode(props) {
     const [confirmPassword, setConfirmPassword] = useState('');
 
 
-    const [selectedOption, setSelectedOption] = useState('unexpanded')
+    
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -447,14 +447,14 @@ export default function ProfileMode(props) {
             </div>
             
             <div className="profile-menu">
-                <div className="profile-menu-btn" onClick={() => setSelectedOption('profile')}>
+                <div className="profile-menu-btn" onClick={() => setAccountSelectedOption('profile')}>
                     <span className='fa-regular fa-user'></span>
                     <div className='profile-menu-text'>
                     <p>Profile</p>
                     <p className='profile-menu-small-text'>Manage your profile details.</p>
                     </div>
                 </div>
-                <div className="profile-menu-btn" onClick={() => setSelectedOption('settings')}>
+                <div className="profile-menu-btn" onClick={() => setAccountSelectedOption('settings')}>
                 <span className='fa-solid fa-gear'></span>
                     <div className='profile-menu-text'>
                     <p>Settings</p>
@@ -471,7 +471,7 @@ export default function ProfileMode(props) {
             </div>
         </div>
 
-        {selectedOption === 'unexpanded' && (
+        {accountSelectedOption === 'unexpanded' && (
             <div className="profile-options-div">
                 <div className="profile-option">Personal details</div>
                 <div className="profile-option">Change password</div>
@@ -479,17 +479,17 @@ export default function ProfileMode(props) {
             </div>
         )}
         
-        {selectedOption === 'profile' && (
+        {accountSelectedOption === 'profile' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
-                    setSelectedOption('unexpanded')
+                    setAccountSelectedOption('unexpanded')
                 }}></span>
                 <h2>Profile</h2>
                 </div>
                 <div className='profile-options-btn-list'>
                 <div className="profile-menu-option" onClick={() => {
-                    setSelectedOption('personal-details')
+                    setAccountSelectedOption('personal-details')
                 }}>
                     <span className='fa-regular fa-user'></span>
                     <div>
@@ -498,7 +498,7 @@ export default function ProfileMode(props) {
                     </div>
                 </div>
                 <div className="profile-menu-option" onClick={() => {
-                    setSelectedOption('change-password')
+                    setAccountSelectedOption('change-password')
                 }}><span className='fa-solid fa-lock'></span>
                     <div>
                     <p>Change password</p>
@@ -515,11 +515,11 @@ export default function ProfileMode(props) {
 
         {showDeleteModal && <DeleteAccountModal/>}
 
-        {selectedOption === 'personal-details' && (
+        {accountSelectedOption === 'personal-details' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
-                    setSelectedOption('profile')
+                    setAccountSelectedOption('profile')
                 }}></span>
                 <h2>Personal details</h2>
                 </div>
@@ -561,11 +561,11 @@ export default function ProfileMode(props) {
             </div>
         )}
 
-        {selectedOption === 'change-password' && (
+        {accountSelectedOption === 'change-password' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
-                    setSelectedOption('profile')
+                    setAccountSelectedOption('profile')
                 }}></span>
                 <h2>Change password</h2>
                 </div>
@@ -614,7 +614,7 @@ export default function ProfileMode(props) {
                     <div className='change-password-btns'>
                         <button className='personal-details-btn' onClick={handleChangePassword}>Save</button>
                         <p>Forgot password? <a onClick={() => {
-                    setSelectedOption('forgot-password')
+                    setAccountSelectedOption('forgot-password')
                 }}>Click here</a></p>
                     </div>
                     
@@ -622,11 +622,11 @@ export default function ProfileMode(props) {
             </div>
         )}
 
-        {selectedOption === 'forgot-password' && (
+        {accountSelectedOption === 'forgot-password' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
-                    setSelectedOption('change-password')
+                    setAccountSelectedOption('change-password')
                 }}></span>
                 <h2>Forgot password?</h2>
                 </div>
@@ -649,11 +649,11 @@ export default function ProfileMode(props) {
             
         )}
         
-        {selectedOption === 'settings' && (
+        {accountSelectedOption === 'settings' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                     <span className='fa-solid fa-arrow-left' onClick={() => {
-                        setSelectedOption('unexpanded')
+                        setAccountSelectedOption('unexpanded')
                     }}></span>
                     <h2>Settings</h2>
                 </div>

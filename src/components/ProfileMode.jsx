@@ -483,7 +483,8 @@ export default function ProfileMode(props) {
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
-                    setAccountSelectedOption('unexpanded')
+                    // setAccountSelectedOption('unexpanded')
+                    setSelectedMode('main')
                 }}></span>
                 <h2>Profile</h2>
                 </div>
@@ -627,6 +628,7 @@ export default function ProfileMode(props) {
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
                     setAccountSelectedOption('change-password')
+                    
                 }}></span>
                 <h2>Forgot password?</h2>
                 </div>
@@ -654,6 +656,7 @@ export default function ProfileMode(props) {
                 <div className='profile-option-h-div'>
                     <span className='fa-solid fa-arrow-left' onClick={() => {
                         setAccountSelectedOption('unexpanded')
+                        setSelectedMode('main')
                     }}></span>
                     <h2>Settings</h2>
                 </div>

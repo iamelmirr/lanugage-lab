@@ -686,6 +686,7 @@ body {
 }
 
 .profile-list-div.modal {
+    display: flex;
     background: #ffefd4;
     padding-inline: 12px;
 }
@@ -1896,7 +1897,7 @@ body {
 }
 
 .profile-list-div {
-    display: flex;
+    display: none;
     flex-direction: column;
     flex: 1;
     padding-inline: 24px;
@@ -1979,7 +1980,7 @@ body {
 .profile-options-div.expanded {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 100%;
     transform: translateX(0);
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     padding-inline: 24px;

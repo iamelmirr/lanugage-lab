@@ -83,9 +83,9 @@ export default function Home(props) {
 
         {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption}/>}
 
-        {selectedMode === 'main' && <MobileNav></MobileNav>}
+        {(selectedMode === 'main' || selectedMode === 'progress') && <MobileNav setSelectedMode={setSelectedMode}></MobileNav>}
 
-        <MobileModal setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption} isMobileModalOpen={isMobileModalOpen}></MobileModal>
+        <MobileModal setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption} isMobileModalOpen={isMobileModalOpen} setSelectedMode={setSelectedMode}></MobileModal>
 
         </>
 

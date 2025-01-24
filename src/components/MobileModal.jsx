@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 
 export default function MobileModal(props) {
-    const { setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, accountSelectedOption, setAccountSelectedOption, isMobileModalOpen } = props;
+    const { setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, accountSelectedOption, setAccountSelectedOption, isMobileModalOpen, setSelectedMode } = props;
 
     const modalRef = useRef(null);
     const [dragStartY, setDragStartY] = useState(0);
@@ -130,14 +130,22 @@ export default function MobileModal(props) {
                             <h2>Account settings</h2>
                         </div>
                         <div className="profile-menu">
-                            <div className="profile-menu-btn" onClick={() => setAccountSelectedOption("profile")}>
+                            <div className="profile-menu-btn" onClick={() => {
+                                setSelectedMode('profile-mode')
+                                setAccountSelectedOption("profile")
+                                closeModal()
+                            } }>
                                 <span className="fa-regular fa-user"></span>
                                 <div className="profile-menu-text">
                                     <p>Profile</p>
                                     <p className="profile-menu-small-text">Manage your profile details.</p>
                                 </div>
                             </div>
-                            <div className="profile-menu-btn" onClick={() => setAccountSelectedOption("settings")}>
+                            <div className="profile-menu-btn" onClick={() => {
+                                setSelectedMode('profile-mode')
+                                setAccountSelectedOption("settings")
+                                closeModal()
+                            } }>
                                 <span className="fa-solid fa-gear"></span>
                                 <div className="profile-menu-text">
                                     <p>Settings</p>

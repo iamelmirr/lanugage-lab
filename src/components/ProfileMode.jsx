@@ -440,11 +440,15 @@ export default function ProfileMode(props) {
 
     return (
         <div className='profile-mode'>
+            <div className="mobile-header profile">
+            <img src="./public/header-logo.png" alt="header-logo" />         </div>
         <div className="profile-list-div">
             <div className="profile-header">
                 <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>
                 <h2>Account</h2>
             </div>
+
+            
             
             <div className="profile-menu">
                 <div className="profile-menu-btn" onClick={() => setAccountSelectedOption('profile')}>
@@ -480,6 +484,8 @@ export default function ProfileMode(props) {
         )}
         
         {accountSelectedOption === 'profile' && (
+            <>
+            
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
                 <span className='fa-solid fa-arrow-left' onClick={() => {
@@ -488,6 +494,11 @@ export default function ProfileMode(props) {
                 }}></span>
                 <h2>Profile</h2>
                 </div>
+
+                <p className='profile-info-text'>
+                Manage your profile information below.
+            </p>
+
                 <div className='profile-options-btn-list'>
                 <div className="profile-menu-option" onClick={() => {
                     setAccountSelectedOption('personal-details')
@@ -512,6 +523,7 @@ export default function ProfileMode(props) {
                     </div></div>
                     </div>
             </div>
+            </>
         )}
 
         {showDeleteModal && <DeleteAccountModal/>}
@@ -524,6 +536,11 @@ export default function ProfileMode(props) {
                 }}></span>
                 <h2>Personal details</h2>
                 </div>
+
+                <p className='profile-info-text'>
+                Manage your personal details below.
+                </p>
+
                 <div className='personal-details-btn-list'>
                     <div className="personal-details-setting">
                         
@@ -570,6 +587,11 @@ export default function ProfileMode(props) {
                 }}></span>
                 <h2>Change password</h2>
                 </div>
+
+                <p className='profile-info-text'>
+                You can set a new password for your account below.
+                </p>
+
                 <div className='personal-details-btn-list'>
                     <div className="personal-details-setting">
                         
@@ -632,6 +654,11 @@ export default function ProfileMode(props) {
                 }}></span>
                 <h2>Forgot password?</h2>
                 </div>
+
+                <p className='profile-info-text'>
+                Enter the verified email associated with your account and we'll send an email with instructions to reset password.
+                </p>
+
                 <div className='personal-details-btn-list'>
                     <div className="personal-details-setting">
                         
@@ -660,8 +687,13 @@ export default function ProfileMode(props) {
                     }}></span>
                     <h2>Settings</h2>
                 </div>
+
+                <p className='profile-info-text'>
+                Manage your account settings below.
+                </p>
+
                 <div className='profile-settings-btn-list'>
-                    <div className="profile-menu-setting">
+                    <div className="profile-menu-setting settings">
                         
                         
                             <p>Choose your target language</p>
@@ -673,7 +705,7 @@ export default function ProfileMode(props) {
                             />
                         
                     </div>
-                    <div className="profile-menu-setting">
+                    <div className="profile-menu-setting settings">
                     <p>Choose your translation language</p>
                     <CustomSelect
                         options={translationLanguages}
@@ -682,7 +714,7 @@ export default function ProfileMode(props) {
                     />
                 </div>
                     
-                    <div className="profile-menu-setting">
+                    <div className="profile-menu-setting settings">
                     <p>Choose your target language level</p>
                     <CustomLevelSelect
                         options={levels}

@@ -10,7 +10,7 @@ export default function MobileNav(props) {
 
     return (
         <div className="mobile-nav">
-            <a href="/">
+            <a onClick={() => setSelectedMode('explore')}>
             <img src="./src/assets/map.svg" alt="" /></a>
             <a onClick={() => setSelectedMode('main')} className="nav-selected" >
             <img src="./src/assets/dashboard-tile-svgrepo-com.svg" alt="" /></a>

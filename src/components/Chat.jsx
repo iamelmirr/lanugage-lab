@@ -29,7 +29,7 @@ export default function Chat(props) {
     const [userGender, setUserGender] = useState(null)
     const [tutorGender, setTutorGender] = useState(null)
     const [tutorName, setTutorName] = useState('John')
-    const [tutorImage, setTutorImage] = useState('.src/assets/john.png')
+    const [tutorImage, setTutorImage] = useState('./public/john.png')
     const [isPlayingAudio, setIsPlayingAudio] = useState(false)
     const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false)
     const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
@@ -216,23 +216,23 @@ export default function Chat(props) {
             teacherInfo: {
                     English: {
                         name: "John",
-                        image: ".src/assets/john.png"
+                        image: "./public/john.png"
                     }, 
                     Spanish: {
                         name: "Carlos",
-                        image: ".src/assets/john.png"
+                        image: "./public/carlos.png"
                     },
                     Italian: {
                         name: "Marco",
-                        image: ".src/assets/john.png"
+                        image: "./public/marco.png"
                     },
                     German: {
                         name: "Sebastian",
-                        image: ".src/assets/john.png"
+                        image: "./public/sebastian.png"
                     },
                     French: {
                         name: "Pierre",
-                        image: ".src/assets/john.png"
+                        image: "./public/pierre.png"
                     },
             },
             firstMessage: { 
@@ -285,27 +285,27 @@ export default function Chat(props) {
             name: "At the Airport",
             description: "Role-play as a traveler asking for directions, checking in, or seeking assistance at the airport.",
             teacherInfo: {
-                English: {
-                    name: "John",
-                    image: ".src/assets/john.png"
-                }, 
-                Spanish: {
-                    name: "Carlos",
-                    image: ".src/assets/john.png"
-                },
-                Italian: {
-                    name: "Marco",
-                    image: ".src/assets/john.png"
-                },
-                German: {
-                    name: "Sebastian",
-                    image: ".src/assets/john.png"
-                },
-                French: {
-                    name: "Pierre",
-                    image: ".src/assets/john.png"
-                },
-        },
+                    English: {
+                        name: "John",
+                        image: "./public/john.png"
+                    }, 
+                    Spanish: {
+                        name: "Carlos",
+                        image: "./public/carlos.png"
+                    },
+                    Italian: {
+                        name: "Marco",
+                        image: "./public/marco.png"
+                    },
+                    German: {
+                        name: "Sebastian",
+                        image: "./public/sebastian.png"
+                    },
+                    French: {
+                        name: "Pierre",
+                        image: "./public/pierre.png"
+                    },
+            },
             firstMessage: { 
                 English: {sender: "assistant", text: "Welcome to Skyport International Airport! I'm John, your airport assistant. How can I help you today? Whether it's directions, check-in assistance, or general information, feel free to ask!"},
                 Spanish: {sender: "assistant", text: "¡Bienvenido al Aeropuerto Internacional Skyport! Soy Carlos, tu asistente en el aeropuerto. ¿En qué puedo ayudarte hoy? Ya sea direcciones, asistencia de check-in o información general, no dudes en preguntar."},
@@ -357,23 +357,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         firstMessage: { 
@@ -427,23 +427,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         firstMessage: { 
@@ -503,23 +503,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         firstMessage: { 
@@ -574,23 +574,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     }, 
         firstMessage: { 
@@ -639,23 +639,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         firstMessage: { 
@@ -703,11 +703,11 @@ export default function Chat(props) {
     teacherInfo: {
         male: {
             name: "Noah",
-            image: ".src/assets/john.png"
+            image: ".src/public/noah.png"
         },
         female: {
             name: "Mia",
-            image: ".src/assets/john.png"
+            image: ".src/public/mia.png"
         }
 }, 
     
@@ -804,23 +804,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are role-playing as a time traveler from the past, present, or future, engaging with the user in conversations about historical events, technologies, and cultural shifts. Your name is ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
@@ -870,23 +870,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are role-playing as a detective named ${tutorName}, leading the investigation with the help of an AI assistant who acts as your helper. Your primary mission is to solve a mystery by asking questions, gathering clues, and making logical deductions. You understand that:
@@ -936,23 +936,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are role-playing as a police officer named ${tutorName} assisting the user with reporting a crime or seeking advice. Your primary mission is to provide the user with realistic interactions that help them practice ${targetLanguage} in scenarios involving law enforcement and legal matters. You understand that:
@@ -1002,23 +1002,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are engaging in a debate with the user on the pros and cons of social media. Your name is ${tutorName}. Your primary goal is to foster a thoughtful and dynamic discussion, helping the user practice ${targetLanguage} in a critical thinking environment. You understand that:
@@ -1069,23 +1069,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are engaging in a debate with the user about whether online education is superior to traditional learning. Your name is ${tutorName}. Your primary goal is to create a thought-provoking conversation that will allow the user to practice ${targetLanguage} while developing critical thinking skills. You understand that:
@@ -1133,23 +1133,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are engaging in a debate about whether voting should be mandatory in democratic societies. Your name is ${tutorName}. The primary goal is to foster a stimulating conversation that encourages the user to practice ${targetLanguage} while discussing a complex political topic. You understand that:
@@ -1198,23 +1198,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a grocery shopping experience with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for specific items, checking prices, and discussing quantities in ${targetLanguage}. You understand that:
@@ -1268,23 +1268,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a restaurant order with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for the menu, discussing their food preferences, and placing an order in ${targetLanguage}. You understand that:
@@ -1335,23 +1335,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a scenario where the user is lost in a foreign city. Your name is ${tutorName}. Your primary goal is to guide the user through asking for directions, seeking advice, and navigating challenges they might encounter in an unfamiliar city. You understand that:
@@ -1399,23 +1399,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a situation where the user has car trouble. Your name is ${tutorName}. Your primary goal is to guide the user through asking for help, explaining car problems clearly, and considering possible solutions. You understand that:
@@ -1465,23 +1465,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a product return with the user. Your name is ${tutorName}. Your primary goal is to guide the user through discussing product issues, inquiring about store policies, and practicing negotiating refunds or exchanges. You understand that:
@@ -1531,23 +1531,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating pronunciation practice with the user. Your name is ${tutorName}. Your primary goal is to help the user improve their pronunciation skills in ${targetLanguage} by guiding them through word and phrase exercises, providing real-time feedback, and adjusting exercises as needed. You understand that:
@@ -1599,23 +1599,23 @@ export default function Chat(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: ".src/assets/john.png"
+                image: "./public/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: ".src/assets/john.png"
+                image: "./public/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: ".src/assets/john.png"
+                image: "./public/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: ".src/assets/john.png"
+                image: "./public/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: ".src/assets/john.png"
+                image: "./public/pierre.png"
             },
     },
         context: `You are simulating a job interview with the user. Your name is ${tutorName}. Your primary goal is to help the user practice answering typical job interview questions while providing constructive feedback to enhance their performance. You understand that:
@@ -2176,12 +2176,6 @@ const topicLabels = {
         };
     }, [])
 
-
-     useEffect(() => {
-         if (messages.length > 0 && messages[messages.length - 1].sender === "assistant") {
-             handleCreateSuggestedAnswer();
-         }
-     }, [messages])
     
 
     
@@ -2439,7 +2433,7 @@ const topicLabels = {
                             role: msg.sender === "assistant" ? "assistant" : "user",
                             content: msg.text,
                         })),
-                        { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: ${lastAssistantMessage.text} ? Respond like the user only with the suggested response, nothing else. Respond in ${targetLanguage} language.` }
+                        { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: " ${lastAssistantMessage.text} "? Respond like the user only with the suggested response, nothing else. Don't aknowledge this message and don't say something like "Sure! I would respond with this:". Just answer with a straight response. Respond in ${targetLanguage} language, not any other language.` }
                     ],
                 }),
             });
@@ -2449,8 +2443,12 @@ const topicLabels = {
             const dataResponse = await response.json();
             const suggestedResponse = dataResponse.choices[0]?.message?.content || "";
 
+            handleSuggestAnswer(suggestedResponse)
+
             setSuggestedAnswer(suggestedResponse);
-            console.log("suggestedResponse:", suggestedResponse) 
+            console.log("suggestedResponse:", suggestedResponse)
+            
+            
 
         } catch (error) {
             console.error("Error fetching GPT response:", error);
@@ -2694,12 +2692,15 @@ const topicLabels = {
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
+                <span onClick={() => setSelectedMode('main')} className="fa-solid fa-arrow-left"></span>
+                <div className="img-wrapper">    
                 <img 
                 src={
                     tutorImage
                 } 
                 alt="teacher-img" 
                                 />
+                </div>                
                     <h3 className="teacher-name">{tutorName}</h3>
                 </div>
 
@@ -2734,6 +2735,7 @@ const topicLabels = {
                         </span>
                         </div>
                     </div>
+
                     </div>
                 ))}
                 <div ref={lastMessageRef} />
@@ -2748,7 +2750,7 @@ const topicLabels = {
             <div className="chat-input-wrapper">
                 <div className={`assistant-options ${showSuggestionBar ? '' : 'hidden'}`}>
                     <span onClick={handleAnotherQuestion}>Another question</span>
-                    <span onClick={handleSuggestAnswer}>Suggest answer</span>
+                    <span onClick={handleCreateSuggestedAnswer}>Suggest answer</span>
                 </div>
                 <div className="input-wrapper">
                     <input

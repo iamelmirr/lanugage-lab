@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
+import { auth } from "../utils/firebaseConfig";
 
 export default function MobileModal(props) {
-    const { setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, accountSelectedOption, setAccountSelectedOption, isMobileModalOpen, setSelectedMode } = props;
+    const { setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, accountSelectedOption, setAccountSelectedOption, isMobileModalOpen, setSelectedMode, isChatSettingsModalOpen, setIsChatSettingsModalOpen, setActiveChat, handleStartNewChat, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback, targetLanguage } = props;
 
     const modalRef = useRef(null);
     const [dragStartY, setDragStartY] = useState(0);
@@ -113,6 +114,7 @@ export default function MobileModal(props) {
                     setIsMobileModalOpen(false);
                     setTimeout(() => {
                         setIsMobileProfileOpen(false);
+                        setSelectedMessage(null)
                     }, 2000);
                 }}
             ></div>
@@ -124,7 +126,7 @@ export default function MobileModal(props) {
                 >
                     <div className="drag-indicator"></div>
                 </div>
-                {isMobileProfileOpen && (
+                {isMobileProfileOpen ? (
                     <div className="profile-list-div modal">
                         <div className="profile-header">
                             <h2>Account settings</h2>
@@ -161,7 +163,116 @@ export default function MobileModal(props) {
                             </div>
                         </div>
                     </div>
-                )}
+                ) : selectedMessage?.feedback ? (
+                    <div className="feedback-modal">
+                       <div className="feedback-modal-first"> 
+                        <div className="user-msg-severity">
+                            <div className="severity-mark">
+                                <span className={selectedMessage?.feedback?.severity}></span>
+                            </div>
+                        </div>
+                        <div className="msg">
+                            <p className={`small-text ${selectedMessage?.feedback?.severity}`}>Your message</p>
+                            <p className="base-text">{selectedMessage?.text}</p>
+                        </div>
+                        </div>
+
+                        <div className={`feedback-modal-second ${selectedMessage?.feedback?.severity}`}>
+                            <p className="feedback-short">
+                                {selectedMessage?.feedback?.severity === 'green' ? 'Good job!' : 'Mistake'}
+                            </p>
+
+                            <p className="feedback-explanation">
+                                {selectedMessage?.feedback?.explanation}
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                ) : selectedMessage?.translation ? (
+
+                    <div className="translation-modal">
+
+                        <div className="translation-header">
+                            <h2>Translation</h2>
+                        </div>
+
+                        <div className="border-div"></div>
+
+                        <div className="translation-msg">
+                            <p className="translation-language">
+                                {targetLanguage}
+                            </p>
+
+                            <p className="translation-message">
+                                {selectedMessage.text}
+                            </p>
+
+                        </div>
+
+                        <div className="border-div"></div>
+
+                        <div className="translation-msg">
+                            <p className="translation-language">
+                                {selectedMessage?.translation.language}
+                            </p>
+
+                            <p className="translation-message">
+                                {selectedMessage?.translation.content}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                ) : isChatSettingsModalOpen ? (
+                    <div className="profile-list-div modal">
+                        
+                        <div className="profile-menu">
+
+                            <div className="modal-menu-btns-div">
+                            <div className="profile-menu-btn" onClick={() => {
+                                setActiveChat(null)
+                                handleStartNewChat()
+                                closeModal()
+                            } }>
+                                <img src="./public/new-message.png" alt="new-chat" />
+                                <div className="profile-menu-text">
+                                    <p>Start a new chat</p>
+                                    <p className="profile-menu-small-text">End the current chat and start a new one.</p>
+                                </div>
+                            </div>
+                            <div className="profile-menu-btn" onClick={() => {
+                                setIsMobileChatInfoVisible(true)
+                                setIsChatHistoryOpen(true)
+                                closeModal()
+                            } }>
+                                <img src="./public/history.png" alt="new-chat" />
+                                <div className="profile-menu-text">
+                                    <p>See chat history</p>
+                                    <p className="profile-menu-small-text">You can view and manage your previous conversations.</p>
+                                </div>
+                            </div>
+                            </div>
+
+
+
+                            <div className="profile-menu-btn" onClick={() => {
+                                setIsMobileChatInfoVisible(true)
+                                setSelectedMessage({
+                                    settings: true
+                                  })
+                                closeModal()
+                            } }>
+                                <img src="./public/settings.png" alt="new-chat" />
+                                <div className="profile-menu-text">
+                                    <p>Settings</p>
+                                    <p className="profile-menu-small-text">Manage your chat settings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : null }
             </div>
         </>
     );

@@ -55,6 +55,10 @@ body {
     
 }
 
+input:focus {
+    outline: 1px solid rgb(207, 83, 0);
+}
+
 
 
 /* NAV  */
@@ -191,11 +195,11 @@ body {
 .mobile-nav .nav-selected {
     border-radius: 100%;
     background: rgb(255 255 255);
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 8px rgba(71, 71, 71, 0.15);
 }
 
 .mobile-nav .nav-selected img {
-    color: #4CAF50;
+    filter: invert(40%) sepia(85%) saturate(2526%) hue-rotate(355deg) brightness(91%) contrast(92%);
 }
 
 .main-div {
@@ -239,18 +243,23 @@ body {
     gap: 22px;
     scrollbar-width: none;
     padding: 24px 12px 0 12px;
-    margin-left: 12px;
-    cursor: grab; /* Add this */
+    cursor: grab;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     user-select: none;
     scroll-snap-type: x mandatory;
     transition: transform 0.2s ease-in-out;
+    -ms-overflow-style: none;
     
 }
 
 .slider-item-swipe {
     display: flex;
+    scroll-snap-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .slider-wrapper:active {
@@ -273,6 +282,7 @@ body {
     width: 380px;
     scroll-snap-align: start;
     flex-shrink: 0;
+    user-select: none;
     
 }
 
@@ -294,7 +304,7 @@ body {
 
 
 .slider-item-one .slider-par {
-    font-size: 10.5px;
+    font-size: 11.5px;
     color: #ffffff;
     opacity: 0.7;
     font-weight: 500;
@@ -308,7 +318,7 @@ body {
 }
 
 .slider-item-one .slider-options-div p {
-    font-size: 11px;
+    font-size: 11.5px;
     color: #ffffff;
 }
 
@@ -319,6 +329,33 @@ body {
     border-radius: 100%;
     color: purple;
 }
+
+.slider-item-two .slider-big-text {
+    font-size: 31px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.slider-item-two .slider-par {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.slider-item-two .slider-options-div p {
+    font-size: 11.5px;
+    color: #ffffff;
+}
+
+.slider-item-two .slider-options-div span {
+    padding: 12px;
+    font-size: 17px;
+    background: #ffffff;
+    border-radius: 100%;
+    color: #0c5310;
+}
+
 
 
 
@@ -1712,6 +1749,8 @@ body {
     align-items: center;
     background: rgb(219, 99, 19);
     height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .registration-content {
@@ -1908,6 +1947,7 @@ body {
     top: 0;
     width: 20%;
     background: orangered;
+    transition: 0.3s width ease-in-out;
 }
 
 .registration-form {
@@ -2104,7 +2144,7 @@ body {
     flex-direction: column;
     gap: 7px;
     width: 100%;
-    
+    position: relative;
 }
 
 .password-div {
@@ -2151,6 +2191,21 @@ body {
     width: 100%;
     font-size: 15px;
 
+}
+
+.login-label-div input.invalid {
+    border-color: rgb(236, 35, 0);
+}
+
+.login-label-div input.invalid:focus {
+    outline: none;
+}
+
+.error-message {
+    color: rgb(236, 35, 0);
+    font-size: 15px;
+    bottom: -20px;
+    font-weight: 500;
 }
 
 .bottom-br-line {
@@ -3122,3 +3177,38 @@ body {
     border: 1px solid #d6d6d6;
 }
 
+.notification-modal {
+    display: flex;
+    visibility: hidden;
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.7);
+    z-index: 1000;
+    background: #ffffff;
+    padding: 12px;
+    max-width: 60%;
+    align-items: center;
+    border-radius: 12px;
+    border: 1.5px solid rgb(190, 190, 190);
+    gap: 12px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.notification-modal.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.notification-icon img {
+    aspect-ratio: 1/1;
+    display: flex;
+    height: 42px;
+}
+
+.notification-info p {
+    font-size: 16px;
+    font-weight: 500;
+}

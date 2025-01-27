@@ -1,4 +1,5 @@
 import Home from "./pages/Home"
+import NotificationModal from "./components/NotificationModal"
 import React, { useState, useEffect } from "react"
 import LandingPage from "./pages/LandingPage"
 import Authentication from "./pages/Authentication"
@@ -42,6 +43,7 @@ const [streakCount, setStreakCount] = useState(0);
 const [longestStreak, setLongestStreak] = useState(0);
 const [lastChatDate, setLastChatDate] = useState(null);
 const [todaysChatTime, setTodaysChatTime] = useState(0);
+const [isNotificationModalVisible, setIsNotificationModalVisible] = useState()
 
 
 
@@ -161,21 +163,33 @@ useEffect(() => {
   
 
   const renderPage = () => {
+    
     if (!isAuthenticated) {
-        if (isRegistering) return <Registration progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} savedChats={savedChats} setSavedChats={setSavedChats} setLearningGoal={setLearningGoal} setLearningReason={setLearningReason} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
+        if (isRegistering) return <Registration isNotificationModalVisible={isNotificationModalVisible}
+        setIsNotificationModalVisible={setIsNotificationModalVisible} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} savedChats={savedChats} setSavedChats={setSavedChats} setLearningGoal={setLearningGoal} setLearningReason={setLearningReason} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} formData={formData} setFormData={setFormData} setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setProgressLevel={setProgressLevel} setUserData={setUserData}/>
-        if (isLogingIn) return <Login setIsAuthenticated={setIsAuthenticated} 
+        if (isLogingIn) return <Login isNotificationModalVisible={isNotificationModalVisible}
+        setIsNotificationModalVisible={setIsNotificationModalVisible} setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
         return <LandingPage setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn} />;
     }
-    return <Home userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime}  />;
+    return <Home isNotificationModalVisible={isNotificationModalVisible}
+    setIsNotificationModalVisible={setIsNotificationModalVisible} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime}  />;
   };
 
-  return <>{renderPage()}</>
+  return (
+    <>
+      {renderPage()}
+      {isNotificationModalVisible && <NotificationModal 
+        isNotificationModalVisible={isNotificationModalVisible}
+        setIsNotificationModalVisible={setIsNotificationModalVisible}
+      />}
+    </>
+  );
 
 }
 

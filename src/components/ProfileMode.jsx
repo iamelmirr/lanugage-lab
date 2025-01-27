@@ -441,7 +441,7 @@ export default function ProfileMode(props) {
     return (
         <div className='profile-mode'>
             <div className="mobile-header profile">
-            <img src="./public/header-logo.png" alt="header-logo" />         </div>
+            <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />         </div>
         <div className="profile-list-div">
             <div className="profile-header">
                 <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>

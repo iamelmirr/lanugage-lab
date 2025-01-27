@@ -8,7 +8,15 @@ import { useState, useRef, useEffect } from "react"
 
 export default function Main(props) {
 
-    const {selectedMode, setSelectedMode, handleSelectedMode, activeTab, setActiveTab, handleTabChange, progressLevel, progressScore, progressPercentage, levelThresholds, longestStreak, streakCount, savedChats, setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, isMobileModalOpen} = props
+    const {selectedMode, setSelectedMode, handleSelectedMode, activeTab, setActiveTab, handleTabChange, progressLevel, progressScore, progressPercentage, levelThresholds, longestStreak, streakCount, savedChats, setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, isMobileModalOpen, userName} = props
+
+    const sliderWrapperRef = useRef(null);
+
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0)
+    const [scrollLeft, setScrollLeft] = useState(0)
+    const [dragDistance, setDragDistance] = useState(0)
+
     
 
     const pointsToNextLevel = levelThresholds[progressLevel] - progressScore
@@ -19,13 +27,13 @@ export default function Main(props) {
     
 
     useEffect(() => {
-        console.log('selected mode changed')
+        
 
         window.scrollTo(0, 0)
 
         const scrollableElements = document.querySelectorAll('.scrollable');
         scrollableElements.forEach(element => {
-            console.log('Scrolling element:', element)
+            
             element.scrollTop = 0;
         });
 
@@ -39,81 +47,107 @@ export default function Main(props) {
 
 
 
-    
-    const sliderWrapperRef = useRef(null);
-
     useEffect(() => {
-        const sliderWrapper = sliderWrapperRef.current;
-        if (!sliderWrapper) return;
-
-        const sliderItems = sliderWrapper.querySelectorAll(".slider-item");
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        let dragged = false;
-
-        const handleMouseDown = (e) => {
-            isDown = true;
-            dragged = false;
-            sliderWrapper.classList.add("active");
-            const paddingLeft = parseInt(getComputedStyle(sliderWrapper).paddingLeft, 10);
-            startX = e.pageX - sliderWrapper.offsetLeft - paddingLeft;
-            scrollLeft = sliderWrapper.scrollLeft;
-        };
-
-        const handleMouseLeave = () => {
-            if (isDown) snapToNearest();
-            isDown = false;
-            sliderWrapper.classList.remove("active");
-        };
-
-        const handleMouseUp = () => {
-            if (dragged) snapToNearest();
-            isDown = false;
-            sliderWrapper.classList.remove("active");
-        };
-
-        const handleMouseMove = (e) => {
-            if (!isDown) return;
-            dragged = true;
-            e.preventDefault();
-            const x = e.pageX - sliderWrapper.offsetLeft;
-            const walk = (x - startX) * 1.5; // Adjust sensitivity here
-            sliderWrapper.scrollLeft = scrollLeft - walk;
-        };
-
-        const snapToNearest = () => {
-            const sliderWrapperScrollLeft = sliderWrapper.scrollLeft;
-            let nearestItem = sliderItems[0];
-            let minDistance = Math.abs(sliderWrapperScrollLeft - nearestItem.offsetLeft);
-
-            sliderItems.forEach((item) => {
-                const distance = Math.abs(sliderWrapperScrollLeft - item.offsetLeft);
-                if (distance < minDistance) {
-                    nearestItem = item;
-                    minDistance = distance;
+        // Reset slider state when returning to the page
+        if (sliderWrapperRef.current) {
+          sliderWrapperRef.current.scrollLeft = 0;
+        }
+        setIsDragging(false);
+        setStartX(0);
+        setScrollLeft(0);
+        setDragDistance(0);
+      }, [selectedMode]);
+    
+      const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setStartX(e.pageX - sliderWrapperRef.current.offsetLeft);
+        setScrollLeft(sliderWrapperRef.current.scrollLeft);
+        setDragDistance(0);
+      };
+    
+      const handleMouseLeave = () => {
+        setIsDragging(false);
+      };
+    
+      const handleMouseUp = (e) => {
+        setIsDragging(false);
+    
+        if (Math.abs(dragDistance) < 5) {
+            // If drag distance is less than 5px, consider it a click
+            const sliderWrapper = sliderWrapperRef.current;
+            const sliderItems = sliderWrapper.querySelectorAll(".slider-item-swipe");
+    
+            sliderItems.forEach((item, index) => {
+                const itemRect = item.getBoundingClientRect();
+                if (
+                    e.clientX >= itemRect.left &&
+                    e.clientX <= itemRect.right &&
+                    e.clientY >= itemRect.top &&
+                    e.clientY <= itemRect.bottom
+                ) {
+                    // Set selectedMode based on the clicked item's index
+                    if (index === 0) {
+                        setSelectedMode("explore");
+                    } else if (index === 1) {
+                        setSelectedMode("progress");
+                    }
                 }
             });
+        }
+    
+        snapToNearest();
+    };
+    
+      const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - sliderWrapperRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        sliderWrapperRef.current.scrollLeft = scrollLeft - walk;
+        setDragDistance(walk);
+      };
 
-            sliderWrapper.scrollTo({
-                left: nearestItem.offsetLeft,
-                behavior: "smooth",
-            });
-        };
-
-        sliderWrapper.addEventListener("mousedown", handleMouseDown);
-        sliderWrapper.addEventListener("mouseleave", handleMouseLeave);
-        sliderWrapper.addEventListener("mouseup", handleMouseUp);
-        sliderWrapper.addEventListener("mousemove", handleMouseMove);
-
+      const snapToNearest = () => {
+        const sliderWrapper = sliderWrapperRef.current;
+        const sliderItems = sliderWrapper.querySelectorAll(".slider-item-swipe");
+        const itemWidth = sliderItems[0].offsetWidth;
+        const itemGap = parseInt(getComputedStyle(sliderWrapper).gap);
+      
+        const nearestIndex = Math.round(sliderWrapper.scrollLeft / (itemWidth + itemGap));
+        const nearestOffset = nearestIndex * (itemWidth + itemGap);
+      
+        sliderWrapper.scrollTo({
+          left: nearestOffset,
+          behavior: "smooth",
+        });
+      };
+    
+      const handleTouchStart = (e) => {
+        handleMouseDown(e.touches[0]);
+      };
+    
+      const handleTouchMove = (e) => {
+        handleMouseMove(e.touches[0]);
+      };
+    
+      const handleTouchEnd = () => {
+        handleMouseUp();
+      };
+    
+      useEffect(() => {
+        const sliderWrapper = sliderWrapperRef.current;
+        if (!sliderWrapper) return;
+      
+        sliderWrapper.addEventListener("touchstart", handleTouchStart);
+        sliderWrapper.addEventListener("touchmove", handleTouchMove);
+        sliderWrapper.addEventListener("touchend", handleTouchEnd);
+      
         return () => {
-            sliderWrapper.removeEventListener("mousedown", handleMouseDown);
-            sliderWrapper.removeEventListener("mouseleave", handleMouseLeave);
-            sliderWrapper.removeEventListener("mouseup", handleMouseUp);
-            sliderWrapper.removeEventListener("mousemove", handleMouseMove);
+          sliderWrapper.removeEventListener("touchstart", handleTouchStart);
+          sliderWrapper.removeEventListener("touchmove", handleTouchMove);
+          sliderWrapper.removeEventListener("touchend", handleTouchEnd);
         };
-    }, []);
-
+      }, [isDragging, startX, scrollLeft]);
 
 
     return (
@@ -125,7 +159,7 @@ export default function Main(props) {
             
 
             <div className="mobile-header">
-                <img src="./public/header-logo.png" alt="header-logo" />
+                <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
                 <span onClick={() => {
                     setIsMobileModalOpen(true)
                     setIsMobileProfileOpen(true)
@@ -149,14 +183,14 @@ export default function Main(props) {
                     <div className="explore-card-head">
                     <p className="explore-header">Your daily pick</p>
                     <div className="card-tags">
-                        <span className="tag">Vocabulary</span>
-                        <span className="tag">Writing</span>
+                        <span className="tag">Speaking</span>
+                        <span className="tag">Listening</span>
                     </div>
                     </div>
                     <p className="explore-desc">Here is your daily pick to improve your language learning skills with engaging experience.</p>
                     <div className="border-div"></div>
                     <p className="explore-options-label">Dialogue</p>
-                    <div className="explore-card-option" style={{
+                    <div onClick={() => setSelectedMode('interview')} className="explore-card-option" style={{
                     backgroundImage: `url(./src/assets/modes-images/interviewimage.jfif)`
                         }}>
                         <p className="explore-card-label">Interview</p>
@@ -245,7 +279,7 @@ export default function Main(props) {
    <>
 
     <div className="mobile-header">
-                <img src="./public/header-logo.png" alt="header-logo" />
+                <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
                 <span onClick={() => {
                     setIsMobileModalOpen(true)
                     setIsMobileProfileOpen(true)
@@ -293,7 +327,7 @@ export default function Main(props) {
 
             <div className="progress-level-subdiv">
                 <p className="font-medium dark">Current streak</p>
-                <p className="font-light-small dark">Pracitce at least 3 minutes to complete a session.</p>
+                <p className="font-light-small dark">Send at least one message to complete a session.</p>
             </div>
 
             <div className="border-div"></div>
@@ -376,7 +410,7 @@ export default function Main(props) {
                     
 
                     <div className="mobile-header">
-                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
                         <span onClick={() => {
                             setIsMobileModalOpen(true)
                             setIsMobileProfileOpen(true)
@@ -385,11 +419,11 @@ export default function Main(props) {
 
 
                     <div className="slider-horizontal">
-                        <div className="slider-wrapper">
+                        <div className="slider-wrapper" ref={sliderWrapperRef} onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}>
                         
                             <div className="slider-item-swipe">
                                 <div className="slider-item slider-item-one">
-                                    <p className="slider-big-text">Hello, Elmir!</p>
+                                    <p className="slider-big-text">Hello, {userName}!</p>
                                     <p className="slider-par">Have you tried our Explore tab? We have interesting things to show you.</p>
                                     <div className="slider-options-div">
                                         <p>See your daily pick</p>
@@ -401,10 +435,10 @@ export default function Main(props) {
 
                             <div className="slider-item-swipe">
                                 <div className="slider-item slider-item-two">
-                                    <p className="slider-big-text">Hello, Elmir!</p>
-                                    <p className="slider-par">Have you tried our Explore tab? We have interesting things to show you.</p>
+                                    <p className="slider-big-text">You are Level {progressLevel}</p>
+                                    <p className="slider-par">Practice {pointsToNextLevel} more {pointsToNextLevel === 1 ? 'minute' : 'minutes'} in any of the modes and you will reach level {progressLevel + 1}. You can view all your learning statistics on the progress tab.</p>
                                     <div className="slider-options-div">
-                                        <p>See your daily pick</p>
+                                        <p>View your stats</p>
                                         <span className="fa-solid fa-arrow-right"></span>
                                     </div>
 

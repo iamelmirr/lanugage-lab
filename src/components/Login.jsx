@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { auth, googleProvider } from '../utils/firebaseConfig';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { use } from 'react';
 
 export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogingIn }) {
     const [formData, setFormData] = useState({
@@ -9,6 +10,32 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
     });
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false)
     const [isEmailSentOpen, setIsEmailSentOpen] = useState(false)
+    const [errors, setErrors] = useState({
+            email: '',
+            password: ''
+        })
+
+
+    const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                return 'Required';
+            }
+            if (!emailRegex.test(email)) {
+                return 'Invalid email';
+            }
+            return '';
+    };
+    
+    const validatePassword = (password) => {
+        if (!password) {
+            return 'Required';
+        }
+        if (password.length < 8) {
+            return 'Must be at least 8 characters';
+        }
+        return '';
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -106,8 +133,15 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         name="email"
                         placeholder="Your email address"
                         value={formData.email}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange(e);
+                            setErrors({
+                                ...errors,
+                                email: validateEmail(e.target.value)
+                            });
+                        }}
                     />
+                    {errors.email && <span className="error-message">{errors.email}</span>}
                     </div>
                     
                     
@@ -167,23 +201,45 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                 <form onSubmit={handleLogin} className="registration-form">
                     <div className='login-label-div'>
                     <label htmlFor="email">Your email address</label>    
-                    <input
+                    <input className={errors.email ? "invalid" : ""}
                         type="email"
+                        required
                         name="email"
                         placeholder="Your email address"
                         value={formData.email}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange(e);
+                        }}
+                        onBlur={(e) => {   
+                            setErrors({
+                                ...errors,
+                                email: validateEmail(e.target.value)
+                            });
+                        }}
                     />
+                    {errors.email && <span className="error-message">{errors.email}</span>}
+
                     </div>
                     <div className='login-label-div password-div'>
                     <label htmlFor="password">Password</label>  
-                    <input
+                    <input className={errors.password ? "invalid" : ""}
                         type="password"
+                        required
                         name="password"
                         placeholder="Password"
                         value={formData.password}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange(e);
+                        }}
+                        onBlur={(e) => {
+                            
+                            setErrors({
+                                ...errors,
+                                password: validatePassword(e.target.value)
+                            });
+                        }}
                     />
+                    {errors.password && <span className="error-message">{errors.password}</span>}
                     <span className="fa-regular fa-eye"></span>
                     </div>
                     <a href="#" onClick={() => setIsForgotPasswordOpen(true)} className="forgot-password">Forgot password?</a>

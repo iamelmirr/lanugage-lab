@@ -4,7 +4,7 @@
 
 export default function CloseChatModal (props) {
 
-    const {isChatCloseModalVisible, setIsChatCloseModalVisible, setSelectedMode} = props
+    const {isChatCloseModalVisible, setIsChatCloseModalVisible, setSelectedMode, setMessages} = props
 
 
     return (
@@ -29,6 +29,7 @@ export default function CloseChatModal (props) {
                         <button onClick={() => {
                             setIsChatCloseModalVisible(false)
                             setSelectedMode('main')
+                            setMessages([])
                         }} className="close-chat-btn leave">
                             Leave
                         </button>

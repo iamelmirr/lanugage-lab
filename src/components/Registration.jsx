@@ -11,14 +11,58 @@ export default function Registration(props) {
     const [selectedLanguage, setSelectedLanguage] = useState('target language')
 
     const currentProgress = (step / 6) * 100
+
+    const [errors, setErrors] = useState({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: ''
+    });
     
     
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const passwordRegex = /^.{8,}$/;
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            return 'Required';
+        }
+        if (!emailRegex.test(email)) {
+            return 'Invalid email';
+        }
+        return '';
+    };
     
+    const validatePassword = (password) => {
+        if (!password) {
+            return 'Required';
+        }
+        if (password.length < 8) {
+            return 'Must be at least 8 characters';
+        }
+        return '';
+    };
+
+    const validateConfirmPassword = (password, confirmPassword) => {
+        if (!confirmPassword) {
+            return 'Required';
+        }
+        if (password !== confirmPassword) {
+            return 'Passwords do not match';
+        }
+        return '';
+    };
+
+    const validateName = (name) => {
+        if (!name) {
+            return 'Required';
+        }
+        return '';
+    };
 
 
     const handleGoogleRegistration = async (googleUser) => {
@@ -491,8 +535,18 @@ export default function Registration(props) {
                         name="firstName"
                         placeholder="First name"
                         value={formData.firstName}
-                        onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                        onChange={(e) => {
+                            handleInputChange(e.target.name, e.target.value);
+                        }}
+                        onBlur={(e) => {
+                            setErrors({
+                                ...errors,
+                                firstName: validateName(e.target.value)
+                            });
+                        }}
+                        className={errors.firstName ? "invalid" : ""}
                     />
+                    {errors.firstName && <span className="error-message">{errors.firstName}</span>}
                     </div>    
                     
                     <div className='login-label-div'>
@@ -502,8 +556,18 @@ export default function Registration(props) {
                         name="lastName"
                         placeholder="Last name"
                         value={formData.lastName}
-                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        onChange={(e) => {
+                            handleInputChange(e.target.name, e.target.value);
+                        }}
+                        onBlur={(e) => {
+                            setErrors({
+                                ...errors,
+                                lastName: validateName(e.target.value)
+                            });
+                        }}
+                        className={errors.lastName ? "invalid" : ""}
                     />
+                    {errors.lastName && <span className="error-message">{errors.lastName}</span>}
                     </div>    
 
                     
@@ -514,8 +578,19 @@ export default function Registration(props) {
                         name="email"
                         placeholder="Email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        onChange={(e) => {
+                            handleInputChange('email', e.target.value);
+                        }}
+
+                        onBlur={(e) => {
+                            setErrors({
+                                ...errors,
+                                email: validateEmail(e.target.value)
+                            });
+                        }}
+                        className={errors.email ? "invalid" : ""}
                     />
+                    {errors.email && <span className="error-message">{errors.email}</span>}
                     </div>    
 
 
@@ -526,8 +601,19 @@ export default function Registration(props) {
                         name="password"
                         placeholder="Password"
                         value={formData.password}
-                        onChange={(e) => handleInputChange('password', e.target.value)}
+                        onChange={(e) => {
+                            handleInputChange('password', e.target.value);
+                        }}
+
+                        onBlur={(e) => {
+                            setErrors({
+                                ...errors,
+                                password: validatePassword(e.target.value)
+                            });
+                        }}
+                        className={errors.password ? "invalid" : ""}
                     />
+                    {errors.password && <span className="error-message">{errors.password}</span>}
                     </div> 
                     
                     <div className='login-label-div'>
@@ -537,8 +623,19 @@ export default function Registration(props) {
                         name="confirmPassword"
                         placeholder="Password"
                         value={formData.confirmPassword}
-                        
+                        onChange={(e) => {
+                            handleInputChange('confirmPassword', e.target.value);
+                        }}
+
+                        onBlur={(e) => {
+                            setErrors({
+                                ...errors,
+                                confirmPassword: validateConfirmPassword(formData.password, e.target.value)
+                            });
+                        }}
+                        className={errors.confirmPassword ? "invalid" : ""}
                     />
+                    {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
                     </div> 
                     
                 

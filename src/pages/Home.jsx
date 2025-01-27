@@ -64,8 +64,8 @@ export default function Home(props) {
 
     const handleSelectedMode = (mode) => {
         setSelectedMode(mode)
-        console.log(selectedMode)
     }
+
 
     useEffect(() => {
 
@@ -1539,7 +1539,6 @@ export default function Home(props) {
         if (selectedMode === 'date') {
             setMessages([])
             setShowGenderModal(true);
-            console.log("gender modal shown")
         } else {
             setMessages(initialMessages);
             setTutorName(chatModes[selectedMode]?.teacherInfo[targetLanguage].name)
@@ -1571,7 +1570,7 @@ export default function Home(props) {
         <>
         <Nav selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} handleTabChange={handleTabChange} setActiveTab={setActiveTab} activeTab={activeTab} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal}></Nav>
 
-        {(selectedMode === 'main' || selectedMode === 'progress' || selectedMode === 'explore') && <Main levelThresholds={levelThresholds} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange} progressLevel={progressLevel} progressScore={progressScore} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} longestStreak={longestStreak} savedChats={savedChats} isMobileModalOpen={isMobileModalOpen} setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} ></Main>}
+        {(selectedMode === 'main' || selectedMode === 'progress' || selectedMode === 'explore') && <Main levelThresholds={levelThresholds} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} activeTab={activeTab} setActiveTab={setActiveTab} handleTabChange={handleTabChange} progressLevel={progressLevel} progressScore={progressScore} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} longestStreak={longestStreak} savedChats={savedChats} isMobileModalOpen={isMobileModalOpen} setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} userName={userName} ></Main>}
 
         {selectedMode === 'dialogue-modes' && <DialogueModes selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode}></DialogueModes>}
 
@@ -1590,11 +1589,11 @@ export default function Home(props) {
 
         {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption}/>}
 
-        {(selectedMode === 'main' || selectedMode === 'progress' || selectedMode === 'explore') && <MobileNav setSelectedMode={setSelectedMode}></MobileNav>}
+        {(selectedMode === 'main' || selectedMode === 'progress' || selectedMode === 'explore') && <MobileNav setSelectedMode={setSelectedMode} selectedMode={selectedMode}></MobileNav>}
 
         <MobileModal setIsMobileModalOpen={setIsMobileModalOpen} isMobileProfileOpen={isMobileProfileOpen} setIsMobileProfileOpen={setIsMobileProfileOpen} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption} isMobileModalOpen={isMobileModalOpen} setSelectedMode={setSelectedMode} isChatSettingsModalOpen={isChatSettingsModalOpen} setIsChatSettingsModalOpen={setIsChatSettingsModalOpen} isChatInfoVisible={isChatInfoVisible} setIsChatInfoVisible={setIsChatInfoVisible} activeChat={activeChat} setActiveChat={setActiveChat} messages={messages} setMessages={setMessages} showGenderModal={showGenderModal} setShowGenderModal={setShowGenderModal} tutorName={tutorName} tutorImage={tutorImage} setTutorImage={setTutorImage} setTutorName={setTutorName} chatModes={chatModes} handleStartNewChat={handleStartNewChat} isMobileChatInfoVisible={isMobileChatInfoVisible} setIsMobileChatInfoVisible={setIsMobileChatInfoVisible} isMobileChatHistory={isMobileChatHistory} setIsMobileChatHistory={setIsMobileChatHistory} isChatHistoryOpen={isChatHistoryOpen} setIsChatHistoryOpen={setIsChatHistoryOpen} selectedMessage={selectedMessage} setSelectedMessage={setSelectedMessage} feedback={feedback} setFeedback={setFeedback} targetLanguage={targetLanguage}></MobileModal>
 
-        <CloseChatModal isChatCloseModalVisible={isChatCloseModalVisible} setIsChatCloseModalVisible={setIsChatCloseModalVisible} setSelectedMode={setSelectedMode}></CloseChatModal>
+        <CloseChatModal isChatCloseModalVisible={isChatCloseModalVisible} setIsChatCloseModalVisible={setIsChatCloseModalVisible} setSelectedMode={setSelectedMode} setMessages={setMessages}></CloseChatModal>
 
         </>
 

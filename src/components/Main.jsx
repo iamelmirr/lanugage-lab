@@ -16,6 +16,27 @@ export default function Main(props) {
     const totalMessages = savedChats.reduce((total, chat) => 
         total + chat.messages.length, 0);
 
+    
+
+    useEffect(() => {
+        console.log('selected mode changed')
+
+        window.scrollTo(0, 0)
+
+        const scrollableElements = document.querySelectorAll('.scrollable');
+        scrollableElements.forEach(element => {
+            console.log('Scrolling element:', element)
+            element.scrollTop = 0;
+        });
+
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            scrollableElements.forEach(element => {
+                element.scrollTop = 0;
+            });
+        }, 100);
+    }, [selectedMode])
+
 
 
     
@@ -95,11 +116,8 @@ export default function Main(props) {
 
 
 
-
-
-
     return (
-        <div className="main-div">
+        <div className="main-div scrollable">
 
     {selectedMode === 'explore' ? 
     (
@@ -125,7 +143,7 @@ export default function Main(props) {
                     Find your daily picks below.
                 </p>
 
-            <div className="explore-options">
+            <div className="explore-options scrollable">
 
                 <div className="explore-card">
                     <div className="explore-card-head">
@@ -242,7 +260,7 @@ export default function Main(props) {
         View your learning progress and statistics.
     </p>
 
-    <div className="progress-grid">
+    <div className="progress-grid scrollable">
         <div className="progress-stat-large">
 
             <div className="progress-level-subdiv">
@@ -367,7 +385,7 @@ export default function Main(props) {
 
 
                     <div className="slider-horizontal">
-                        <div className="slider-wrapper" ref={sliderWrapperRef}>
+                        <div className="slider-wrapper">
                         
                             <div className="slider-item-swipe">
                                 <div className="slider-item slider-item-one">
@@ -400,7 +418,7 @@ export default function Main(props) {
                         <p>Learning modes</p>
                     </div>
 
-                    <div className={`chats-options ${activeTab === 'chats' ? 'active-tab' : ''}`}>
+                    <div className={`chats-options scrollable ${activeTab === 'chats' ? 'active-tab' : ''}`}>
                         <ChatCard
                             selectedMode={selectedMode}
                             setSelectedMode={setSelectedMode}

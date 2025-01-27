@@ -115,7 +115,7 @@ export default function MobileModal(props) {
                     setTimeout(() => {
                         setIsMobileProfileOpen(false);
                         setSelectedMessage(null)
-                    }, 2000);
+                    }, 200);
                 }}
             ></div>
             <div ref={modalRef} className={`mobile-modal ${isMobileModalOpen ? "open" : ""}`}>

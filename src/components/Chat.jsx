@@ -22,7 +22,7 @@ import { use } from "react";
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime, isChatSettingsModalOpen, setIsChatSettingsModalOpen, isMobileModalOpen, setIsMobileModalOpen, isChatInfoVisible, setIsChatInfoVisible, activeChat, setActiveChat, messages, setMessages, showGenderModal, setShowGenderModal, tutorName, setTutorName, tutorImage, setTutorImage, chatModes, tutorGender, setTutorGender, userGender, setUserGender, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime, isChatSettingsModalOpen, setIsChatSettingsModalOpen, isMobileModalOpen, setIsMobileModalOpen, isChatInfoVisible, setIsChatInfoVisible, activeChat, setActiveChat, messages, setMessages, showGenderModal, setShowGenderModal, tutorName, setTutorName, tutorImage, setTutorImage, chatModes, tutorGender, setTutorGender, userGender, setUserGender, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback, isChatCloseModalVisible, setIsChatCloseModalVisible } = props;
 
     
     
@@ -1213,7 +1213,7 @@ const topicLabels = {
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
-                <span onClick={() => setSelectedMode('main')} className="fa-solid fa-arrow-left"></span>
+                <span onClick={() => setIsChatCloseModalVisible(true)} className="fa-solid fa-arrow-left"></span>
                 <div className="img-wrapper">    
                 <img 
                 src={
@@ -1239,7 +1239,9 @@ const topicLabels = {
                         >{showOptionsModal && <OptionsModal />}</span>
 
                         <span 
-                        className="fa-solid fa-ellipsis-vertical mobile" onClick={() => {                            setIsMobileModalOpen(true)
+                        className="fa-solid fa-ellipsis-vertical mobile" onClick={() => {
+                        setSelectedMessage(null)
+                        setIsMobileModalOpen(true)
                         setIsChatSettingsModalOpen(true)    
                         }}> 
                         </span>

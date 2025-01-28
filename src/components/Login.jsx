@@ -74,6 +74,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
     };
 
     return isEmailSentOpen ? (
+        <div className='login-wrapper'>
         <div className="login-container">
             <div className='header-auth-div'>
                 <img src="./public/header-logo.png" alt="" />
@@ -94,6 +95,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
 
             <img className='robot-img' src="./src/assets/aiimages/robot-mail.png" alt="" />
 
+
             <div className='bottom-br-line check-email'></div>
                 
             <button 
@@ -105,8 +107,10 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
             </button>
                 
         </div>
+        </div>
     ) : isForgotPasswordOpen ? (
-        <div className="login-container">
+        <div className='login-wrapper'>
+        <div className="login-container reset-password">
             <div className='header-auth-div'>
                 <img src="./public/header-logo.png" alt="" />
             </div>
@@ -163,7 +167,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
 
             <div className='bottom-br-line forgot-password'></div>
                 
-                <p className="login-anc">
+                <p className="login-anc ">
                         Not a member yet? <a href="#" onClick={(e) => {
                         e.preventDefault();
                         setIsLogingIn(false);
@@ -171,7 +175,10 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         }}>Sign up</a>
                     </p>
         </div>
+        </div>
     ) : (
+        <div className='login-wrapper'>
+            <img className='header-logo' src="./public/header-logo.png" alt="header-logo" />
         <div className="login-container">
             <div className='header-auth-div'>
                 <img src="./public/header-logo.png" alt="" />
@@ -257,6 +264,9 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                     
                 </form>
             </div>
+
+            <div className='border-div'></div>
+
             <div className='bottom-br-line'></div>
                 <p className="login-anc">
                         Not a member yet? <a href="#" onClick={(e) => {
@@ -265,6 +275,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         setIsRegistering(true);
                         }}>Sign up</a>
                     </p>
+        </div>
         </div>
     ) 
 }

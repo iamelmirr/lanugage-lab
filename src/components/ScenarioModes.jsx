@@ -103,17 +103,15 @@ export default function ScenarioModes(props) {
         </div>
         <div className="about-modes-div">
             <h2>Information</h2>
-            <br />
+            <div className="border-div"></div>
             <div className="info-card">
-                {/* <h2>{dialogueModesInfo.infoCardTitle}</h2>
+                <h2>About Scenario Mode</h2>
                 <div className="modes-card-tags">
-                    {dialogueModesInfo.infoCardTags.split(" ").map((tag, i) => {
-                        return (
-                            <span key={i} className="tag">{tag}</span>
-                        )
-                    })}
+                    <span  className="tag">Listening</span>
+                    <span  className="tag">Comprehension</span>
+                        
                 </div>
-                <p>{dialogueModesInfo.infoCardDesc}</p> */}
+                <p>Immerse yourself in dynamic, real-life situations to practice language like never before. Choose from a variety of scenarios, such as ordering food at a restaurant, traveling abroad, or handling workplace challenges.</p>
             </div>
         </div>
         </div>

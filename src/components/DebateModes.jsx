@@ -110,20 +110,18 @@ export default function DebateModes(props) {
 </div> 
 </div>
 <div className="about-modes-div">
-    <h2>Information</h2>
-    <br />
-    <div className="info-card">
-        <h2>Roleplays</h2>
-        {/* <div className="modes-card-tags">
-            {allRoleplayModes.infoCardTags.split(" ").map((tag, i) => {
-                return (
-                    <span key={i} className="tag">{tag}</span>
-                )
-            })} 
-        </div> */}
-        <p>Roleplays</p>
-    </div>
-</div>
+            <h2>Information</h2>
+            <div className="border-div"></div>
+            <div className="info-card">
+                <h2>About Debate Mode</h2>
+                <div className="modes-card-tags">
+                    <span  className="tag">Vocabulary</span>
+                    <span  className="tag">Writing</span>
+                        
+                </div>
+                <p>With the Debate mode you can argue for or against interesting and intriguing topics. Enhance your language skills as you defend your arguments against all-knowing AI.</p>
+            </div>
+        </div>
 </div>
 )
 }

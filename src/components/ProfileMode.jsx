@@ -20,6 +20,9 @@ export default function ProfileMode(props) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    useEffect(() => {
+        console.log(accountSelectedOption)
+    }, [accountSelectedOption])
 
     
 
@@ -442,14 +445,14 @@ export default function ProfileMode(props) {
         <div className='profile-mode'>
             <div className="mobile-header profile">
             <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />         </div>
-        <div className="profile-list-div">
+            <div className={`profile-list-div ${(accountSelectedOption === 'unexpanded' || !accountSelectedOption) ? 'wide' : ''}`}>
             <div className="profile-header">
                 <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>
                 <h2>Account</h2>
             </div>
 
             
-            
+           
             <div className="profile-menu">
                 <div className="profile-menu-btn" onClick={() => setAccountSelectedOption('profile')}>
                     <span className='fa-regular fa-user'></span>
@@ -476,7 +479,7 @@ export default function ProfileMode(props) {
         </div>
 
         {accountSelectedOption === 'unexpanded' && (
-            <div className="profile-options-div">
+            <div className="profile-options-div wide">
                 <div className="profile-option">Personal details</div>
                 <div className="profile-option">Change password</div>
                 <div className="profile-option">Delete account</div>
@@ -488,9 +491,13 @@ export default function ProfileMode(props) {
             
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
-                <span className='fa-solid fa-arrow-left' onClick={() => {
+                <span className='fa-solid fa-arrow-left mobile' onClick={() => {
                     // setAccountSelectedOption('unexpanded')
                     setSelectedMode('main')
+                }}></span>
+                <span className='fa-solid fa-arrow-left wide' onClick={() => {
+                    setAccountSelectedOption('unexpanded')
+                    
                 }}></span>
                 <h2>Profile</h2>
                 </div>
@@ -681,10 +688,14 @@ export default function ProfileMode(props) {
         {accountSelectedOption === 'settings' && (
             <div className="profile-options-div expanded">
                 <div className='profile-option-h-div'>
-                    <span className='fa-solid fa-arrow-left' onClick={() => {
+                    <span className='fa-solid fa-arrow-left mobile' onClick={() => {
                         setAccountSelectedOption('unexpanded')
                         setSelectedMode('main')
                     }}></span>
+                    <span className='fa-solid fa-arrow-left wide' onClick={() => {
+                    setAccountSelectedOption('unexpanded')
+                    
+                }}></span>
                     <h2>Settings</h2>
                 </div>
 

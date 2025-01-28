@@ -2,10 +2,10 @@ import React from "react"
 
 
 const mainNavButtons = [
-    {label: 'Dashboard', link: '/', icon: <span className="fa-solid fa-house"></span>, handleMode: 'main'},
-    {label: 'Chat', link: '/', icon: <span className="fa-solid fa-comment-dots"></span>, handleMode: 'default-chat'},
-    {label: 'Challenge', link: '/', icon: <span className="fa-solid fa-trophy"></span>, handleMode: 'main'},
-    {label: 'Progress', link: '/', icon: <span className="fa-solid fa-bolt"></span>, handleMode: 'progress'},
+    {label: 'Dashboard', link: '/', icon: <img className="nav-a-img" src="./public/home.png"/>, handleMode: 'main'},
+    {label: 'Chat', link: '/', icon: <img className="nav-a-img" src="./public/chat.png"/>, handleMode: 'default-chat'},
+    {label: 'Challenge', link: '/', icon: <img className="nav-a-img" src="./public/challenge.png"/>, handleMode: 'main'},
+    {label: 'Progress', link: '/', icon: <img className="nav-a-img" src="./public/rise.png"/>, handleMode: 'progress'},
 ]
 
 
@@ -67,7 +67,7 @@ export default function Nav(props) {
 
             <a className="profile-link" onClick={() => {
                 handleSelectedMode('profile-mode')
-            }}>Profile</a>
+            }}><img src="./public/user.png"/> Profile</a>
 
 
 

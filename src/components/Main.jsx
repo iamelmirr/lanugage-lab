@@ -294,6 +294,8 @@ export default function Main(props) {
         View your learning progress and statistics.
     </p>
 
+    <div className="border-div"></div>
+
     <div className="progress-grid scrollable">
         <div className="progress-stat-large">
 
@@ -417,6 +419,7 @@ export default function Main(props) {
                         }}  className="fa-regular fa-user"></span>
                     </div>
 
+                    
 
                     <div className="slider-horizontal">
                         <div className="slider-wrapper" ref={sliderWrapperRef} onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}>
@@ -451,6 +454,8 @@ export default function Main(props) {
                     <div className="main-label-div">
                         <p>Learning modes</p>
                     </div>
+
+                    <div className="border-div"></div>
 
                     <div className={`chats-options scrollable ${activeTab === 'chats' ? 'active-tab' : ''}`}>
                         <ChatCard

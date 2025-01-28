@@ -85,7 +85,7 @@ export default function ChatCard(props) {
                         </h4>
                         <p className="card-light-desc">{card.shortDesc}</p>
 
-                        <div></div>
+                        <div className="hidden-div"></div>
                         
                         
                     </div>

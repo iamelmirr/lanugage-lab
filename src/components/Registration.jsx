@@ -663,7 +663,9 @@ export default function Registration(props) {
 
 
     return (
+        <>
         <div className="registration-container">
+        <img className='registration-logo' src="./public/header-logo.png" alt="" />
             {step === -1 ? (
                 <div className="registration-content null-step">
                     <div className='mobile-get-started-reg-div'>
@@ -685,6 +687,7 @@ export default function Registration(props) {
                     <div className='absolute-logo-div'>
                         <img src="./public/header-logo.png" alt="" />
                     </div>
+                    <div className='border-div'></div>
                     <a className='bottom-reg-a' href="/">            
                         <p>© LanguageLab, Inc.</p>
                     </a>
@@ -717,5 +720,6 @@ export default function Registration(props) {
             </>    
             )}
         </div>
+        </>
     );
 }

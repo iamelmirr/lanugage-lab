@@ -75,6 +75,14 @@ export default function Home(props) {
 
     }, [selectedMessage])
 
+    useEffect(() => {
+
+        if(accountSelectedOption !== 'unexpanded') {
+            setAccountSelectedOption('unexpanded')
+        }
+
+    }, [selectedMode])
+
     const chatModes = {
         'default-chat': {
             name: "Default Chat",
@@ -1584,7 +1592,7 @@ export default function Home(props) {
 
         
 
-        {(selectedMode === 'main' || selectedMode === 'progress') && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds}></Dashboard>}
+        {(selectedMode === 'main' || selectedMode === 'progress') && <Dashboard selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} userName={userName} setUserName={setUserName} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} progressPercentage={progressPercentage}></Dashboard>}
 
 
         {selectedMode === 'profile-mode' && <ProfileMode userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} handleSelectedMode={handleSelectedMode} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} accountSelectedOption={accountSelectedOption} setAccountSelectedOption={setAccountSelectedOption}/>}

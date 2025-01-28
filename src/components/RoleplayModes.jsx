@@ -50,7 +50,7 @@ export default function RoleplayModes(props) {
                         <img src="./public/header-logo.png" alt="header-logo" />
                         <span className="fa-regular fa-user"></span>
         </div>    
-        <div className="modes-div">
+        <div className="modes-div roleplay">
             <div className="modes-title-wrapper">
             <span className="fa-solid fa-arrow-left" onClick={() => {
                 handleSelectedMode('main')
@@ -96,17 +96,15 @@ export default function RoleplayModes(props) {
         </div>
         <div className="about-modes-div">
             <h2>Information</h2>
-            <br />
+            <div className="border-div"></div>
             <div className="info-card">
-                <h2>Roleplays</h2>
-                {/* <div className="modes-card-tags">
-                    {allRoleplayModes.infoCardTags.split(" ").map((tag, i) => {
-                        return (
-                            <span key={i} className="tag">{tag}</span>
-                        )
-                    })} 
-                </div> */}
-                <p>Roleplays</p>
+                <h2>About Roleplay Mode</h2>
+                <div className="modes-card-tags">
+                    <span  className="tag">Vocabulary</span>
+                    <span  className="tag">Writing</span>
+                        
+                </div>
+                <p>With the Roleplay mode practicing language will be fun and exciting. You can pick various settings from daily conversations to creative and fantastic dialogues.</p>
             </div>
         </div>
         </div>

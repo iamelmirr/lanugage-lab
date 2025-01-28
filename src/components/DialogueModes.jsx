@@ -123,7 +123,7 @@ export default function DialogueModes(props) {
         </div>
         <div className="about-modes-div">
             <h2>Information</h2>
-            <br />
+            <div className="border-div"></div>
             <div className="info-card">
                 <h2>{dialogueModesInfo.infoCardTitle}</h2>
                 <div className="modes-card-tags">

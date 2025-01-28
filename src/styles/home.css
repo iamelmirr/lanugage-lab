@@ -76,6 +76,7 @@ input:focus {
     top: 0;
     flex-shrink: 0;
     overflow-y: auto;
+    scrollbar-width: none;
     
 }
 
@@ -111,11 +112,23 @@ input:focus {
     gap: 16px;
 }
 
+.nav-a-img {
+    aspect-ratio: 1/1;
+    width: 23px;
+}
+
 
 .profile-link {
+    display: flex;
     margin-top: auto;
     font-size: 15px;
     font-weight: 500;
+    gap: 15px;
+}
+
+.profile-link img {
+    aspect-ratio: 1/1;
+    width: 23px;
 }
 
 .dashboard-link {
@@ -209,6 +222,7 @@ input:focus {
     scrollbar-width: none;
     width: 100%;
     overflow-y: auto;
+    transition: width 0.2s ease-in-out;
     
 }
 
@@ -495,11 +509,14 @@ input:focus {
     z-index: 2;
     display: none;
     flex-direction: column;
-    width: 34%;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     position: sticky;
     top: 0;
     height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-bottom: 40px;
+    transition: width 0.2s ease-in-out;
     
 }
 
@@ -507,10 +524,154 @@ input:focus {
     width: 200px;
 }
 
+.popular-card {
+    margin-top: 24px;
+    margin-inline: 24px;
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid rgb(224, 224, 224);
+}
+
+.popular-card .font-medium {
+    font-size: 22px;
+    color: #282828;
+}
+
+.popular-card .font-base {
+    font-size: 14.5px;
+    color: #282828;
+    padding-block: 24px;
+}
+
+.popular-card .tag {
+    font-size: 14.5px;
+    background: #EAEBF9;
+    padding: 8px;
+    border-radius: 16px;
+    font-weight: 500;
+    opacity: 0.6;
+}
+
 .dashboard-div .dashboard-header {
     display: flex;
-    padding: 24px ;
+    padding-inline: 24px ;
+    padding-block: 21px;
     position: sticky;
+    top: 0;
+    z-index: 12;
+    background: #ffffff;
+}
+
+.dashboard-div .border-div {
+    border-top: 1px solid rgb(231, 231, 231);
+}
+
+
+
+.dashboard-div .slider-horizontal .slider-wrapper .slider-item{
+    width: 340px;
+    height: 280px;
+    flex-shrink: 0;
+}
+
+.dashboard-div .slider-horizontal .slider-wrapper .slider-item .slider-par{
+    font-size: 14.5px;
+}
+
+.dashboard-div .slider-horizontal .slider-wrapper .slider-item .slider-options-div p {
+    font-size: 18.5px;
+}
+
+.dashboard-div .slider-horizontal {
+    margin-bottom: 24px;
+    min-height: 304px;
+}
+
+.dashboard-div .slider-horizontal .slider-wrapper {
+    padding: 24px 24px 0;
+    height: 304px;
+}
+
+.dashboard-div .border-div {
+    width: calc(100% - 48px);
+    align-self: center;
+}
+
+.dashboard-div .progress-stat-large {
+    margin-top: 24px;
+    margin-inline: 24px;
+    background: #ffffff;
+    border: 1px solid lightgray;
+}
+
+.dashboard-div .progress-stat-large .font-medium {
+    font-size: 23px;
+    color: #282828;
+}
+
+.dashboard-div .progress-stat-large .font-light-small {
+    font-size: 14.5px;
+    color: #8b8b8b;
+}
+
+.dashboard-div .progress-stat-large .font-base {
+    color: #282828;
+    font-size: 18.5px;
+}
+
+.dashboard-div .progress-stat-large .level-track {
+    padding: 12px 16px;
+    background: rgb(255, 244, 223);
+    gap: 16px;
+}
+.dashboard-div .progress-stat-large .border-div {
+    width: 100%;
+}
+
+.dashboard-div .progress-stat-large .level-track p {
+    color: #DB6313;
+}
+
+.dashboard-div .level-track-inside {
+    background: rgb(214, 207, 193);
+}
+
+.dashboard-div .progress-stat-small {
+    margin-top: 24px;
+    margin-inline: 24px;
+}
+
+.dashboard-div .progress-stat-small .font-medium{
+    font-size: 23px;
+}
+
+.dashboard-div .progress-stat-small .font-light-small.dark {
+    color: #8B8B8B;
+    font-size: 14.5px;
+} 
+
+.dashboard-div .progress-stat-small .border-div {
+    width: 100%;
+}
+
+.dashboard-div .progress-stat-small .stat-icon-div {
+    width: 60px;
+    height: 60px;
+    padding-top: 15px;
+}
+
+.dashboard-div .progress-stat-small .stat-icon-div span {
+    font-size: 28px;
+}
+
+.dashboard-div .progress-stat-small .stat-subdiv p {
+    font-size: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
 }
 
 .dashboard-info {
@@ -652,16 +813,25 @@ input:focus {
 .about-modes-div {
     display: none;
     flex-direction: column;
-    width: 40%;
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     position: sticky;
     top: 0;
     height: 100vh;
+    
+    width: clamp(100px, 43.38%, 496px);
+    flex-shrink: 0;
+}
+
+.about-modes-div .border-div {
+    width: calc(100% - 48px);
+    align-self: center;
 }
 
 .about-modes-div h2 {
     display: flex;
     padding: 24px;
+    font-size: 23px;
+    font-weight: 500;
 }
 
 .about-modes-div .info-card {
@@ -673,13 +843,34 @@ input:focus {
     border-radius: 12px;
 }
 
+.about-modes-div .border-div {
+    border-top: 1px solid rgb(224, 224, 224);
+}
+
+.about-modes-div .tag {
+    background: rgb(228, 228, 228);
+    padding: 8px;
+    font-size: 14.5px;
+    opacity: 0.6;
+    border-radius: 24px;
+    font-weight: 500;
+}
+
+.about-modes-div .info-card p {
+    font-weight: 500;
+    color: #B9B9B9;
+    font-size: 14.5px;
+}
+
 .about-modes-div .info-card h2 {
+    font-size: 23px;
+    font-weight: 500;
     padding: 0;
 }
 
 .modes-card-tags {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     padding-block: 24px;
 }
 
@@ -2048,6 +2239,7 @@ input:focus {
     font-size: 11px;
     width: 90%;
     margin-bottom: 30px;
+    font-weight: 500;
 }
 
 .reg-btn-action.google-btn.auth {
@@ -2432,9 +2624,18 @@ input:focus {
 .profile-list-div {
     display: none;
     flex-direction: column;
-    flex: 1;
     padding-inline: 24px;
     background: var(--light-blue-background);
+    transition: width 0.3s ease-in-out;
+    width: 55%;
+}
+
+.profile-options-div .fa-arrow-left.wide {
+    display: none;
+}
+
+.profile-list-div.wide {
+    width: 100%;
 }
 
 .profile-header {
@@ -2504,10 +2705,7 @@ input:focus {
     display: flex;
     flex-direction: column;
     width: 0;
-    transform: translateX(200%);
-    opacity: 0;
-    flex: 1;
-    
+    transition: width 0.3s ease-in-out;
 }
 
 .profile-info-text {
@@ -2536,10 +2734,7 @@ input:focus {
     flex-direction: column;
     width: 100%;
     transform: translateX(0);
-    box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     padding-inline: 12px;
-    transition: transform 0.2s ease-in-out, width 0.2s ease-in-out;
-    transform-origin: right;
     opacity: 1;
     padding-bottom: 18px;
 
@@ -3211,4 +3406,422 @@ input:focus {
 .notification-info p {
     font-size: 16px;
     font-weight: 500;
+}
+
+.registration-container .registration-logo {
+    display: none;
+}
+
+.login-wrapper {
+    width: 100%;
+}
+
+.login-wrapper .header-logo {
+    display: none;
+}
+
+
+
+
+@media (min-width: 1024px) {
+
+    /* REGISTRATION AND LOGIN */
+
+    .registration-container {
+        position: relative;
+        align-items: center;
+        overflow: hidden;
+        height: 100vh;
+        justify-content: center;
+    }
+
+    .registration-container .registration-logo {
+        display: flex;
+        position: absolute;
+        aspect-ratio: 1/1;
+        width: 50px;
+        top: 14px;
+        left: 14px;
+    }
+
+    .registration-container .registration-content {
+        max-width: 700px;
+        height: 90%;
+        overflow-y: auto;
+        border-radius: 24px;
+        scrollbar-width: none;
+    }
+
+    .mobile-get-started-reg-div {
+        height: 230px;
+        flex-shrink: 0;
+    }
+
+    .get-started-info {
+        height: 500px;
+        flex-shrink: 0;
+        flex: 1;
+    }
+
+    .registration-content.registration-content.null-step .border-div {
+        margin-block: 24px;
+        
+        width: calc(100% - 48px);
+    }
+
+    .registration-content .get-started-text {
+        padding: 0 40px 40px;
+    }
+
+    .registration-content .get-started-text h1 {
+        padding-inline: 48px;
+    }
+
+    .registration-content .action-buttons {
+        padding-inline: 24px;
+    }
+
+    .login-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #DB6313;
+    }
+
+    .login-container {
+        max-width: 700px;
+        height: 90%;
+        min-height: 0;
+        overflow-y: auto;
+        border-radius: 24px;
+        scrollbar-width: none;
+        padding-inline: 24px;
+        padding-block: 36px;
+    }
+
+    .login-container .header-auth-div {
+        display: none;
+    }
+
+    .login-container .bottom-br-line {
+        display: none;
+    }
+
+    .login-container .border-div{
+        display: flex;
+        width: 100%;
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    .login-wrapper .header-logo {
+        aspect-ratio: 1/1;
+        display: flex;
+        width: 50px;
+        position: absolute;
+        top: 14px;
+        left: 14px;
+    }
+
+    .login-container.reset-password {
+        padding-bottom: 4px;
+    }
+    
+    .registration-container .header-auth-div.registration {
+        display: none;
+    }
+
+    .registration-form {
+        align-items: center;
+        width: 100%;
+    }
+
+    .registration-form .reg-progress-animation {
+        margin-top: 24px;
+        width: calc(100% - 48px);
+        border-radius: 18px;
+    }
+
+    .registration-form .reg-progress-animation .reg-progress-inside {
+        border-top-left-radius: 18px;
+        border-bottom-left-radius: 18px;
+    }
+
+    .registration-form .registration-step {
+        width: 100%;
+        padding-inline: 24px;
+    }
+
+    .reg-step-action-btns {
+        width: 100%;
+        padding-inline: 24px;
+    }
+
+    .reg-step-action-btns.reg-step-action-btns.reason-learning {
+        position: sticky;
+        padding-inline: 0;
+    }
+
+    .reason-options {
+        margin-bottom: 12px;
+    }
+
+    .registration-info-p {
+        padding-bottom: 12px;
+    }
+
+
+
+    /* MAIN */
+
+    .mobile-header {
+        display: none;
+    }
+
+    .mobile-nav {
+        display: none;
+    }
+
+    .nav {
+        display: flex;
+    }
+
+    .dashboard-div {
+        display: flex;
+        width: clamp(100px, 35%, 496px);
+
+    }
+
+    .main-div {
+        width: auto;
+        flex: 1;
+    }
+
+    .main-div .slider-horizontal {
+        display: none;
+    }
+
+    .main-label-div {
+        padding: 24px 24px;
+        line-height: 1;
+    }
+
+    .main-div .border-div {
+        padding-bottom: 24px;
+        width: calc(100% - 48px);
+        align-self: center;
+        border-top: 1px solid rgb(221, 221, 221);
+    }
+
+    .chats-options {
+        padding: 0 24px 40px;
+    }
+
+    .chats-options .chat-card-info {
+        padding: 24px 0 24px 24px;
+    }
+
+    .chats-options .chat-card-info h2 {
+        font-size: 30px;
+    }
+
+    .chats-options .chat-card .chat-card-info .tag {
+        font-size: 14.5px;
+        padding: 8px 8px;
+    }
+
+    .chats-options .chat-card .chat-card-info h4 {
+        font-size: 18.5px;
+    }
+
+    .chats-options .chat-card .chat-card-info .card-light-desc {
+        font-size: 14.5px;
+    }
+
+    .chats-options .chat-card .chat-card-img {
+        max-width: 190px;
+    }
+
+    .chats-options .chat-card .chat-card-img img {
+        height: auto;
+    }
+
+    .chats-options .chat-card .chat-card-info .hidden-div {
+        display: none;
+    }
+
+
+    /* CHAT MODES */
+
+    .modes-page {
+        flex-direction: row;
+        flex: 1;
+    }
+
+    .about-modes-div {
+        display: flex;
+    }
+
+    .modes-div .chat-mode-info {
+        display: none;
+    }
+
+    .modes-title-wrapper {
+        top: 0;
+        padding: 24px;
+    }
+
+    .modes-div .card-mode-list {
+        gap: 24px;
+        padding-inline: 24px;
+        padding-bottom: 32px;
+    }
+
+    .modes-div {
+        width: auto;
+    }
+
+    .modes-div.roleplay {
+        flex: 1;
+    }
+
+    
+
+
+
+    /* PROGRESS */
+
+    .progress-info-text {
+        display: none;
+    }
+
+    .progress-header {
+        top: 0;
+        padding: 24px;
+    }
+
+    .progress-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 19px;
+        padding-bottom: 0;
+    }
+
+    .progress-grid .border-div {
+        padding: 0;
+    }
+
+    .progress-grid .progress-stat-large .font-medium {
+        font-size: 23px;
+    }
+
+    .progress-grid .progress-stat-large .font-light-small {
+        font-size: 14.5px;
+    }
+
+    .progress-grid .progress-stat-large .font-base {
+        font-size: 18px;
+    }
+
+    .progress-grid .progress-stat-large .font-small {
+        font-size: 14.5px;
+    }
+
+.progress-grid .progress-stat-small .font-medium {
+    font-size: 23px;
+}
+
+.progress-grid .progress-stat-small .font-light-small {
+    font-size: 14.5px;
+}
+
+.progress-grid .progress-stat-small .font-medium.font-base {
+    font-size: 19px;
+}
+
+.progress-grid .progress-stat-small .stat-icon-div {
+    height: 60px;
+    width: 60px;
+}
+
+
+.progress-grid .progress-stat-small .stat-icon-div span {
+    font-size: 24px;
+    padding-top: 4px;
+}
+
+
+/* PROFILE MODE  */
+
+.profile-mode {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-options-div.wide {
+    background: #fff6e5;
+    color: #fff6e5;
+}
+
+.profile-list-div {
+    display: flex;
+    background: #fff6e5;
+    width: 55%;
+    
+}
+
+.profile-options-div {
+    width: 0;
+    background: #ffffff;
+    
+}
+
+.profile-header h2 {
+    font-size: 23px;
+    font-weight: 500;
+}
+
+.profile-options-div .profile-info-text {
+    display: none;
+}
+
+.profile-option-h-div {
+    padding-block: 24px;
+    border-bottom: 1px solid rgb(224, 224, 224);
+}
+
+.profile-options-div.expanded {
+    width: 45%;
+    box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
+    padding-inline: 24px; 
+    padding-bottom: 24px;
+    
+}
+
+.profile-options-div .fa-arrow-left.mobile {
+    display: none;
+}
+
+.profile-options-div .fa-arrow-left.wide {
+    display: flex;
+}
+
+
+
+/* CHAT */
+
+.chat-info-div {
+    display: flex;
+}
+
+}
+
+
+
+@media (min-width: 1180px) {
+    .dashboard-div .slider-horizontal .slider-wrapper .slider-item{
+        width: 380px;
+    }
+    
 }

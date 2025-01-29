@@ -1050,8 +1050,13 @@ button, a, span {
     justify-content: space-between;
     align-items: center;
     height: 80px;
-    position: sticky;
+    position: fixed;
     top: 0;
+    width: 100%;
+    z-index: 12;
+    background: #ffffff;
+    padding-right: 24px;
+    
 }
 
 .modal-overlay {

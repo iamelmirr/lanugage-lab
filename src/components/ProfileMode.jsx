@@ -386,10 +386,18 @@ export default function ProfileMode(props) {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '16px',
+                        maxWidth: '80%'
                     }}
                 >
                     <h2>Are you sure you want to delete your account?</h2>
-                    <input 
+                    <input
+                        style={{
+                            height: '60px',
+                            border: '1px solid #dadada',
+                            paddingInline: '16px',
+                            borderRadius: '16px',
+                            fontSize: '14px',
+                        }} 
                         type="password"
                         name="deleteAccountPassword"
                         placeholder="Enter your password"
@@ -504,7 +512,7 @@ export default function ProfileMode(props) {
 
                 <p className='profile-info-text'>
                 Manage your profile information below.
-            </p>
+                </p>
 
                 <div className='profile-options-btn-list'>
                 <div className="profile-menu-option" onClick={() => {

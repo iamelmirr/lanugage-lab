@@ -209,12 +209,12 @@ export default function Main(props) {
                     <div className="border-div"></div>
                     <p className="explore-options-label">Today's scenarios</p>
                     <div className="explore-cards-inline">
-                        <div className="explore-card-option inline" style={{
+                        <div onClick={() => setSelectedMode('detective')} className="explore-card-option inline" style={{
                         backgroundImage: `url(./src/assets/modes-images/detective2.jfif)`
                         }}>
                             <p className="explore-card-label">Detective</p>
                         </div>
-                        <div className="explore-card-option inline" style={{
+                        <div onClick={() => setSelectedMode('time-traveler')} className="explore-card-option inline" style={{
                         backgroundImage: `url(./src/assets/modes-images/time-traveler2.jfif)`
                         }}>
                             <p className="explore-card-label">Time traveler</p>
@@ -234,12 +234,12 @@ export default function Main(props) {
                     <div className="border-div"></div>
                     <p className="explore-options-label">Today's topics</p>
                     <div className="explore-cards-block">
-                        <div className="explore-card-option" style={{
+                        <div onClick={() => setSelectedMode('debate-mandatory-voting')} className="explore-card-option" style={{
                         backgroundImage: `url(./src/assets/modes-images/voting.jfif)`
                         }}>
                             <p className="explore-card-label">Should voting be mandatory?</p>
                         </div>
-                        <div className="explore-card-option " style={{
+                        <div onClick={() => setSelectedMode('debate-freedom-speech')} className="explore-card-option " style={{
                         backgroundImage: `url(./src/assets/modes-images/speech.jfif)`
                         }}>
                             <p className="explore-card-label">Freedom of speech</p>
@@ -259,12 +259,12 @@ export default function Main(props) {
                     <div className="border-div"></div>
                     <p className="explore-options-label">Today's dialogues</p>
                     <div className="explore-cards-inline">
-                        <div className="explore-card-option inline" style={{
+                        <div onClick={() => setSelectedMode('airport')} className="explore-card-option inline" style={{
                         backgroundImage: `url(./src/assets/modes-images/airport1.jfif)`
                         }}>
                             <p className="explore-card-label">Airport</p>
                         </div>
-                        <div className="explore-card-option inline" style={{
+                        <div onClick={() => setSelectedMode('ordering-dinner')} className="explore-card-option inline" style={{
                         backgroundImage: `url(./src/assets/modes-images/restaurant3.jfif)`
                         }}>
                             <p className="explore-card-label">Ordering dinner</p>

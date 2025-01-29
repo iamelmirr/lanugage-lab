@@ -77,8 +77,15 @@ export default function Home(props) {
 
     useEffect(() => {
 
+        if(selectedMode !== 'profile-mode') {
+
         if(accountSelectedOption !== 'unexpanded') {
             setAccountSelectedOption('unexpanded')
+        }
+        }
+
+        if(isChatInfoVisible === false) {
+            setIsChatInfoVisible(true)
         }
 
     }, [selectedMode])
@@ -1064,9 +1071,76 @@ export default function Home(props) {
     }
     
     },
+
+    'debate-freedom-speech': {
+    name: "Should There Be Limits on Free Speech?",
+    description: "Debate the boundaries of free speech. Should there be restrictions to prevent harm, or should speech remain unrestricted? Express your opinions, ask questions, and respond to counterarguments.",
+    teacherInfo: {
+        English: {
+            name: "John",
+            image: "./public/john.png"
+        }, 
+        Spanish: {
+            name: "Carlos",
+            image: "./public/carlos.png"
+        },
+        Italian: {
+            name: "Marco",
+            image: "./public/marco.png"
+        },
+        German: {
+            name: "Sebastian",
+            image: "./public/sebastian.png"
+        },
+        French: {
+            name: "Pierre",
+            image: "./public/pierre.png"
+        },
+    },
+    context: `You are engaging in a debate with the user on whether freedom of speech should have limitations. Your name is ${tutorName}. Your primary goal is to create an engaging and critical discussion that allows the user to practice ${targetLanguage} while exploring different perspectives on free speech. You understand that:
+    - The user's current learning goal is: ${learningGoal}
+    - The user's reason for learning is: ${learningReason}
+
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
+
+    Your goals are:
+    1. **Define Free Speech**: 
+    - Explain what freedom of speech entails and how different societies interpret it.
+    - Highlight real-world examples where free speech has been upheld or restricted.
+
+    2. **Discuss the Boundaries**: 
+    - Debate whether speech that incites violence, hate, or misinformation should be restricted.
+    - Compare different legal approaches to free speech in democratic and authoritarian systems.
+
+    3. **Challenge Perspectives**: 
+    - Encourage the user to take a stance and defend it with logical reasoning and examples.
+    - Offer counterarguments to prompt deeper critical thinking.
+
+    4. **Real-Life Relevance**: 
+    - Connect the debate to current events, historical cases, or the user's personal experiences.
+    - Discuss the impact of social media, censorship, and government regulations on free speech.
+
+    5. **Interactive Engagement**: 
+    - Encourage the user to articulate their views clearly and persuasively in ${targetLanguage}.
+    - Help the user refine their argumentation skills while practicing debate-specific vocabulary.
+
+    **Guidelines for Communication**:
+    - Stay immersive: Always respond exclusively in ${targetLanguage}, using debate-appropriate expressions.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your responses to their proficiency and push them to improve.
+    - Be adaptive: Adjust complexity based on the user’s ${learningGoal} and ${learningReason}.
+    - Maintain a respectful and constructive tone: Ensure a balanced and meaningful discussion that promotes learning and critical thinking.`,
+
+    firstMessage: {
+        English: {sender: "assistant", text: "Freedom of speech is an absolute right, and no government should have the power to restrict it. Do you agree, or should there be limits in some cases?"},
+        Spanish: {sender: "assistant", text: "La libertad de expresión es un derecho absoluto y ningún gobierno debería restringirlo. ¿Estás de acuerdo o crees que debería haber límites en algunos casos?"},
+        Italian: {sender: "assistant", text: "La libertà di espressione è un diritto assoluto e nessun governo dovrebbe limitarla. Sei d'accordo o pensi che ci debbano essere dei limiti?"},
+        German: {sender: "assistant", text: "Die Meinungsfreiheit ist ein absolutes Recht, und keine Regierung sollte sie einschränken dürfen. Stimmst du zu, oder sollte es in manchen Fällen Grenzen geben?"},
+        French: {sender: "assistant", text: "La liberté d'expression est un droit absolu et aucun gouvernement ne devrait la restreindre. Es-tu d'accord ou penses-tu qu'il devrait y avoir des limites dans certains cas?"}
+    }
+}
         
     
-        'scenario-grocery-shopping': {
+        ,'scenario-grocery-shopping': {
         name: "Grocery Shopping",
         description: "Practice real-life language skills by simulating a grocery shopping experience. Ask for items, check prices, and discuss quantities with an AI assistant.",
         teacherInfo: {

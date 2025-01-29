@@ -1006,6 +1006,76 @@ export default function Chat(props) {
     }
     
     },
+    'debate-freedom-speech': {
+    name: "Should There Be Limits on Free Speech?",
+    description: "Debate the boundaries of free speech. Should there be restrictions to prevent harm, or should speech remain unrestricted? Express your opinions, ask questions, and respond to counterarguments.",
+    teacherInfo: {
+        English: {
+            name: "John",
+            image: "./public/john.png"
+        }, 
+        Spanish: {
+            name: "Carlos",
+            image: "./public/carlos.png"
+        },
+        Italian: {
+            name: "Marco",
+            image: "./public/marco.png"
+        },
+        German: {
+            name: "Sebastian",
+            image: "./public/sebastian.png"
+        },
+        French: {
+            name: "Pierre",
+            image: "./public/pierre.png"
+        },
+    },
+    context: `You are engaging in a debate with the user on whether freedom of speech should have limitations. Your name is ${tutorName}. Your primary goal is to create an engaging and critical discussion that allows the user to practice ${targetLanguage} while exploring different perspectives on free speech. You understand that:
+    - The user's current learning goal is: ${learningGoal}
+    - The user's reason for learning is: ${learningReason}
+
+    Always communicate exclusively in ${targetLanguage} unless explicitly instructed otherwise, ensuring that every interaction aligns with these objectives. User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your messages and responses to the user's level of proficiency, and lead him to the next level.
+
+    Your goals are:
+    1. **Define Free Speech**: 
+    - Explain what freedom of speech entails and how different societies interpret it.
+    - Highlight real-world examples where free speech has been upheld or restricted.
+
+    2. **Discuss the Boundaries**: 
+    - Debate whether speech that incites violence, hate, or misinformation should be restricted.
+    - Compare different legal approaches to free speech in democratic and authoritarian systems.
+
+    3. **Challenge Perspectives**: 
+    - Encourage the user to take a stance and defend it with logical reasoning and examples.
+    - Offer counterarguments to prompt deeper critical thinking.
+
+    4. **Real-Life Relevance**: 
+    - Connect the debate to current events, historical cases, or the user's personal experiences.
+    - Discuss the impact of social media, censorship, and government regulations on free speech.
+
+    5. **Interactive Engagement**: 
+    - Encourage the user to articulate their views clearly and persuasively in ${targetLanguage}.
+    - Help the user refine their argumentation skills while practicing debate-specific vocabulary.
+
+    **Guidelines for Communication**:
+    - Stay immersive: Always respond exclusively in ${targetLanguage}, using debate-appropriate expressions.
+    - User's language level: User's current ${targetLanguage} language level is ${targetLanguageLevel}. Adapt your responses to their proficiency and push them to improve.
+    - Be adaptive: Adjust complexity based on the user’s ${learningGoal} and ${learningReason}.
+    - Maintain a respectful and constructive tone: Ensure a balanced and meaningful discussion that promotes learning and critical thinking.`,
+
+    firstMessage: {
+        English: {sender: "assistant", text: "Freedom of speech is an absolute right, and no government should have the power to restrict it. Do you agree, or should there be limits in some cases?"},
+        Spanish: {sender: "assistant", text: "La libertad de expresión es un derecho absoluto y ningún gobierno debería restringirlo. ¿Estás de acuerdo o crees que debería haber límites en algunos casos?"},
+        Italian: {sender: "assistant", text: "La libertà di espressione è un diritto assoluto e nessun governo dovrebbe limitarla. Sei d'accordo o pensi che ci debbano essere dei limiti?"},
+        German: {sender: "assistant", text: "Die Meinungsfreiheit ist ein absolutes Recht, und keine Regierung sollte sie einschränken dürfen. Stimmst du zu, oder sollte es in manchen Fällen Grenzen geben?"},
+        French: {sender: "assistant", text: "La liberté d'expression est un droit absolu et aucun gouvernement ne devrait la restreindre. Es-tu d'accord ou penses-tu qu'il devrait y avoir des limites dans certains cas?"}
+    }
+},
+
+
+
+
         
     
         'scenario-grocery-shopping': {
@@ -2058,34 +2128,47 @@ const topicLabels = {
              setShowOptionsModal(false)}} />
           <div className="options-modal" style={{
             position: 'absolute',
-            top: '20px',
+            top: '28px',
             right: '-10px',
             background: 'white',
             boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
             borderRadius: '8px',
             padding: '8px 0',
-            zIndex: 5,
+            zIndex: 500,
             minWidth: '200px'
           }}>
               <button style={{
+                height: '60px',
                 width: '100%', // Add this line
                 padding: '8px 16px', // Add padding
-                textAlign: 'left'
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '500',
               }} onClick={() => {
                 setActiveChat(null)
                 handleStartNewChat()}}>Start a new chat</button>
               <button style={{
+                 height: '60px',
                 width: '100%',
                 padding: '8px 16px',
-                textAlign: 'left'
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '500',
+                borderTop: '1px solid #e9e9e9',
               }} onClick={() => {
                 setIsChatInfoVisible(true)
                 setIsChatHistoryOpen(true)
                 setSelectedMessage('')}}>See chat history</button>
               <button style={{
+                 height: '60px',
                 width: '100%',
                 padding: '8px 16px',
-                textAlign: 'left'
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '500',
+                borderTop: '1px solid #e9e9e9',
+                
+
               }} onClick={() => {
                 setIsChatInfoVisible(true)
                 setIsChatHistoryOpen(false)
@@ -2115,13 +2198,34 @@ const topicLabels = {
         const speechKey = import.meta.env.VITE_AZURE_SPEECH_KEY;
         const serviceRegion = import.meta.env.VITE_AZURE_REGION;
 
+        let speechRecognitionLanguage;
+        switch (targetLanguage) {
+            case "English":
+                speechRecognitionLanguage = "en-US";
+                break;
+            case "German":
+                speechRecognitionLanguage = "de-DE";
+                break;
+            case "Italian":
+                speechRecognitionLanguage = "it-IT";
+                break;
+            case "French":
+                speechRecognitionLanguage = "fr-FR";
+                break;
+            case "Spanish":
+                speechRecognitionLanguage = "es-ES";
+                break;
+            default:
+                speechRecognitionLanguage = "en-US";
+        }
+
         if (!speechKey || !serviceRegion) {
             console.error("Azure Speech key or region missing.");
             return;
         }
 
         const speechConfig = speechSdk.SpeechConfig.fromSubscription(speechKey, serviceRegion);
-        speechConfig.speechRecognitionLanguage = "en-US";
+        speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
 
         const audioConfig = speechSdk.AudioConfig.fromDefaultMicrophoneInput();
 
@@ -2661,7 +2765,7 @@ const topicLabels = {
             <GenderSelectionModal />
             }
             <div className="chat-label">
-                <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>
+                <span className="fa-solid fa-arrow-left" onClick={() => setIsChatCloseModalVisible(true)}></span>
                 <h2>Chat</h2>
             </div>
             <div className="chat-options">
@@ -2713,7 +2817,7 @@ const topicLabels = {
                             <span className="fa-solid fa-rotate-right"></span>
                             <p>Repeat</p>
                         </span>
-                        <span className="translate-msg" onClick={() => handleTranslateMessage(msg)}>
+                        <span className={`translate-msg ${translationLanguage === 'none' ? 'hidden' : ''}`} onClick={() => handleTranslateMessage(msg)}>
                             <span className="fa-solid fa-language"></span>
                             <p>Translate</p>
                         </span>
@@ -2725,7 +2829,7 @@ const topicLabels = {
                             <span className="fa-solid fa-rotate-right"></span>
                             
                         </span>
-                        <span className="translate-msg" onClick={() => handleTranslateMessage(msg)}>
+                        <span className={`translate-msg ${translationLanguage === 'none' ? 'hidden' : ''}`} onClick={() => handleTranslateMessage(msg)}>
                             <span className="fa-solid fa-language"></span>
                             
                         </span>
@@ -2754,9 +2858,10 @@ const topicLabels = {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                     />
-                    <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"}`} onClick={() => {
+                    <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"} ${isRecording ? 'recording' : ''}`} onClick={() => {
                         handleSendMessage({ sender: "user", text: inputValue })
-                    }} onMouseDown={inputValue === "" ? handleMicrophonePress : undefined} 
+                    }} onTouchStart={inputValue === "" ? handleMicrophonePress : undefined}
+                    onTouchEnd={inputValue === "" ? handleMicrophoneRelease : undefined} onMouseDown={inputValue === "" ? handleMicrophonePress : undefined} 
                     onMouseUp={inputValue === "" ? handleMicrophoneRelease : undefined}>
                         <span className={`fa-solid ${inputValue === "" ? "fa-microphone" : "fa-arrow-right"}`}></span>
                         
@@ -2775,12 +2880,18 @@ const topicLabels = {
     </div>
 
     <div className="chat-info-title">
-    <span className="fa-solid fa-arrow-left" onClick={() => {
+    <span className="fa-solid fa-arrow-left mobile" onClick={() => {
         setIsMobileChatInfoVisible(false)
         setSelectedMessage(null)
         setIsChatHistoryOpen(false)
     }}></span>
     <h2>{isChatHistoryOpen && !selectedMessage ? 'Chat history' : selectedMessage?.settings ? 'Settings' : selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
+    <span className="fa-solid fa-x" onClick={() => {
+        setIsMobileChatInfoVisible(false)
+        setSelectedMessage(null)
+        setIsChatHistoryOpen(false)
+        setIsChatInfoVisible(false)
+    }}></span>
         <span className="fa-solid fa-xmark" onClick={() => {
     setIsChatInfoVisible(false);
 }}></span>
@@ -2894,6 +3005,7 @@ const topicLabels = {
                     <div className="translation-content">
                         <h3>{targetLanguage}</h3>
                         <p>{selectedMessage.text}</p>
+                        <div className="border-div"></div>
                         <h3>{selectedMessage.translation.language}</h3>
                         <p>{selectedMessage.translation.content}</p>
                     </div>

@@ -1255,7 +1255,7 @@ button, a, span {
     flex-direction: column;
     flex: 1;
     gap: 10px;
-    padding-top: 155px;
+    padding-top: 145px;
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;

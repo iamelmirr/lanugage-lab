@@ -191,7 +191,7 @@ export default function Main(props) {
                     <div className="border-div"></div>
                     <p className="explore-options-label">Dialogue</p>
                     <div onClick={() => setSelectedMode('interview')} className="explore-card-option" style={{
-                    backgroundImage: `url(./src/assets/modes-images/interviewimage.jfif)`
+                    backgroundImage: `url(/modes-images/interviewimage.jfif)`
                         }}>
                         <p className="explore-card-label">Interview</p>
                         </div>

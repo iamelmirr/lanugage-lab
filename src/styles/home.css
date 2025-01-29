@@ -1018,7 +1018,7 @@ button, a, span {
     position: sticky;
     flex-direction: column;
     padding-inline: 12px;
-    height: 100vh;
+    height: 100%;
     width:100%;
     background: #ffffff;
     transition: width 0.2s ease-in-out;
@@ -1050,6 +1050,8 @@ button, a, span {
     justify-content: space-between;
     align-items: center;
     height: 80px;
+    position: sticky;
+    top: 0;
 }
 
 .modal-overlay {

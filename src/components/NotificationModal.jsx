@@ -11,7 +11,7 @@ export default function NotificationModal(props) {
         <div className={`notification-modal ${isNotificationModalVisible ? 'visible' : ''}`}>
 
             <div className="notification-icon">
-                <img src="./public/exclamation-mark.png" alt="notification" />
+                <img src="/exclamation-mark.png" alt="notification" />
             </div>
 
             <div className="notification-info">

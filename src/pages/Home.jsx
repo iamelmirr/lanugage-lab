@@ -90,6 +90,7 @@ export default function Home(props) {
 
     }, [selectedMode])
 
+    
     const chatModes = {
         'default-chat': {
             name: "Default Chat",
@@ -97,23 +98,23 @@ export default function Home(props) {
             teacherInfo: {
                     English: {
                         name: "John",
-                        image: "./public/john.png"
+                        image: "/john.png"
                     }, 
                     Spanish: {
                         name: "Carlos",
-                        image: "./public/carlos.png"
+                        image: "/carlos.png"
                     },
                     Italian: {
                         name: "Marco",
-                        image: "./public/marco.png"
+                        image: "/marco.png"
                     },
                     German: {
                         name: "Sebastian",
-                        image: "./public/sebastian.png"
+                        image: "/sebastian.png"
                     },
                     French: {
                         name: "Pierre",
-                        image: "./public/pierre.png"
+                        image: "/pierre.png"
                     },
             },
             firstMessage: { 
@@ -166,26 +167,26 @@ export default function Home(props) {
             name: "At the Airport",
             description: "Role-play as a traveler asking for directions, checking in, or seeking assistance at the airport.",
             teacherInfo: {
-                    English: {
-                        name: "John",
-                        image: "./public/john.png"
-                    }, 
-                    Spanish: {
-                        name: "Carlos",
-                        image: "./public/carlos.png"
-                    },
-                    Italian: {
-                        name: "Marco",
-                        image: "./public/marco.png"
-                    },
-                    German: {
-                        name: "Sebastian",
-                        image: "./public/sebastian.png"
-                    },
-                    French: {
-                        name: "Pierre",
-                        image: "./public/pierre.png"
-                    },
+                English: {
+                    name: "John",
+                    image: "/john.png"
+                }, 
+                Spanish: {
+                    name: "Carlos",
+                    image: "/carlos.png"
+                },
+                Italian: {
+                    name: "Marco",
+                    image: "/marco.png"
+                },
+                German: {
+                    name: "Sebastian",
+                    image: "/sebastian.png"
+                },
+                French: {
+                    name: "Pierre",
+                    image: "/pierre.png"
+                },
             },
             firstMessage: { 
                 English: {sender: "assistant", text: "Welcome to Skyport International Airport! I'm John, your airport assistant. How can I help you today? Whether it's directions, check-in assistance, or general information, feel free to ask!"},
@@ -238,25 +239,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi, I’m John, your virtual medical assistant. Imagine you’re in a medical emergency—what would you say to ask for help? For example, how would you describe your symptoms?"},
             Spanish: {sender: "assistant", text: "Hola, soy Carlos, tu asistente médico virtual. Imagina que estás en una emergencia médica. ¿Qué dirías para pedir ayuda? Por ejemplo, ¿cómo describirías tus síntomas?"},
@@ -308,25 +309,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi, I’m John, your virtual assistant for doctor appointments. Imagine you’re at a clinic—how would you describe the reason for your visit today?"},
             Spanish: {sender: "assistant", text: "Hola, soy Carlos, tu asistente virtual para citas médicas. Imagina que estás en una clínica. ¿Cómo describirías el motivo de tu visita hoy?"},
@@ -384,25 +385,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         firstMessage: { 
             English: {sender: "assistant", text: "Hi! Let's practice booking movie tickets. What kind of movie do you feel like watching today?"},
             Spanish: {sender: "assistant", text: "¡Hola! Practiquemos reservar entradas para el cine. ¿Qué tipo de película te apetece ver hoy?"},
@@ -455,25 +456,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    }, 
+        }, 
         firstMessage: { 
             English: {sender: "assistant", text: "Welcome to our restaurant! Are you ready to order, or would you like to hear today’s specials?"},
             Spanish: {sender: "assistant", text: "¡Bienvenido a nuestro restaurante! ¿Estás listo para pedir o te gustaría escuchar las especialidades del día?"},
@@ -520,25 +521,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         firstMessage: { 
             English: {sender: "assistant", text: "Good evening! Welcome to our hotel. Do you have a reservation, or would you like to check room availability?"},
             Spanish: {sender: "assistant", text: "¡Buenas noches! Bienvenido a nuestro hotel. ¿Tiene una reserva o le gustaría consultar la disponibilidad de habitaciones?"},
@@ -584,11 +585,11 @@ export default function Home(props) {
     teacherInfo: {
         male: {
             name: "Noah",
-            image: ".src/public/noah.png"
+            image: "/noah.png"
         },
         female: {
             name: "Mia",
-            image: ".src/public/mia.png"
+            image: "/mia.png"
         }
 }, 
     
@@ -685,25 +686,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are role-playing as a time traveler from the past, present, or future, engaging with the user in conversations about historical events, technologies, and cultural shifts. Your name is ${tutorName}. Your primary mission is to help the user achieve their specific objectives for learning ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -749,27 +750,27 @@ export default function Home(props) {
         name: "Detective",
         description: "Solve a mystery, ask questions to gather clues, and make deductions as a detective.",
         teacherInfo: {
-            English: {
-                name: "John",
-                image: "./public/john.png"
-            }, 
-            Spanish: {
-                name: "Carlos",
-                image: "./public/carlos.png"
+                English: {
+                    name: "John",
+                    image: "/john.png"
+                }, 
+                Spanish: {
+                    name: "Carlos",
+                    image: "/carlos.png"
+                },
+                Italian: {
+                    name: "Marco",
+                    image: "/marco.png"
+                },
+                German: {
+                    name: "Sebastian",
+                    image: "/sebastian.png"
+                },
+                French: {
+                    name: "Pierre",
+                    image: "/pierre.png"
+                },
             },
-            Italian: {
-                name: "Marco",
-                image: "./public/marco.png"
-            },
-            German: {
-                name: "Sebastian",
-                image: "./public/sebastian.png"
-            },
-            French: {
-                name: "Pierre",
-                image: "./public/pierre.png"
-            },
-    },
         context: `You are role-playing as a detective named ${tutorName}, leading the investigation with the help of an AI assistant who acts as your helper. Your primary mission is to solve a mystery by asking questions, gathering clues, and making logical deductions. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -817,25 +818,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are role-playing as a police officer named ${tutorName} assisting the user with reporting a crime or seeking advice. Your primary mission is to provide the user with realistic interactions that help them practice ${targetLanguage} in scenarios involving law enforcement and legal matters. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -883,25 +884,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are engaging in a debate with the user on the pros and cons of social media. Your name is ${tutorName}. Your primary goal is to foster a thoughtful and dynamic discussion, helping the user practice ${targetLanguage} in a critical thinking environment. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -950,25 +951,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are engaging in a debate with the user about whether online education is superior to traditional learning. Your name is ${tutorName}. Your primary goal is to create a thought-provoking conversation that will allow the user to practice ${targetLanguage} while developing critical thinking skills. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1014,25 +1015,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are engaging in a debate about whether voting should be mandatory in democratic societies. Your name is ${tutorName}. The primary goal is to foster a stimulating conversation that encourages the user to practice ${targetLanguage} while discussing a complex political topic. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1071,30 +1072,29 @@ export default function Home(props) {
     }
     
     },
-
     'debate-freedom-speech': {
     name: "Should There Be Limits on Free Speech?",
     description: "Debate the boundaries of free speech. Should there be restrictions to prevent harm, or should speech remain unrestricted? Express your opinions, ask questions, and respond to counterarguments.",
     teacherInfo: {
         English: {
             name: "John",
-            image: "./public/john.png"
+            image: "/john.png"
         }, 
         Spanish: {
             name: "Carlos",
-            image: "./public/carlos.png"
+            image: "/carlos.png"
         },
         Italian: {
             name: "Marco",
-            image: "./public/marco.png"
+            image: "/marco.png"
         },
         German: {
             name: "Sebastian",
-            image: "./public/sebastian.png"
+            image: "/sebastian.png"
         },
         French: {
             name: "Pierre",
-            image: "./public/pierre.png"
+            image: "/pierre.png"
         },
     },
     context: `You are engaging in a debate with the user on whether freedom of speech should have limitations. Your name is ${tutorName}. Your primary goal is to create an engaging and critical discussion that allows the user to practice ${targetLanguage} while exploring different perspectives on free speech. You understand that:
@@ -1137,34 +1137,38 @@ export default function Home(props) {
         German: {sender: "assistant", text: "Die Meinungsfreiheit ist ein absolutes Recht, und keine Regierung sollte sie einschränken dürfen. Stimmst du zu, oder sollte es in manchen Fällen Grenzen geben?"},
         French: {sender: "assistant", text: "La liberté d'expression est un droit absolu et aucun gouvernement ne devrait la restreindre. Es-tu d'accord ou penses-tu qu'il devrait y avoir des limites dans certains cas?"}
     }
-}
+},
+
+
+
+
         
     
-        ,'scenario-grocery-shopping': {
+        'scenario-grocery-shopping': {
         name: "Grocery Shopping",
         description: "Practice real-life language skills by simulating a grocery shopping experience. Ask for items, check prices, and discuss quantities with an AI assistant.",
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a grocery shopping experience with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for specific items, checking prices, and discussing quantities in ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1216,25 +1220,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a restaurant order with the user. Your name is ${tutorName}. Your primary goal is to engage the user in realistic scenarios where they can practice asking for the menu, discussing their food preferences, and placing an order in ${targetLanguage}. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1283,25 +1287,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a scenario where the user is lost in a foreign city. Your name is ${tutorName}. Your primary goal is to guide the user through asking for directions, seeking advice, and navigating challenges they might encounter in an unfamiliar city. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1347,25 +1351,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a situation where the user has car trouble. Your name is ${tutorName}. Your primary goal is to guide the user through asking for help, explaining car problems clearly, and considering possible solutions. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1413,25 +1417,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a product return with the user. Your name is ${tutorName}. Your primary goal is to guide the user through discussing product issues, inquiring about store policies, and practicing negotiating refunds or exchanges. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1479,25 +1483,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating pronunciation practice with the user. Your name is ${tutorName}. Your primary goal is to help the user improve their pronunciation skills in ${targetLanguage} by guiding them through word and phrase exercises, providing real-time feedback, and adjusting exercises as needed. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}
@@ -1547,25 +1551,25 @@ export default function Home(props) {
         teacherInfo: {
             English: {
                 name: "John",
-                image: "./public/john.png"
+                image: "/john.png"
             }, 
             Spanish: {
                 name: "Carlos",
-                image: "./public/carlos.png"
+                image: "/carlos.png"
             },
             Italian: {
                 name: "Marco",
-                image: "./public/marco.png"
+                image: "/marco.png"
             },
             German: {
                 name: "Sebastian",
-                image: "./public/sebastian.png"
+                image: "/sebastian.png"
             },
             French: {
                 name: "Pierre",
-                image: "./public/pierre.png"
+                image: "/pierre.png"
             },
-    },
+        },
         context: `You are simulating a job interview with the user. Your name is ${tutorName}. Your primary goal is to help the user practice answering typical job interview questions while providing constructive feedback to enhance their performance. You understand that:
     - The user's current learning goal is: ${learningGoal}
     - The user's reason for learning is: ${learningReason}

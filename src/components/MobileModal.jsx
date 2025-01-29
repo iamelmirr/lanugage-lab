@@ -236,7 +236,7 @@ export default function MobileModal(props) {
                                 handleStartNewChat()
                                 closeModal()
                             } }>
-                                <img src="./public/new-message.png" alt="new-chat" />
+                                <img src="/new-message.png" alt="new-chat" />
                                 <div className="profile-menu-text">
                                     <p>Start a new chat</p>
                                     <p className="profile-menu-small-text">End the current chat and start a new one.</p>
@@ -247,7 +247,7 @@ export default function MobileModal(props) {
                                 setIsChatHistoryOpen(true)
                                 closeModal()
                             } }>
-                                <img src="./public/history.png" alt="new-chat" />
+                                <img src="/history.png" alt="new-chat" />
                                 <div className="profile-menu-text">
                                     <p>See chat history</p>
                                     <p className="profile-menu-small-text">You can view and manage your previous conversations.</p>
@@ -264,7 +264,7 @@ export default function MobileModal(props) {
                                   })
                                 closeModal()
                             } }>
-                                <img src="./public/settings.png" alt="new-chat" />
+                                <img src="/settings.png" alt="new-chat" />
                                 <div className="profile-menu-text">
                                     <p>Settings</p>
                                     <p className="profile-menu-small-text">Manage your chat settings.</p>

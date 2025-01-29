@@ -8,7 +8,7 @@ const allRoleplayModes = [
         tags: 'Basics',
         desc: 'Engage in a casual conversation and navigate a date scenario. Practice small talk, discussing interests, and planning activities.',
         shortDesc: 'Simulate casual conversations on a date.',
-        imageSrc: './src/assets/modes-images/at-date2.jfif',
+        imageSrc: '/modes-images/at-date2.jfif',
         handleSelectedMode: 'date'
     },
     {
@@ -16,7 +16,7 @@ const allRoleplayModes = [
         tags: 'Intermediate',
         desc: 'Engage in conversations as a time traveler from the past, present, or future. Discuss historical events, future technologies, and cultural differences.',
         shortDesc: 'Explore history, culture, and the future.',
-        imageSrc: './src/assets/modes-images/time-traveler2.jfif',
+        imageSrc: '/modes-images/time-traveler2.jfif',
         handleSelectedMode: 'time-traveler'
     },
     {
@@ -24,7 +24,7 @@ const allRoleplayModes = [
         tags: 'Intermediate',
         desc: 'Solve a mystery, ask questions to gather clues, and make deductions as a detective.',
         shortDesc: 'Simulate detective work through dialogue.',
-        imageSrc: './src/assets/modes-images/detective2.jfif',
+        imageSrc: '/modes-images/detective2.jfif',
         handleSelectedMode: 'detective'
     },
     {
@@ -32,7 +32,7 @@ const allRoleplayModes = [
         tags: 'Basics',
         desc: 'Role-play interacting with a police officer, reporting a crime, or seeking advice.',
         shortDesc: 'Practice conversations involving law enforcement.',
-        imageSrc: './src/assets/modes-images/policer-officer2.jfif',
+        imageSrc: '/modes-images/policer-officer2.jfif',
         handleSelectedMode: 'police-officer'
     }
 ]
@@ -47,7 +47,7 @@ export default function RoleplayModes(props) {
             return (
                 <div className="modes-page">
         <div className="mobile-header modes">
-                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <img src="/header-logo.png" alt="header-logo" />
                         <span className="fa-regular fa-user"></span>
         </div>    
         <div className="modes-div roleplay">

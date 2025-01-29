@@ -33,19 +33,19 @@ export default function ProfileMode(props) {
 
     // Add language options
     const targetLanguages = [
-        { code: 'en', name: 'English', flag: './public/flags/english.png' },
-        { code: 'de', name: 'German', flag: './public/flags/german.png' },
-        { code: 'es', name: 'Spanish', flag: './public/flags/spanish.png' },
-        { code: 'it', name: 'Italian', flag: './public/flags/italian.png' },
-        { code: 'fr', name: 'French', flag: './public/flags/french.png' }
+        { code: 'en', name: 'English', flag: '/flags/english.png' },
+        { code: 'de', name: 'German', flag: '/flags/german.png' },
+        { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
+        { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
+        { code: 'fr', name: 'French', flag: '/flags/french.png' }
     ];
     const translationLanguages = [
-        { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png'},
-        { code: 'en', name: 'English', flag: './public/flags/english.png' },
-        { code: 'de', name: 'German', flag: './public/flags/german.png' },
-        { code: 'es', name: 'Spanish', flag: './public/flags/spanish.png' },
-        { code: 'it', name: 'Italian', flag: './public/flags/italian.png' },
-        { code: 'fr', name: 'French', flag: './public/flags/french.png' }
+        { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png'},
+        { code: 'en', name: 'English', flag: '/flags/english.png' },
+        { code: 'de', name: 'German', flag: '/flags/german.png' },
+        { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
+        { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
+        { code: 'fr', name: 'French', flag: '/flags/french.png' }
     ];
 
     const levels = [
@@ -452,7 +452,7 @@ export default function ProfileMode(props) {
     return (
         <div className='profile-mode'>
             <div className="mobile-header profile">
-            <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />         </div>
+            <img onClick={() => setSelectedMode('main')} src="/header-logo.png" alt="header-logo" />         </div>
             <div className={`profile-list-div ${(accountSelectedOption === 'unexpanded' || !accountSelectedOption) ? 'wide' : ''}`}>
             <div className="profile-header">
                 <span className="fa-solid fa-arrow-left" onClick={() => setSelectedMode('main')}></span>

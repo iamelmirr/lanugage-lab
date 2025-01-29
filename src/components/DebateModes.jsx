@@ -8,7 +8,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate the pros and cons of using social media. Share your views, ask questions, and respond to counterarguments presented by the AI.', 
         shortDesc: 'Discuss the impact of social media on society.', 
-        imageSrc: './src/assets/modes-images/social-media-debate.jfif',
+        imageSrc: '/modes-images/social-media-debate.jfif',
         handleSelectedMode: 'debate-social-media'
     },
     {
@@ -16,7 +16,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate the merits of online learning versus traditional classroom learning. Discuss the advantages, disadvantages, and ideal scenarios for each.', 
         shortDesc: 'Analyze online learning vs. traditional education.', 
-        imageSrc: './src/assets/modes-images/onlinelearning.jfif',
+        imageSrc: '/modes-images/onlinelearning.jfif',
         handleSelectedMode: 'debate-online-learning'
     },
     {
@@ -24,7 +24,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate whether voting should be mandatory in democracies. Present arguments for and against and respond to opposing views.', 
         shortDesc: 'Discuss the implications of mandatory voting.', 
-        imageSrc: './src/assets/modes-images/isvotingman.jfif',
+        imageSrc: '/modes-images/isvotingman.jfif',
         handleSelectedMode: 'debate-mandatory-voting'
     },
     {
@@ -32,7 +32,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate whether happiness is more important than success. Discuss different perspectives on this matter and respond to counterarguments.', 
         shortDesc: 'Discuss the balance between happiness and success.', 
-        imageSrc: './src/assets/modes-images/happinessorsuccess.jfif',
+        imageSrc: '/modes-images/happinessorsuccess.jfif',
         handleSelectedMode: 'debate-happiness-vs-success'
     },
     {
@@ -40,7 +40,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate whether healthcare is a fundamental human right. Discuss different views and the implications of these positions.', 
         shortDesc: 'Explore healthcare as a fundamental human right.', 
-        imageSrc: './src/assets/modes-images/healthcare-debate.jfif',
+        imageSrc: '/modes-images/healthcare-debate.jfif',
         handleSelectedMode: 'debate-healthcare-right'
     },
     {
@@ -48,7 +48,7 @@ const allDebateModes = [
         tags: 'Debate', 
         desc: 'Debate the limits of freedom of speech. Present different viewpoints and respond to counterarguments.', 
         shortDesc: 'Examine the boundaries of free expression.', 
-        imageSrc: './src/assets/modes-images/freedomofspeech.jfif',
+        imageSrc: '/modes-images/freedomofspeech.jfif',
         handleSelectedMode: 'debate-freedom-speech'
     }
 ];
@@ -62,7 +62,7 @@ export default function DebateModes(props) {
     return (
         <div className="modes-page">
 <div className="mobile-header modes">
-                <img src="./public/header-logo.png" alt="header-logo" />
+                <img src="/header-logo.png" alt="header-logo" />
                 <span className="fa-regular fa-user"></span>
 </div>    
 <div className="modes-div">

@@ -12,7 +12,7 @@ export default function CloseChatModal (props) {
             <div className={`close-modal-underlay ${isChatCloseModalVisible ? 'visible' : ''}`}></div>
                 <div className={`chat-close-modal ${isChatCloseModalVisible ? 'visible' : ''}`}>
                     <div className="close-chat-icon">
-                        <img src="./public/exclamation-mark.png" alt="exclamation-mark" />
+                        <img src="/exclamation-mark.png" alt="exclamation-mark" />
                     </div>
 
                     <div className="close-chat-text">

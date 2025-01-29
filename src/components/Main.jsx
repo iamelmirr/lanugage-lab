@@ -159,7 +159,7 @@ export default function Main(props) {
             
 
             <div className="mobile-header">
-                <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
+                <img onClick={() => setSelectedMode('main')} src="/header-logo.png" alt="header-logo" />
                 <span onClick={() => {
                     setIsMobileModalOpen(true)
                     setIsMobileProfileOpen(true)
@@ -210,12 +210,12 @@ export default function Main(props) {
                     <p className="explore-options-label">Today's scenarios</p>
                     <div className="explore-cards-inline">
                         <div onClick={() => setSelectedMode('detective')} className="explore-card-option inline" style={{
-                        backgroundImage: `url(./src/assets/modes-images/detective2.jfif)`
+                        backgroundImage: `url(/modes-images/detective2.jfif)`
                         }}>
                             <p className="explore-card-label">Detective</p>
                         </div>
                         <div onClick={() => setSelectedMode('time-traveler')} className="explore-card-option inline" style={{
-                        backgroundImage: `url(./src/assets/modes-images/time-traveler2.jfif)`
+                        backgroundImage: `url(/modes-images/time-traveler2.jfif)`
                         }}>
                             <p className="explore-card-label">Time traveler</p>
                         </div>
@@ -235,12 +235,12 @@ export default function Main(props) {
                     <p className="explore-options-label">Today's topics</p>
                     <div className="explore-cards-block">
                         <div onClick={() => setSelectedMode('debate-mandatory-voting')} className="explore-card-option" style={{
-                        backgroundImage: `url(./src/assets/modes-images/voting.jfif)`
+                        backgroundImage: `url(/modes-images/voting.jfif)`
                         }}>
                             <p className="explore-card-label">Should voting be mandatory?</p>
                         </div>
                         <div onClick={() => setSelectedMode('debate-freedom-speech')} className="explore-card-option " style={{
-                        backgroundImage: `url(./src/assets/modes-images/speech.jfif)`
+                        backgroundImage: `url(/modes-images/speech.jfif)`
                         }}>
                             <p className="explore-card-label">Freedom of speech</p>
                         </div>
@@ -260,12 +260,12 @@ export default function Main(props) {
                     <p className="explore-options-label">Today's dialogues</p>
                     <div className="explore-cards-inline">
                         <div onClick={() => setSelectedMode('airport')} className="explore-card-option inline" style={{
-                        backgroundImage: `url(./src/assets/modes-images/airport1.jfif)`
+                        backgroundImage: `url(/modes-images/airport1.jfif)`
                         }}>
                             <p className="explore-card-label">Airport</p>
                         </div>
                         <div onClick={() => setSelectedMode('ordering-dinner')} className="explore-card-option inline" style={{
-                        backgroundImage: `url(./src/assets/modes-images/restaurant3.jfif)`
+                        backgroundImage: `url(/modes-images/restaurant3.jfif)`
                         }}>
                             <p className="explore-card-label">Ordering dinner</p>
                         </div>
@@ -279,7 +279,7 @@ export default function Main(props) {
    <>
 
     <div className="mobile-header">
-                <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
+                <img onClick={() => setSelectedMode('main')} src="/header-logo.png" alt="header-logo" />
                 <span onClick={() => {
                     setIsMobileModalOpen(true)
                     setIsMobileProfileOpen(true)
@@ -412,7 +412,7 @@ export default function Main(props) {
                     
 
                     <div className="mobile-header">
-                        <img onClick={() => setSelectedMode('main')} src="./public/header-logo.png" alt="header-logo" />
+                        <img onClick={() => setSelectedMode('main')} src="/header-logo.png" alt="header-logo" />
                         <span onClick={() => {
                             setIsMobileModalOpen(true)
                             setIsMobileProfileOpen(true)

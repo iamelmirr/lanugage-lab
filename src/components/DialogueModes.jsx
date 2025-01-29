@@ -8,7 +8,7 @@ const allDialogueModes = [
         tags: 'Basics', 
         desc: 'Role-play as a traveler asking for directions, checking in, or seeking assistance at the airport.', 
         shortDesc: 'Simulate airport experiences and get feedback.', 
-        imageSrc: './src/assets/modes-images/airport1.jfif',
+        imageSrc: '/modes-images/airport1.jfif',
         handleSelectedMode: 'airport'
     },
     {
@@ -16,7 +16,7 @@ const allDialogueModes = [
         tags: 'Intermediate', 
         desc: 'Practice handling a medical emergency, asking for help, explaining symptoms, and understanding medical advice.', 
         shortDesc: 'Simulate emergency language skills.', 
-        imageSrc: './src/assets/modes-images/emergency.jfif',
+        imageSrc: '/modes-images/emergency.jfif',
         handleSelectedMode: 'medical-emergency'
     },
     {
@@ -24,7 +24,7 @@ const allDialogueModes = [
         tags: 'Intermediate', 
         desc: 'Simulate a doctor-patient interaction, discussing health issues, medications, and follow-up care.', 
         shortDesc: 'Practice healthcare-related conversations.', 
-        imageSrc: './src/assets/modes-images/doctors.jfif',
+        imageSrc: '/modes-images/doctors.jfif',
         handleSelectedMode: 'doctor-appointment'
     },
     {
@@ -32,7 +32,7 @@ const allDialogueModes = [
         tags: 'Basics', 
         desc: 'Practice booking movie tickets online, selecting showtimes, and finding the best deals.', 
         shortDesc: 'Simulate the process of buying movie tickets.', 
-        imageSrc: './src/assets/modes-images/movietickets2.jfif',
+        imageSrc: '/modes-images/movietickets2.jfif',
         handleSelectedMode: 'buying-movie-tickets'
     },
     {
@@ -40,7 +40,7 @@ const allDialogueModes = [
         tags: 'Basics', 
         desc: 'Practice ordering food at a restaurant, asking about the menu, specials, and dietary restrictions.', 
         shortDesc: 'Simulate restaurant dining experiences.', 
-        imageSrc: './src/assets/modes-images/restaurant3.jfif',
+        imageSrc: '/modes-images/restaurant3.jfif',
         handleSelectedMode: 'ordering-dinner'
     },
     {
@@ -48,7 +48,7 @@ const allDialogueModes = [
         tags: 'Basics', 
         desc: 'Practice checking into a hotel, asking about amenities, room options, and pricing.', 
         shortDesc: 'Simulate hotel check-in experiences.', 
-        imageSrc: './src/assets/modes-images/hotel2.jfif',
+        imageSrc: '/modes-images/hotel2.jfif',
         handleSelectedMode: 'checking-hotel'
     }
 ]
@@ -74,7 +74,7 @@ export default function DialogueModes(props) {
     return (
         <div className="modes-page">
         <div className="mobile-header modes">
-                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <img src="/header-logo.png" alt="header-logo" />
                         <span className="fa-regular fa-user"></span>
         </div>    
         <div className="modes-div">

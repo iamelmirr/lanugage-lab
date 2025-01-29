@@ -7,7 +7,7 @@ const allScenarioModes = [
         tags: 'Basics',
         desc: 'Practice real-life language skills by simulating a grocery shopping experience. Ask for items, check prices, and discuss quantities with an AI assistant.',
         shortDesc: 'Simulate a grocery shopping experience.',
-        imageSrc: './src/assets/modes-images/shopping-scenario.jfif',
+        imageSrc: '/modes-images/shopping-scenario.jfif',
         handleSelectedMode: 'scenario-grocery-shopping'
     },
     {
@@ -15,7 +15,7 @@ const allScenarioModes = [
         tags: 'Basics',
         desc: 'Simulate ordering food at a restaurant. Practice asking for the menu, discussing preferences, and placing an order.',
         shortDesc: 'Practice ordering food at a restaurant.',
-        imageSrc: './src/assets/modes-images/order-scenario.jfif',
+        imageSrc: '/modes-images/order-scenario.jfif',
         handleSelectedMode: 'scenario-restaurant-order'
     },
     {
@@ -23,7 +23,7 @@ const allScenarioModes = [
         tags: 'Intermediate',
         desc: 'Practice asking for directions and advice when lost in a foreign city. Interact with an AI to get help and make informed decisions.',
         shortDesc: 'Navigate being lost in a foreign city.',
-        imageSrc: './src/assets/modes-images/lost-scenario.jfif',
+        imageSrc: '/modes-images/lost-scenario.jfif',
         handleSelectedMode: 'scenario-lost-city'
     },
     {
@@ -31,7 +31,7 @@ const allScenarioModes = [
         tags: 'Intermediate',
         desc: 'Simulate a scenario where you encounter car trouble. Practice asking for assistance, explaining issues, and finding solutions.',
         shortDesc: 'Troubleshoot car issues and seek help.',
-        imageSrc: './src/assets/modes-images/car-trouble-scenario.jfif',
+        imageSrc: '/modes-images/car-trouble-scenario.jfif',
         handleSelectedMode: 'scenario-car-trouble'
     },
     {
@@ -39,7 +39,7 @@ const allScenarioModes = [
         tags: 'Intermediate',
         desc: 'Practice returning a product to a store. Discuss issues, inquire about policies, and ask for refunds or exchanges.',
         shortDesc: 'Simulate a product return process.',
-        imageSrc: './src/assets/modes-images/product-return.jfif',
+        imageSrc: '/modes-images/product-return.jfif',
         handleSelectedMode: 'scenario-product-return'
     }
 ]
@@ -54,7 +54,7 @@ export default function ScenarioModes(props) {
     return (
         <div className="modes-page">
         <div className="mobile-header modes">
-                        <img src="./public/header-logo.png" alt="header-logo" />
+                        <img src="/header-logo.png" alt="header-logo" />
                         <span className="fa-regular fa-user"></span>
         </div>    
         <div className="modes-div">

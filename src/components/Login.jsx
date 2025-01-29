@@ -77,7 +77,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         <div className='login-wrapper'>
         <div className="login-container">
             <div className='header-auth-div'>
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
             </div>
             <div className="login-content">
                 <div className="login-header-options reset-password-header">
@@ -93,7 +93,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                     
             </div>
 
-            <img className='robot-img' src="./src/assets/aiimages/robot-mail.png" alt="" />
+            <img className='robot-img' src="/aiimages/robot-mail.png" alt="" />
 
 
             <div className='bottom-br-line check-email'></div>
@@ -112,7 +112,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         <div className='login-wrapper'>
         <div className="login-container reset-password">
             <div className='header-auth-div'>
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
             </div>
             <div className="login-content">
                 <div className="login-header-options reset-password-header">
@@ -178,10 +178,10 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         </div>
     ) : (
         <div className='login-wrapper'>
-            <img className='header-logo' src="./public/header-logo.png" alt="header-logo" />
+            <img className='header-logo' src="/header-logo.png" alt="header-logo" />
         <div className="login-container">
             <div className='header-auth-div'>
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
             </div>
             <div className="login-content">
                 <div className="login-header-options">
@@ -193,7 +193,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                 </div>
 
                 <button className="reg-btn-action google-btn" onClick={handleGoogleLogin}>
-                       <img src="./public/google-logo.webp" alt="" /> Continue with Google
+                       <img src="/google-logo.webp" alt="" /> Continue with Google
                     </button>
 
 
@@ -269,7 +269,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
 
             <div className='bottom-br-line'></div>
                 <p className="login-anc">
-                        Not a member yet? <a href="#" onClick={(e) => {
+                        Not a member yet? <a onClick={(e) => {
                         e.preventDefault();
                         setIsLogingIn(false);
                         setIsRegistering(true);

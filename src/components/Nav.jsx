@@ -2,10 +2,10 @@ import React from "react"
 
 
 const mainNavButtons = [
-    {label: 'Dashboard', link: '/', icon: <img className="nav-a-img" src="./public/home.png"/>, handleMode: 'main'},
-    {label: 'Chat', link: '/', icon: <img className="nav-a-img" src="./public/chat.png"/>, handleMode: 'default-chat'},
-    {label: 'Challenge', link: '/', icon: <img className="nav-a-img" src="./public/challenge.png"/>, handleMode: 'main'},
-    {label: 'Progress', link: '/', icon: <img className="nav-a-img" src="./public/rise.png"/>, handleMode: 'progress'},
+    {label: 'Dashboard', link: '/', icon: <img className="nav-a-img" src="/home.png"/>, handleMode: 'main'},
+    {label: 'Chat', link: '/', icon: <img className="nav-a-img" src="/chat.png"/>, handleMode: 'default-chat'},
+    {label: 'Challenge', link: '/', icon: <img className="nav-a-img" src="/challenge.png"/>, handleMode: 'main'},
+    {label: 'Progress', link: '/', icon: <img className="nav-a-img" src="/rise.png"/>, handleMode: 'progress'},
 ]
 
 
@@ -27,7 +27,7 @@ export default function Nav(props) {
     return (
         <div className="nav" onClick={() => setShowOptionsModal(false)}>
             <div className="logo-div">
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
             </div>
 
             <div className="nav-container">
@@ -67,7 +67,7 @@ export default function Nav(props) {
 
             <a className="profile-link" onClick={() => {
                 handleSelectedMode('profile-mode')
-            }}><img src="./public/user.png"/> Profile</a>
+            }}><img src="/user.png"/> Profile</a>
 
 
 

@@ -247,21 +247,21 @@ export default function Registration(props) {
     };
 
     const languages = [
-        { code: 'en', name: 'English', flag: './public/flags/english.png' },
-        { code: 'es', name: 'Spanish', flag: './public//flags/spanish.png' },
-        { code: 'fr', name: 'French', flag: './public//flags/french.png' },
-        { code: 'de', name: 'German', flag: './public//flags/german.png' },
-        { code: 'it', name: 'Italian', flag: './public//flags/italian.png' },
+        { code: 'en', name: 'English', flag: '/flags/english.png' },
+        { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
+        { code: 'fr', name: 'French', flag: '/flags/french.png' },
+        { code: 'de', name: 'German', flag: '/flags/german.png' },
+        { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
         // Add more languages here
     ];
 
     const translationLanguages = [
-        { code: 'en', name: 'English', flag: './public/flags/english.png' },
-        { code: 'es', name: 'Spanish', flag: './public//flags/spanish.png' },
-        { code: 'fr', name: 'French', flag: './public//flags/french.png' },
-        { code: 'de', name: 'German', flag: './public//flags/german.png' },
-        { code: 'it', name: 'Italian', flag: './public//flags/italian.png' },
-        { code: 'hr', name: 'Croatian', flag: './public/flags/croatian.png' }
+        { code: 'en', name: 'English', flag: '/flags/english.png' },
+        { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
+        { code: 'fr', name: 'French', flag: '/flags/french.png' },
+        { code: 'de', name: 'German', flag: '/flags/german.png' },
+        { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
+        { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png' }
     ];
 
     const steps = [
@@ -329,7 +329,7 @@ export default function Registration(props) {
                     <p className='registration-info-p'>We will personalize conversations based on your language level.</p>
 
                     <div className="level-options">
-                        {[{name: "Beginner (A1 - A2)", desc: "Beginner", langLevel: "A1-A2", levelImage: "./src/assets/signal-weak.svg"}, {name: "Intermediate (B1 - B2)", desc: "Intermediate", langLevel: "B1-B2", levelImage: "./src/assets/signal-medium.svg"}, {name: "Advanced (C1 - C2)", desc: "Advanced", langLevel: "C1-C2", levelImage: "./src/assets/signal-strong.svg"}].map(level => (
+                        {[{name: "Beginner (A1 - A2)", desc: "Beginner", langLevel: "A1-A2", levelImage: "/signal-weak.svg"}, {name: "Intermediate (B1 - B2)", desc: "Intermediate", langLevel: "B1-B2", levelImage: "/signal-medium.svg"}, {name: "Advanced (C1 - C2)", desc: "Advanced", langLevel: "C1-C2", levelImage: "/signal-strong.svg"}].map(level => (
                             <button 
                                 key={level.desc} 
                                 onClick={() => handleInputChange('level', level.name)}
@@ -429,7 +429,7 @@ export default function Registration(props) {
                     </div>
 
                     <div className="goal-options">
-                        {[{name: "Learning basics", desc: "I want to learn basics", levelImage: "./src/assets/books.webp"}, {name: "Improve speaking", desc: "I want to improve speaking", levelImage: "./src/assets/talking.webp"}, {name: "Become fluent", desc: "I want to become fluent", levelImage: "./src/assets/star.webp"}, {name: "I'm not sure", desc: "I'm not sure yet", levelImage: "./src/assets/unsure.webp"}].map(goal => (
+                        {[{name: "Learning basics", desc: "I want to learn basics", levelImage: "/books.webp"}, {name: "Improve speaking", desc: "I want to improve speaking", levelImage: "/talking.webp"}, {name: "Become fluent", desc: "I want to become fluent", levelImage: "/star.webp"}, {name: "I'm not sure", desc: "I'm not sure yet", levelImage: "/unsure.webp"}].map(goal => (
                             <button 
                                 key={goal.name} 
                                 onClick={() => handleInputChange('goal', goal.name)}
@@ -470,7 +470,7 @@ export default function Registration(props) {
 
 
                     <div className="reason-options">
-                        {[{name: "Academy and research", image: "./src/assets/books.webp"}, {name: "University and education", image:"./src/assets/student-hat.webp"}, {name: "Travel and tourism", image:"./src/assets/airplane.webp"}, {name:"Job and career", image:"./src/assets/job.webp"}, {name:"Immigration", image:"./src/assets/globe.webp"}, {name:"Better communication", image:"./src/assets/talking.webp"}, {name:"Language tests and certificates", image:"./src/assets/test.webp"}, {name:"Other", image:"./src/assets/perfection.webp"}].map(reason => (
+                        {[{name: "Academy and research", image: "/books.webp"}, {name: "University and education", image:"/student-hat.webp"}, {name: "Travel and tourism", image:"/airplane.webp"}, {name:"Job and career", image:"/job.webp"}, {name:"Immigration", image:"/globe.webp"}, {name:"Better communication", image:"/talking.webp"}, {name:"Language tests and certificates", image:"/test.webp"}, {name:"Other", image:"/perfection.webp"}].map(reason => (
                             <button 
                                 key={reason.name} 
                                 onClick={() => handleInputChange('reason', reason.name)}
@@ -515,7 +515,7 @@ export default function Registration(props) {
                     <div className='registration-auth-div'>
 
                     <button className='reg-btn-action google-btn auth' onClick={handleGoogleSignIn}>
-                    <img src="./public/google-logo.webp" alt="" /> Sign up with Google
+                    <img src="/google-logo.webp" alt="" /> Sign up with Google
                         </button>
 
                     <div className='or-div signup-or'>
@@ -665,18 +665,18 @@ export default function Registration(props) {
     return (
         <>
         <div className="registration-container">
-        <img className='registration-logo' src="./public/header-logo.png" alt="" />
+        <img className='registration-logo' src="/header-logo.png" alt="" />
             {step === -1 ? (
                 <div className="registration-content null-step">
                     <div className='mobile-get-started-reg-div'>
-                        <img src="./src/assets/aiimages/default-chat-mode.png" alt="chat-avatar" />
+                        <img src="/aiimages/default-chat-mode.png" alt="chat-avatar" />
                     </div>
                     <div className='get-started-info'>
                     <div className='get-started-text'>    
                     <h1>A Smarter Way to Learn a Language</h1>
                     <p>Discover how AI can revolutionize your language learning experience with immersive techniques, engaging methods, and personalized teaching for maximum progress.</p>
                     </div>
-                    <img className='teacherfullimg' src="./src/assets/aiimages/default-chat-mode.png" alt="teacherfullimg" />
+                    <img className='teacherfullimg' src="/aiimages/default-chat-mode.png" alt="teacherfullimg" />
                     <div className="action-buttons">
                         <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
                         <a className='reg-btn-action login-btn' href="/login" onClick={(e) =>                                            {e.preventDefault();
@@ -685,7 +685,7 @@ export default function Registration(props) {
                                 }}>Log in</a>
                     </div>
                     <div className='absolute-logo-div'>
-                        <img src="./public/header-logo.png" alt="" />
+                        <img src="/header-logo.png" alt="" />
                     </div>
                     <div className='border-div'></div>
                     <a className='bottom-reg-a' href="/">            
@@ -697,7 +697,7 @@ export default function Registration(props) {
             ) : step === 0 ? ( 
             <>    
                 <div className='header-auth-div registration'>
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
                 </div>
                 <div className="registration-content step-div">
                 <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
@@ -709,7 +709,7 @@ export default function Registration(props) {
             ) : (
                 <>    
                 <div className='header-auth-div registration'>
-                <img src="./public/header-logo.png" alt="" />
+                <img src="/header-logo.png" alt="" />
                 </div>
                 <div className="registration-content step-div">
                 <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>

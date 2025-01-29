@@ -15,7 +15,7 @@ export default function Hero() {
                     <p>Unlock new language with your AI partner</p>
                     <a href="/" className="get-started hero-get-started">Get Started</a>
                 </div>
-                <div className="hero-img-div"><img src="../public/Screenshot_21.png" alt="" /></div>
+                <div className="hero-img-div"><img src="/Screenshot_21.png" alt="" /></div>
             </div>
     )
 }

@@ -318,11 +318,11 @@ button, a, span {
 
 
 .slider-item-one {
-    background-image: url("/src/assets/design-pink.png");;
+    background-image: url("/design-pink.png");;
 }
 
 .slider-item-two {
-    background-image: url("/src/assets/design-green.png");
+    background-image: url("/design-green.png");
 }
 
 .slider-item-one .slider-big-text {

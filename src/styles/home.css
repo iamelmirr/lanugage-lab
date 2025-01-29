@@ -3386,7 +3386,8 @@ button, a, span {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
-    width: 60%;
+    width: 90%;
+    max-width: 520px;
     padding: 16px;
     border-radius: 16px;
     gap: 24px;

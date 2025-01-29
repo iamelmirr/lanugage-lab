@@ -409,7 +409,7 @@ button, a, span {
     scrollbar-width: none;
     padding-inline: 12px;
     background: rgb(255, 246, 229);
-    padding-bottom: 90px;
+    padding-bottom: 120px;
     
 }
 
@@ -1255,7 +1255,7 @@ button, a, span {
     flex-direction: column;
     flex: 1;
     gap: 10px;
-    padding-top: 12px;
+    padding-top: 92px;
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -3923,6 +3923,23 @@ button, a, span {
     display: none;
 }
 
+.chat-options {
+    position: relative;
+    background: inherit;
+    padding-right: 0;
+    border-top: 0.5px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.chat-msg-wrapper {
+    padding-top: 18px;
+}
+
+.img-wrapper img {
+    border-radius: 100%;
+    background: #ffffff;
+}
+
 .chat-info-title .fa-arrow-left.mobile{
     display: none;
 }
@@ -3981,7 +3998,7 @@ button, a, span {
 
 .chat-info-div .chat-info-title {
     padding: 24px 0px;
-    border-bottom: 1px solid #dadada;
+    border-bottom: 1px solid #ebebeb;
 }
 
 .chat-info-small-text {
@@ -3999,7 +4016,7 @@ button, a, span {
 .default-chat-info-card {
     padding: 24px;
     gap: 20px;
-    border: 1px solid #dadada;
+    border: 1px solid #ebebeb;
 }
 
 .default-chat-info-card h2 {

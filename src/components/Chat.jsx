@@ -22,7 +22,7 @@ import { use } from "react";
 
 
 export default function Chat(props) {
-    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime, isChatSettingsModalOpen, setIsChatSettingsModalOpen, isMobileModalOpen, setIsMobileModalOpen, isChatInfoVisible, setIsChatInfoVisible, activeChat, setActiveChat, messages, setMessages, showGenderModal, setShowGenderModal, tutorName, setTutorName, tutorImage, setTutorImage, tutorGender, setTutorGender, userGender, setUserGender, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback, isChatCloseModalVisible, setIsChatCloseModalVisible } = props;
+    const { selectedMode, setSelectedMode, handleSelectedMode, progressScore, setProgressScore, targetLanguage, translationLanguage, targetLanguageLevel, learningGoal, learningReason, isMuted, setIsMuted, savedChats, setSavedChats, showOptionsModal, setShowOptionsModal, setTargetLanguageLevel, setTranslationLanguage, voiceSpeed, setVoiceSpeed, showSuggestionBar, setShowSuggestionBar, streakCount, setStreakCount, longestStreak, setLongestStreak, lastChatDate, setLastChatDate, todaysChatTime, setTodaysChatTime, isChatSettingsModalOpen, setIsChatSettingsModalOpen, isMobileModalOpen, setIsMobileModalOpen, isChatInfoVisible, setIsChatInfoVisible, activeChat, setActiveChat, messages, setMessages, showGenderModal, setShowGenderModal, tutorName, setTutorName, tutorImage, setTutorImage, tutorGender, setTutorGender, userGender, setUserGender, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback, isChatCloseModalVisible, setIsChatCloseModalVisible, chatCloseMode, isChatCloseMode } = props;
 
     
     const chatModes = {
@@ -2765,12 +2765,16 @@ const topicLabels = {
             <GenderSelectionModal />
             }
             <div className="chat-label">
-                <span className="fa-solid fa-arrow-left" onClick={() => setIsChatCloseModalVisible(true)}></span>
+                <span className="fa-solid fa-arrow-left" onClick={() => {setIsChatCloseModalVisible(true)
+                isChatCloseMode('main')    
+                }}></span>
                 <h2>Chat</h2>
             </div>
             <div className="chat-options">
                 <div className="teacher-info">
-                <span onClick={() => setIsChatCloseModalVisible(true)} className="fa-solid fa-arrow-left"></span>
+                <span onClick={() => {setIsChatCloseModalVisible(true)
+                isChatCloseMode('main')    
+                }} className="fa-solid fa-arrow-left"></span>
                 <div className="img-wrapper">    
                 <img 
                 src={
@@ -2847,10 +2851,10 @@ const topicLabels = {
                 )}
             </div>
             <div className="chat-input-wrapper">
-                <div className={`assistant-options ${showSuggestionBar ? '' : 'hidden'}`}>
+                {messages.length > 1 && (<div className={`assistant-options ${showSuggestionBar ? '' : 'hidden'}`}>
                     <span onClick={handleAnotherQuestion}>Another question</span>
                     <span onClick={handleCreateSuggestedAnswer}>Suggest answer</span>
-                </div>
+                </div>)}
                 <div className="input-wrapper">
                     <input
                         type="text"
@@ -2876,7 +2880,13 @@ const topicLabels = {
         }}>
 
     <div className="mobile-header">
-            <img src="/header-logo.png" alt="header-logo" />
+            <img onClick={() => {
+                setIsMobileChatInfoVisible(false)
+                setIsChatHistoryOpen(false)
+                setSelectedMessage(null)
+                setIsChatCloseModalVisible(true)
+                isChatCloseMode('main')    
+                }} src="/header-logo.png" alt="header-logo" />
     </div>
 
     <div className="chat-info-title">
@@ -2888,8 +2898,8 @@ const topicLabels = {
     <h2>{isChatHistoryOpen && !selectedMessage ? 'Chat history' : selectedMessage?.settings ? 'Settings' : selectedMessage ? (selectedMessage.translation ? 'Translation' : 'Feedback') : 'Information'}</h2>
     <span className="fa-solid fa-x" onClick={() => {
         setIsMobileChatInfoVisible(false)
-        setSelectedMessage(null)
         setIsChatHistoryOpen(false)
+        setSelectedMessage(null)
         setIsChatInfoVisible(false)
     }}></span>
         <span className="fa-solid fa-xmark" onClick={() => {
@@ -2970,7 +2980,11 @@ const topicLabels = {
             .map((chat) => {
                 const lastChatMessage = chat.messages?.[chat.messages.length - 1].text
             return (
-                <div onClick={() => loadChat(chat.id)} key={chat.id} className="chat-history-item">
+                <div onClick={() => {
+                    loadChat(chat.id)
+                    setIsMobileChatInfoVisible(false)
+                    setIsChatHistoryOpen(false)
+                }} key={chat.id} className="chat-history-item">
 
                     <div className="chat-history-img-wrapper">
                         <img src={chat.tutorImage} alt="tutor-image" />

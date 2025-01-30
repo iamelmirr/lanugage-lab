@@ -99,6 +99,7 @@ button, a, span {
 .logo-div img {
     aspect-ratio: 1/1;
     width: 50px;
+    cursor: pointer;
     
 }
 
@@ -123,6 +124,10 @@ button, a, span {
     gap: 16px;
 }
 
+.nav-options a.selected {
+    color: #DB6313;
+}
+
 .nav-a-img {
     aspect-ratio: 1/1;
     width: 23px;
@@ -137,6 +142,14 @@ button, a, span {
     gap: 15px;
 }
 
+.profile-link.selected {
+    color: #DB6313;
+}
+
+.profile-link.selected img {
+    filter: invert(37%) sepia(94%) saturate(559%) hue-rotate(358deg) brightness(98%) contrast(95%);
+}
+
 .profile-link img {
     aspect-ratio: 1/1;
     width: 23px;
@@ -148,6 +161,15 @@ button, a, span {
     gap: 15px;
     font-size: 15px;
     font-weight: 500;
+}
+
+.dashboard-link.selected {
+    color: #DB6313;
+}
+
+.dashboard-link.selected img {
+    filter: invert(37%) sepia(94%) saturate(559%) hue-rotate(358deg) brightness(98%) contrast(95%);
+
 }
 
 .dashboard-link span {
@@ -181,6 +203,7 @@ button, a, span {
 
 .mobile-header img {
     height: 40px;
+    cursor: pointer;
 }
 
 .mobile-header span {
@@ -409,7 +432,7 @@ button, a, span {
     scrollbar-width: none;
     padding-inline: 12px;
     background: rgb(255, 246, 229);
-    padding-bottom: 120px;
+    padding-bottom: 94px;
     
 }
 
@@ -752,6 +775,10 @@ button, a, span {
     font-size: 23px;
 }
 
+.modes-title-wrapper span {
+    cursor: pointer;
+}
+
 .chat-mode-info {
     display: flex;
     flex-direction: column;
@@ -787,6 +814,7 @@ button, a, span {
     overflow: auto;
     gap: 12px;
     padding: 12px;
+    padding-bottom: 32px;
     scrollbar-width: none;
 }
 
@@ -1039,6 +1067,7 @@ button, a, span {
 .chat-label span {
     font-size: 21px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .chat-label h2 {
@@ -1093,6 +1122,7 @@ button, a, span {
 .teacher-info span {
     font-size: 21px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .teacher-info img {
@@ -1175,6 +1205,7 @@ button, a, span {
     border-bottom: 1px solid #e4e4e4;
     background: #ffffff;
     height: 80px;
+    cursor: pointer;
 }
 
 .chat-history-item button {
@@ -1275,13 +1306,14 @@ button, a, span {
     background: #fff1d9;
     padding: 5px;
     border-radius: 100%;
-    
+    cursor: pointer;
 }
 
 .msg-options-div.mobile .translate-msg {
     background: #fff1d9;
     padding: 5px;
     border-radius: 100%;
+    cursor: pointer;
 }
 
 .msg-options-div.mobile .repeat-msg span {
@@ -1305,7 +1337,7 @@ button, a, span {
 .message-wrapper .fa-circle-info {
     font-size: 17px;
     color: #0a8010;
-    
+    cursor: pointer;
 }
 
 .wrapper-user {
@@ -1578,6 +1610,7 @@ button, a, span {
     justify-content: center;
     color: #868686;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .assistant-options.hidden {
@@ -1725,14 +1758,17 @@ button, a, span {
 
 .chat-info-title span.fa-x {
     display: none;
+    cursor: pointer;
 }
 
 .chat-info-title .fa-arrow-left {
     font-size: 17px;
+    cursor: pointer;
 }
 
 .chat-info-title .fa-xmark {
     display: none;
+    cursor: pointer;
 }
 
 .chat-info-small-text {
@@ -1759,6 +1795,7 @@ button, a, span {
     padding-top: 10px;
     overflow-y: auto;
     scrollbar-width: none;
+    padding-bottom: 30px;
 }
 
 .profile-settings-btn-list.mobile-settings {
@@ -2264,6 +2301,7 @@ button, a, span {
 
 .reg-step-header span {
     margin-top: 9px;
+    cursor: pointer;
 }
 
 .header-auth-div.registration {
@@ -2293,6 +2331,10 @@ button, a, span {
     background: #FFFFFF;
     border: 1px solid rgb(223 223 223);
     justify-content: space-between;
+}
+
+.lang-level-btn.selected {
+    border: 1px solid rgb(219, 99, 19);
 }
 
 .lang-level-name-span {
@@ -2383,6 +2425,10 @@ button, a, span {
     font-weight: 500;
 }
 
+.login-header-options span {
+    cursor: pointer;
+}
+
 .google-btn {
     gap: 4px;
     font-weight: 500;
@@ -2436,7 +2482,16 @@ button, a, span {
 .password-div .fa-eye {
     position: absolute;
     right: 15px;
-    top: 68%;
+    top: 59px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #BBBBBB;
+}
+
+.password-div .fa-eye-slash {
+    position: absolute;
+    right: 15px;
+    top: 59px;
     transform: translateY(-50%);
     cursor: pointer;
     color: #BBBBBB;
@@ -2652,6 +2707,10 @@ button, a, span {
     width: 24px;
 }
 
+.lang-goal-btn.selected {
+    border: 1px solid rgb(219, 99, 19);
+}
+
 .reason-options {
     display: flex;
     flex-direction: column;
@@ -2678,6 +2737,10 @@ button, a, span {
     font-weight: 500;
     font-size: 15px;
     gap: 8px;
+}
+
+.reason-options button.selected {
+    border: 1px solid rgb(219, 99, 19);
 }
 
 .reason-options button img {
@@ -2738,6 +2801,10 @@ button, a, span {
     
 }
 
+.profile-header span {
+    cursor: pointer;
+}
+
 .mobile-header.profile {
     background: #FFEFD4;;
 }
@@ -2761,6 +2828,7 @@ button, a, span {
     padding:16px;
     border: 1px solid rgb(211, 211, 211);
     border-radius: 16px;
+    cursor: pointer;
 }
 
 .profile-menu-btn span {
@@ -2819,6 +2887,10 @@ button, a, span {
     font-weight: 500;
 }
 
+.profile-option-h-div span {
+    cursor: pointer;
+}
+
 .profile-options-div.expanded {
     display: flex;
     flex-direction: column;
@@ -2827,7 +2899,7 @@ button, a, span {
     padding-inline: 12px;
     opacity: 1;
     padding-bottom: 18px;
-
+    flex-grow: 1;
 }
 
 .profile-options-btn-list {
@@ -2911,6 +2983,7 @@ button, a, span {
     gap: 16px;
     padding-block: 24px;
     border-top: 1px solid rgb(216, 216, 216);
+    cursor: pointer;
 }
 
 .profile-options-btn-list > :first-child {
@@ -3893,7 +3966,6 @@ button, a, span {
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     padding-inline: 24px; 
     padding-bottom: 24px;
-    
 }
 
 .profile-options-div .fa-arrow-left.mobile {
@@ -3958,8 +4030,9 @@ button, a, span {
 
 .teacher-info span {
     display: none;
-    cursor: pointer;
 }
+
+
 
 .chat-div {
     padding-inline: 24px;
@@ -4043,6 +4116,14 @@ button, a, span {
     display: flex;
 }
 
+.msg-options-div span {
+    cursor: pointer;
+}
+
+.msg-options-div.mobile span {
+    cursor: pointer;
+}
+
 .message .msg-options-div span p {
     font-size: 13.5px;
 }
@@ -4096,12 +4177,17 @@ button, a, span {
 }
 
 .chat-info-list .message-content {
-    border-bottom: 1px solid #dadada;
+    border-bottom: 1px solid #ebebeb;
 }
 
 .chat-info-list .severity-indicator {
-    border-bottom: 1px solid #dadada;;
+    border-bottom: 1px solid #ebebeb;
 }
+
+.translation-content {
+    padding-bottom: 30px;
+}
+
 
 .translation-content h3 {
     font-size: 14px;

@@ -476,7 +476,11 @@ export default function ProfileMode(props) {
                     <p className='profile-menu-small-text'>Manage your account settings.</p>
                     </div>
                 </div>
-                <div className="profile-menu-btn" onClick={handleLogout}>
+                <div className="profile-menu-btn" onClick={() => {
+                    setAccountSelectedOption('unexpanded')
+                    setSelectedMode('main')
+                    handleLogout()
+                    }}>
                 <span className='fa-solid fa-arrow-right-from-bracket'></span>
                     <div className='profile-menu-text'>
                     <p className='log-out-text'>Log out</p>

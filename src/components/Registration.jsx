@@ -284,7 +284,8 @@ export default function Registration(props) {
                                 key={lang.code} 
                                 onClick={() => {
                                     handleInputChange('language', lang.name)
-                                    setSelectedLanguage(lang.name)     
+                                    setSelectedLanguage(lang.name)
+                                    handleNextStep()     
                                 }}
                                 className={`language-option ${formData.language === lang.name ? 'selected' : ''}`}
                             >
@@ -379,7 +380,10 @@ export default function Registration(props) {
                     {translationLanguages.filter(lang => lang.name !== formData.language).map(lang => (
                     <div 
                         key={lang.code} 
-                        onClick={() => handleInputChange('translationLanguage', lang.name)}
+                        onClick={() => {handleInputChange('translationLanguage', lang.name)
+
+                            handleNextStep()      
+                        }}
                         className={`language-option ${formData.translationLanguage === lang.name ? 'selected' : ''}`}
                     >
                         <span className='img-span'>

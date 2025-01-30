@@ -47,7 +47,7 @@ export default function RoleplayModes(props) {
             return (
                 <div className="modes-page">
         <div className="mobile-header modes">
-                        <img src="/header-logo.png" alt="header-logo" />
+                        <img onClick={() => setSelectedMode('main')} src="/header-logo.png" alt="header-logo" />
                         <span className="fa-regular fa-user"></span>
         </div>    
         <div className="modes-div roleplay">

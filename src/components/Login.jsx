@@ -14,6 +14,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
             email: '',
             password: ''
         })
+    const [showPassword, setShowPassword] = useState(false);
 
 
     const validateEmail = (email) => {
@@ -40,13 +41,30 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+
+            if (errors.email || errors.password) {
+                return;
+            }
+
             const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
             setIsAuthenticated(true);
             setIsLogingIn(false);
             setIsRegistering(false);
         } catch (error) {
             console.error("Login error:", error);
-            // Handle error appropriately
+            
+            if (error.code === 'auth/invalid-credential') {
+                setErrors(prev => ({
+                    ...prev,
+                    email: 'Wrong email/password or this account does not exist'
+                }));
+            } else if (error.code === 'auth/wrong-password') {
+                setErrors(prev => ({
+                    ...prev,
+                    password: 'Incorrect password'
+                }));
+            }
+    
         }
     };
 
@@ -54,11 +72,23 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         e.preventDefault()
         try {
             const result = await signInWithPopup(auth, googleProvider);
+
+            const userDocRef = doc(db, "users", result.user.uid);
+            const userDoc = await getDoc(userDocRef);
             
             
+            if (userDoc.exists()) {
                 setIsAuthenticated(true);
                 setIsRegistering(false);
                 setIsLogingIn(false);
+            } else {
+                // User doesn't exist in database
+                await auth.signOut(); // Sign out the user
+                setErrors(prev => ({
+                    ...prev,
+                    email: 'This email is not registered. Please sign up first.'
+                }));
+            }
             
         } catch (error) {
             console.error("Google login error:", error);
@@ -230,7 +260,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                     <div className='login-label-div password-div'>
                     <label htmlFor="password">Password</label>  
                     <input className={errors.password ? "invalid" : ""}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         required
                         name="password"
                         placeholder="Password"
@@ -247,7 +277,10 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                         }}
                     />
                     {errors.password && <span className="error-message">{errors.password}</span>}
-                    <span className="fa-regular fa-eye"></span>
+                    <span 
+                            className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                            onClick={() => setShowPassword(!showPassword)}
+                        ></span>
                     </div>
                     <a href="#" onClick={() => setIsForgotPasswordOpen(true)} className="forgot-password">Forgot password?</a>
                     

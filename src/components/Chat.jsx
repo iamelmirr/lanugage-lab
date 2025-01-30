@@ -2091,14 +2091,25 @@ const topicLabels = {
             <div className="modal-content" style={{
               background: 'white',
               padding: '24px',
-              borderRadius: '12px',
+              borderRadius: '16px',
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
             }}>
-              <h2>Select your gender</h2>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button onClick={() => {
+              <h2 style={{
+              fontWeight: '510',
+              
+            }}>Select your gender</h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <button style={{ 
+                    padding: '10px 16px',
+                    background: 'rgb(219, 99, 19)',
+                    border:'1px solid #ebebeb',
+                    borderRadius: '8px',
+                    fontSize: '17px',
+                    color: '#f0f0f0',
+                    fontWeight: '500'
+                 }} onClick={() => {
                   setUserGender('male');
                   // Update context for AI to play female role
                   setTutorGender('female')
@@ -2114,7 +2125,15 @@ const topicLabels = {
                   
 
                 }}>Male</button>
-                <button onClick={() => {
+                <button style={{ 
+                    padding: '10px 16px',
+                    background: 'rgb(219, 99, 19)',
+                    border:'1px solid #ebebeb',
+                    borderRadius: '8px',
+                    fontSize: '17px',
+                    color: '#f0f0f0',
+                    fontWeight: '500'
+                 }} onClick={() => {
                   setUserGender('female');
                   setTutorGender('male')
                   setTutorName('Noah')

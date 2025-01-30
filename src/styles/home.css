@@ -27,14 +27,14 @@ br {
 }
 
 html {
-    height: 100vh;
+    height: 100dvh;
 }
 
 html, body, #root {
     height: 100%;
     color: #282828;
     scrollbar-width: none;
-    min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
 }
 
@@ -51,7 +51,7 @@ body {
     display: flex;
     width: 100%;
     max-width: 1440px;
-    min-height: 100vh;
+    min-height: 100dvh;
     box-shadow: 0 6px 10px rgba(121, 121, 121, 0.2);
     
 }
@@ -80,7 +80,7 @@ button, a, span {
     flex-direction: column;
     padding:  24px;
     gap: 45px;
-    height: 100vh;
+    height: 100dvh;
     box-shadow: 0 4px 10px rgba(121, 121, 121, 0.15); 
     z-index: 2;
     position: sticky;
@@ -529,7 +529,7 @@ button, a, span {
     box-shadow: 0 4px 10px rgba(121, 121, 121, 0.15);
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     scrollbar-width: none;
     padding-bottom: 40px;
@@ -715,7 +715,7 @@ button, a, span {
     flex-direction: column;
     width: 100%;
     overflow-y: auto;
-    height: 100vh;
+    height: 100dvh;
     scrollbar-width: none;
     
 }
@@ -836,7 +836,7 @@ button, a, span {
     box-shadow: 0 4px 8px rgba(121, 121, 121, 0.15);
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100dvh;
     
     width: clamp(100px, 43.38%, 496px);
     flex-shrink: 0;
@@ -1050,12 +1050,11 @@ button, a, span {
     justify-content: space-between;
     align-items: center;
     height: 80px;
-    position: fixed;
+    position: relative;
     top: 0;
     width: 100%;
     z-index: 12;
     background: #ffffff;
-    padding-right: 24px;
     
 }
 
@@ -1255,7 +1254,7 @@ button, a, span {
     flex-direction: column;
     flex: 1;
     gap: 10px;
-    padding-top: 145px;
+    padding-top: 12px;
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -2030,7 +2029,7 @@ button, a, span {
     width: 100%;
     align-items: center;
     background: rgb(219, 99, 19);
-    height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     scrollbar-width: none;
 }
@@ -2045,7 +2044,7 @@ button, a, span {
 }
 
 .registration-content.null-step {
-    height: 100vh;
+    height: 100dvh;
 }
 
 .mobile-get-started-reg-div {
@@ -2212,7 +2211,7 @@ button, a, span {
 
 .registration-content.step-div {
     width: 100%;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100dvh - 80px);
 }
 
 .reg-progress-animation {
@@ -2347,7 +2346,7 @@ button, a, span {
     flex-direction: column;
     background: rgb(255, 250, 240);
     padding-inline: 12px;
-    min-height: 100vh;
+    min-height: 100dvh;
     align-items: center;
 }
 
@@ -2662,7 +2661,7 @@ button, a, span {
     width: 100%;
     
     scrollbar-width: none;
-    max-height: calc(100vh - 200px)
+    max-height: calc(100dvh - 200px)
     
     
 }

@@ -1909,6 +1909,20 @@ const topicLabels = {
         };
 
         useEffect(() => {
+
+            if(isChatCloseModalVisible === true) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    URL.revokeObjectURL(currentAudio.src);
+                    setCurrentAudio(null);
+                    setIsPlayingAudio(false);
+                }
+            }
+
+        }, [isChatCloseModalVisible])
+
+        useEffect(() => {
             const lastMessage = messages[messages.length - 1];
             
             if (messages.length > 1 && lastMessage.sender === 'assistant') { 
@@ -2876,7 +2890,6 @@ const topicLabels = {
         
         
         <div className={`chat-info-div ${!isChatInfoVisible ? 'hidden' : isMobileChatInfoVisible ? 'mobile' : ''}`} onClick={() => {setShowOptionsModal(false)
-            setIsChatHistoryOpen(false)
         }}>
 
     <div className="mobile-header">

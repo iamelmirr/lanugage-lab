@@ -306,7 +306,10 @@ export default function Registration(props) {
 
                 <div className='bottom-br-line reg-step'></div>
 
-                <p className='login-anc'>Already a member? <a href="/login">Log in</a></p>
+                <p className='login-anc'>Already a member? <a onClick={() => {
+                    setIsRegistering(false)
+                    setIsLogingIn(true)
+                }}>Log in</a></p>
 
                 </div>    
                 

@@ -12,7 +12,7 @@ import { signInWithEmailLink, isSignInWithEmailLink, updateEmail } from "firebas
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Check if user is logged in (e.g., using Firebase Auth)
+    
     return auth.currentUser !== null
   })
 const [isRegistering, setIsRegistering] = useState(false)
@@ -69,6 +69,13 @@ const levelThresholds = Array(100).fill(0).reduce((thresholds, _, index) => {
   else thresholds.push(thresholds[index - 1] + 50); // Levels 61–100: +30 points
   return thresholds;
 }, []);
+
+
+useEffect(() => {
+  document.body.classList.toggle('authenticated', isAuthenticated);
+  document.body.classList.toggle('registering', isRegistering);
+  document.body.classList.toggle('logging-in', isLogingIn);
+}, [isAuthenticated, isRegistering, isLogingIn]);
 
 
 const calculateLevel = (score) => {

@@ -46,6 +46,10 @@ body {
     justify-content: center;
 }
 
+body:not(.authenticated):not(.registering):not(.logging-in) #root {
+    max-width: 100%;
+}
+
 #root {
     position: relative;
     display: flex;
@@ -2033,50 +2037,6 @@ img {
 
 
 
-/* LANDING PAGE */
-
-
-.landing-page-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.landing-page-body {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 82px;
-}
-
-.landing-header {    display: flex;
-    position: fixed;
-    top: 7px;
-    width: 90%;
-    max-width: 1200px;
-    z-index: 8;
-    justify-content: space-between;
-    height: 74px;
-    align-items: center;
-    background: var(--primary-color);
-    padding-inline: 15px;
-    border-radius: 35px;
-}
-
-.hero-div {
-    display: flex;
-    min-height: calc(100vh - 80px);
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-img-div img {
-    height: 540px;
-
-}
-
 
 
 /* REGISTRATION PAGE */
@@ -3613,6 +3573,188 @@ img {
 .login-wrapper .header-logo {
     display: none;
 }
+
+
+
+
+
+/* LANDING PAGE */
+
+
+
+
+.landing-page-main-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, #f09c00 40%, #ffffff 100%);
+
+}
+
+
+
+.landing-header {    
+    display: flex;
+    position: fixed;
+    top: 12px;
+    width: 90%;
+    max-width: 1200px;
+    z-index: 8;
+    justify-content: space-between;
+    height: 74px;
+    align-items: center;
+    background: #ffffff;
+    padding-inline: 24px;
+    border-radius: 35px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.landing-header img {
+    aspect-ratio: 1/1;
+    display: flex;
+    width: 46px;
+}
+
+.landing-header a {
+    background: #f06c00;
+    padding: 8px 12px;
+    border-radius: 24px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff; /* White text for high contrast */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* Dark shadow for depth */
+}
+
+
+
+.hero-div {
+    padding-top: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hero-framer {
+    display: flex;
+    height: 632px;
+    align-items: center;
+    width: fit-content;
+}
+
+
+
+.phone-framer {
+    height: 511px;
+    width: fit-content;
+    overflow-x: visible;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-inline: 35px;
+    position: relative;
+    align-items: center;
+    
+}
+
+.phone-top {
+    display: flex;
+    height: 65px;
+    background: #ffffff;
+    width: 230px;
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    border: 4px solid #dadada;
+    border-bottom: none;
+}
+
+.phone-bottom {
+    display: flex;
+    height: 80px;
+    background: #ffffff;
+    width: 230px;
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+    border: 4px solid #dadada;
+    border-top: none;
+}
+
+.screen-framer {
+    display: flex;
+    height: 366px;
+    width: 300px;
+    justify-content: center;
+    position: relative;
+    overflow-y: hidden;
+}
+
+.screen-framer .screen {
+    display: flex;
+    height: 366px;
+    width: 230px;
+    background: #f7f7f7;
+    border-inline: 4px solid #dadada;
+    justify-content: center;
+    overflow-x: visible;
+    overflow-y: hidden;
+}
+
+.hero-messages {
+    width: 300px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hero-messages .message {
+    width: 91%;
+    padding: 12px;
+}
+
+.hero-messages .message p {
+    font-size: 16.5px;
+    font-weight: 500;
+}
+
+.hero-messages .message.user {
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-top-right-radius: 0;
+    color: #282828;
+    font-weight: 500;
+}
+
+.hero-messages .message.ai {
+    background: rgb(255, 208, 120);
+    border-top-left-radius: 0;
+}
+
+.hero-messages .message.ai p {
+    color: rgb(128, 77, 0);
+}
+
+.hero-messages .message-options {
+    display: flex;
+    margin-left: auto;
+    gap: 12px;
+}
+
+.hero-messages .message-options img {
+    aspect-ratio: 1/1;
+    display: flex;
+    width: 20px;
+}
+
+
+
+
+
+
+
 
 
 

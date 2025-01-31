@@ -11,13 +11,13 @@ export default function LandingPage(props) {
     
 
     return (
-        <div className="landing-page-div">
+        <div className="landing-page-main-div">
         <Header setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
         setIsLogingIn={setIsLogingIn}/>
-        <div className="landing-page-body">
+        
             <Hero></Hero>
-        </div>
+        
         </div>
     )
 

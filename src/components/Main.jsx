@@ -249,7 +249,7 @@ export default function Main(props) {
 
                 <div className="explore-card">
                     <div className="explore-card-head">
-                    <p className="explore-header">Debates</p>
+                    <p className="explore-header">Dialogues</p>
                     <div className="card-tags">
                         <span className="tag">Vocabulary</span>
                         <span className="tag">Writing</span>

@@ -48,6 +48,7 @@ body {
 
 body:not(.authenticated):not(.registering):not(.logging-in) #root {
     max-width: 100%;
+    overflow-y: auto;
 }
 
 #root {
@@ -3581,6 +3582,14 @@ img {
 /* LANDING PAGE */
 
 
+.landing-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    overflow-y: auto;
+}
+
 
 
 .landing-page-main-div {
@@ -3588,8 +3597,9 @@ img {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100vh;
-    background: linear-gradient(to bottom, #f09c00 40%, #ffffff 100%);
+    height: 96vh;
+    background: linear-gradient(to bottom, #f09c00 20%, #ffffff 100%);
+    
 
 }
 
@@ -3617,6 +3627,20 @@ img {
     width: 46px;
 }
 
+.lan-header-container {
+    display: flex;
+    gap: 20px;
+}
+
+.lan-header-container h1 {
+    font-weight: 520;
+    font-size: 30px;
+    background: linear-gradient(to right, #f06c00 48%, black 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 3px 3px 8px rgba(168, 90, 0, 0.4); /* Optional shadow */
+}
+
 .landing-header a {
     background: #f06c00;
     padding: 8px 12px;
@@ -3630,7 +3654,7 @@ img {
 
 
 .hero-div {
-    padding-top: 90px;
+    padding-top: 86px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3642,14 +3666,16 @@ img {
     display: flex;
     height: 632px;
     align-items: center;
-    width: fit-content;
+    width: 100%;
+    max-width: 1100px;
 }
 
 
 
 .phone-framer {
     height: 511px;
-    width: fit-content;
+    width: 50%;
+    min-width: fit-content;
     overflow-x: visible;
     overflow-y: hidden;
     display: flex;
@@ -3708,6 +3734,19 @@ img {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    top: 350px;
+    animation: slideUp 45s ease-out forwards;
+}
+
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(50px); /* Starts lower */
+    }
+    100% {
+        transform: translateY(-845px); /* Moves up into position */
+        
+    }
 }
 
 .hero-messages .message {
@@ -3729,7 +3768,7 @@ img {
 }
 
 .hero-messages .message.ai {
-    background: rgb(255, 208, 120);
+    background: rgb(255, 200, 155);
     border-top-left-radius: 0;
 }
 
@@ -3747,8 +3786,217 @@ img {
     aspect-ratio: 1/1;
     display: flex;
     width: 20px;
+
 }
 
+.hero-teacher-info {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    padding-left: 12px;
+    opacity: 0.83;
+}
+
+.hero-teacher-info .img-framer {
+    display: flex;
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    border: 2px solid #2e2e2e;
+    overflow: hidden;
+}
+
+.hero-teacher-info .img-framer img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+
+.hero-teacher-info .hero-teacher-p {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.phone-bottom {
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.microphone-wrapper {
+    display: flex;
+    background: #000000;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    height: 56px;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.6); /* Initial shadow */
+    animation: pulseShadow 3s ease-in-out 5;
+}
+
+@keyframes pulseShadow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.4); /* Expand shadow */
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.6); /* Back to normal */
+    }
+}
+
+.microphone-wrapper img {
+    height: 28px;
+}
+
+.hero-text-div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 550px;
+    justify-content: center;
+}
+
+.hero-text-div h1 {
+    font-size: 60px; 
+    color: #111111;  
+    font-weight: 600; 
+    line-height: 1.55;
+}
+
+.hero-text-div .languages {
+    color: #494949;
+}
+
+.hero-text-div p {
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+.hero-text-div .disclaimer {
+    margin-top: 5px;
+    font-size: 14.5px;
+    font-weight: 520;
+}
+
+.hero-text-div a {
+    background: #f06c00;
+    padding: 10px 14px;
+    border-radius: 24px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-top: 24px;
+    width: fit-content;
+}
+
+
+.languages-slider {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    position: relative;
+    margin-block: 24px;
+}
+
+.languages-slider .slider-track {
+    display: flex;
+    gap: 60px;
+    animation: slide 180s linear infinite;
+    width: max-content;
+    will-change: transform;
+}
+
+.languages-slider:hover .slider-track {
+    animation-play-state: paused;
+}
+
+.languages-slider .language-slider-option {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.languages-slider .language-slider-option img {
+    aspect-ratio: 1/1;
+    height: 46px;
+}
+
+.languages-slider .language-slider-option p {
+    font-size: 19px;
+    font-weight: 510;
+}
+
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .languages-slider {
+        height: 50px;
+    }
+
+    .languages-slider .language-slider-option img {
+        height: 36px;
+    }
+
+    .languages-slider .language-slider-option p {
+        font-size: 16px;
+    }
+}
+
+
+.app-info {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(to bottom, #ffffff 20%, rgb(218, 218, 218) 100%);
+}
+
+.app-info-inside {
+    padding-block: 82px;
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+
+}
+
+.app-statistic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-statistic h2 {
+    font-size: 34px;
+    color: #000000;
+}
+
+.app-statistic p {
+    font-size: 17px;
+    color: #000000;
+}
 
 
 

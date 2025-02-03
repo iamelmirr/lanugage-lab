@@ -1552,6 +1552,8 @@ export default function Chat(props) {
     
     const [isPlayingAudio, setIsPlayingAudio] = useState(false)
     const [hasLoadedInitialChat, setHasLoadedInitialChat] = useState(false);
+    const [isChatLoading, setIsChatLoading] = useState(false)
+    const lastMessageRef = useRef(null)
     
     
 
@@ -1573,6 +1575,7 @@ export default function Chat(props) {
 
     useEffect(() => {
         if (!hasLoadedInitialChat) {
+            setIsChatLoading(true)
             console.log('triggered inside')
             if (savedChats.length > 0) {
                 const latestChat = savedChats
@@ -1583,6 +1586,7 @@ export default function Chat(props) {
                     setMessages(latestChat.messages);
                     setActiveChat(latestChat)
                     setTutorName(latestChat.tutorName)
+                    
                 } else {
                     if (selectedMode === 'date') {
                         setMessages([])
@@ -1592,8 +1596,12 @@ export default function Chat(props) {
                         setActiveChat(null)
                         setTutorName([chatModes[selectedMode]?.teacherInfo[targetLanguage].name])
                         setTutorImage([chatModes[selectedMode]?.teacherInfo[targetLanguage].image])
+                        
                     }
                 }
+
+
+                setTimeout(() => setIsChatLoading(false), 1500)
             
             }   else {
                 if (selectedMode === 'date') {
@@ -1605,6 +1613,8 @@ export default function Chat(props) {
                     setTutorImage([chatModes[selectedMode]?.teacherInfo[targetLanguage].image])
                     setActiveChat(null)
                 }
+
+                setTimeout(() => setIsChatLoading(false), 1500)
             }
             setHasLoadedInitialChat(true)
             console.log("saved chats:", savedChats)
@@ -1767,7 +1777,7 @@ const topicLabels = {
     const [isRecording, setIsRecording] = useState(false)
     const recognitionRef = useRef(null)
     const chatContainerRef = useRef(null)
-    const lastMessageRef = useRef(null)
+    
     const [currentAudio, setCurrentAudio] = useState(null)
     
     const [translationMessage, setTranslationMessage] = useState('')
@@ -1780,6 +1790,7 @@ const topicLabels = {
 
 
       const loadChat = (chatId) => {
+        setIsChatLoading(true)
         const chat = savedChats.find(c => c.id === chatId);
         if (chat) {
         setMessages([]); // Clear messages first
@@ -1792,7 +1803,8 @@ const topicLabels = {
             } else if (chat.tutorName === 'Noah') {
                 setTutorGender('male')
             } // Set messages after a brief delay
-        }, 0);
+            
+        }, 0)
 
         
 
@@ -1801,6 +1813,8 @@ const topicLabels = {
         setSelectedMode(chat.mode);
     }
     console.log("saved chats:", savedChats)
+
+    setTimeout(() => setIsChatLoading(false), 1500)
       };
 
       
@@ -1935,9 +1949,14 @@ const topicLabels = {
         useEffect(() => {
             const lastMessage = messages[messages.length - 1];
             
-            if (messages.length > 0 && lastMessage.sender === 'assistant') { 
+            if (messages.length > 0 && lastMessage.sender === 'assistant') {
+
+                if(isChatLoading) {
+                    setTimeout(() => {handleSpeech()}, 1500)
+                } else {
               handleSpeech()
-            } 
+
+            }} 
         }, [messages])  
     
 
@@ -2312,15 +2331,19 @@ const topicLabels = {
     useEffect(() => {
         
         if (lastMessageRef.current) {
-            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+            lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }, [messages])
 
-
-
-
-
-    
+    useEffect(() => {
+        if (messages.length > 0) {
+            setTimeout(() => {
+                if (lastMessageRef.current) {
+                    lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+            }, 100); // Small delay to ensure the DOM updates before scrolling
+        }
+    }, [isChatLoading]); 
 
     
     const handleMicrophonePress = () => {
@@ -2794,7 +2817,9 @@ const topicLabels = {
     return (
         <>
         <div className={`chat-div ${!isChatInfoVisible ? 'expanded' : isMobileChatInfoVisible ? 'mobile-chat' : ''}`}>
-            {props.selectedMode === 'date' && messages.length < 1 && showGenderModal && 
+            {isChatLoading ? (<div className="chat-loading-screen"><div className="loading-spinner"></div></div>) : (
+            <>    
+                {props.selectedMode === 'date' && messages.length < 1 && showGenderModal && 
             <GenderSelectionModal />
             }
             <div className="chat-label">
@@ -2894,6 +2919,11 @@ const topicLabels = {
                         placeholder="Enter your message"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && inputValue.trim() !== '') {
+                                handleSendMessage({ sender: 'user', text: inputValue })
+                            }
+                        }}
                     />
                     <button className={`input-btn ${inputValue === "" ? "microphone" : "arrow-right"} ${isRecording ? 'recording' : ''}`} onClick={() => {
                         handleSendMessage({ sender: "user", text: inputValue })
@@ -2905,6 +2935,7 @@ const topicLabels = {
                     </button>
                 </div>
             </div>
+            </>)}
         </div>
         
         

@@ -8,6 +8,7 @@ import Login from "./components/Login"
 import { auth, db } from './utils/firebaseConfig'
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore'
 import { signInWithEmailLink, isSignInWithEmailLink, updateEmail } from "firebase/auth"
+import LoadingScreen from "./components/LoadingScreen"
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     
     return auth.currentUser !== null
   })
+const [isLoading, setIsLoading] = useState(true)  
 const [isRegistering, setIsRegistering] = useState(false)
 const [isLogingIn, setIsLogingIn] = useState(false)
 const [selectedMode, setSelectedMode] = useState('main')
@@ -117,6 +119,7 @@ useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     if (user) {
       setIsAuthenticated(true)
+      setIsLoading(false)
       try {
 
         const userEmail = user.email;
@@ -161,6 +164,7 @@ useEffect(() => {
       setIsAuthenticated(false)
       setUserData(null);
       setUserName('');
+      setIsLoading(false)
     }
   });
 
@@ -179,22 +183,30 @@ useEffect(() => {
         if (isLogingIn) return <Login isNotificationModalVisible={isNotificationModalVisible}
         setIsNotificationModalVisible={setIsNotificationModalVisible} setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
-        setIsLogingIn={setIsLogingIn} />;
+        setIsLogingIn={setIsLogingIn} setIsLoading={setIsLoading} />;
         return <LandingPage setIsAuthenticated={setIsAuthenticated} 
         setIsRegistering={setIsRegistering}
-        setIsLogingIn={setIsLogingIn} />;
+        setIsLogingIn={setIsLogingIn} setIsLoading={setIsLoading} />;
     }
     return <Home isNotificationModalVisible={isNotificationModalVisible}
-    setIsNotificationModalVisible={setIsNotificationModalVisible} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime}  />;
+    setIsNotificationModalVisible={setIsNotificationModalVisible} userName={userName} userLastName={userLastName} userEmail={userEmail} setUserEmail={setUserEmail} setUserLastName={setUserLastName} setUserName={setUserName} selectedMode={selectedMode} setSelectedMode={setSelectedMode} setProgressScore={setProgressScore} progressScore={progressScore} progressLevel={progressLevel} levelThresholds={levelThresholds} tempUserEmail={tempUserEmail} setTempUserEmail={setTempUserEmail} newUserEmail={newUserEmail} setNewUserEmail={setNewUserEmail} userPassword={userPassword} setUserPassword={setUserPassword} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setFormData={setFormData} setTargetLanguage={setTargetLanguage} setTranslationLanguage={setTranslationLanguage} targetLanguage={targetLanguage} translationLanguage={translationLanguage} setTargetLanguageLevel={setTargetLanguageLevel} targetLanguageLevel={targetLanguageLevel} learningGoal={learningGoal} learningReason={learningReason} isMuted={isMuted} setIsMuted={setIsMuted} savedChats={savedChats} setSavedChats={setSavedChats} showOptionsModal={showOptionsModal} setShowOptionsModal={setShowOptionsModal} voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed} showSuggestionBar={showSuggestionBar} setShowSuggestionBar={setShowSuggestionBar} progressPercentage={progressPercentage} setProgressPercentage={setProgressPercentage} streakCount={streakCount} setStreakCount={setStreakCount} longestStreak={longestStreak} setLongestStreak={setLongestStreak} lastChatDate={lastChatDate} setLastChatDate={setLastChatDate} todaysChatTime={todaysChatTime} setTodaysChatTime={setTodaysChatTime} />;
   };
 
   return (
     <>
-      {renderPage()}
-      {isNotificationModalVisible && <NotificationModal 
-        isNotificationModalVisible={isNotificationModalVisible}
-        setIsNotificationModalVisible={setIsNotificationModalVisible}
-      />}
+      {isLoading ? (
+        <LoadingScreen /> 
+      ) : (
+        <>
+          {renderPage()}
+          {isNotificationModalVisible && (
+            <NotificationModal 
+              isNotificationModalVisible={isNotificationModalVisible}
+              setIsNotificationModalVisible={setIsNotificationModalVisible}
+            />
+          )}
+        </>
+      )}
     </>
   );
 

@@ -51,6 +51,11 @@ body:not(.authenticated):not(.registering):not(.logging-in) #root {
     overflow-y: auto;
 }
 
+body.registering #root,
+body.logging-in #root {
+    max-width: 100%;
+}
+
 #root {
     position: relative;
     display: flex;
@@ -1067,6 +1072,14 @@ img {
     background: #ffffff;
     transition: width 0.2s ease-in-out;
     
+}
+
+.chat-loading-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .chat-div.expanded {
@@ -3875,7 +3888,7 @@ img {
 }
 
 .hero-text-div h1 {
-    font-size: 30px; 
+    font-size: 33px; 
     color: #111111;  
     font-weight: 600; 
     line-height: 1.4;
@@ -3888,7 +3901,7 @@ img {
 }
 
 .hero-text-div p {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     margin-top: 28px;
     text-align: center;
@@ -4373,7 +4386,32 @@ img {
 }
 
 
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #DB6313; /* Using the orange color from your existing styles */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 
 

@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { auth, googleProvider } from '../utils/firebaseConfig';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { auth, googleProvider, db } from '../utils/firebaseConfig';
+import { signInWithEmailAndPassword, signInWithPopup, fetchSignInMethodsForEmail, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { use } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
 
-export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogingIn }) {
+export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogingIn, setIsLoading }) {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -46,6 +47,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                 return;
             }
 
+            setIsLoading(true)
             const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
             setIsAuthenticated(true);
             setIsLogingIn(false);
@@ -56,7 +58,7 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
             if (error.code === 'auth/invalid-credential') {
                 setErrors(prev => ({
                     ...prev,
-                    email: 'Wrong email/password or this account does not exist'
+                    email: 'Wrong credentials or this account does not exist'
                 }));
             } else if (error.code === 'auth/wrong-password') {
                 setErrors(prev => ({
@@ -65,35 +67,67 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
                 }));
             }
     
+        } finally {
+            setIsLoading(false)
         }
     };
 
-    const handleGoogleLogin = async (e) => {
-        e.preventDefault()
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
+    
 
-            const userDocRef = doc(db, "users", result.user.uid);
+    const handleGoogleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            // First, get the Google account information without signing in
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+    
+            // Check if this email is already registered in your Firestore
+            setIsLoading(true)
+            const userDocRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userDocRef);
             
-            
             if (userDoc.exists()) {
+                // User exists in Firestore, proceed with login
                 setIsAuthenticated(true);
                 setIsRegistering(false);
                 setIsLogingIn(false);
             } else {
-                // User doesn't exist in database
-                await auth.signOut(); // Sign out the user
+                // User does not exist in Firestore, sign out and show an error
+                await auth.signOut();
                 setErrors(prev => ({
                     ...prev,
-                    email: 'This email is not registered. Please sign up first.'
+                    email: 'Account exists but not fully set up. Please contact support.'
                 }));
             }
-            
         } catch (error) {
             console.error("Google login error:", error);
+            if (error.code === 'auth/popup-closed-by-user') {
+                // User closed the popup, no need to show an error
+                return;
+            } else if (error.code === 'auth/account-exists-with-different-credential') {
+                setErrors(prev => ({
+                    ...prev,
+                    email: 'An account already exists with this email address using a different sign-in method.'
+                }));
+            } else if (error.code === 'auth/network-request-failed') {
+                setErrors(prev => ({
+                    ...prev,
+                    email: 'Network error. Please check your internet connection and try again.'
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev,
+                    email: 'An error occurred during Google login. Please try again.'
+                }));
+            }
+        } finally {
+            setIsLoading(false)
         }
     };
+
+
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

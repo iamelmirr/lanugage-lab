@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { auth } from "../utils/firebaseConfig";
+import { auth } from "../../utils/firebaseConfig";
 
 export default function MobileModal(props) {
     const { setIsMobileModalOpen, isMobileProfileOpen, setIsMobileProfileOpen, accountSelectedOption, setAccountSelectedOption, isMobileModalOpen, setSelectedMode, isChatSettingsModalOpen, setIsChatSettingsModalOpen, setActiveChat, handleStartNewChat, isMobileChatInfoVisible, setIsMobileChatInfoVisible, isMobileChatHistory, setIsMobileChatHistory, isChatHistoryOpen, setIsChatHistoryOpen, selectedMessage, setSelectedMessage, feedback, setFeedback, targetLanguage } = props;

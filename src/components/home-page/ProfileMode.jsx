@@ -1,35 +1,25 @@
-import React from 'react';
-import { auth, db } from '../utils/firebaseConfig';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { auth, db } from '../../utils/firebaseConfig';
 import { updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { updateProfile, updatePassword, updateEmail, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 
-
-
-
 export default function ProfileMode(props) {
-
-    const {setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage, targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel, accountSelectedOption, setAccountSelectedOption} = props
+    const {
+        setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail,
+        tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword,
+        setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage,
+        targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel,
+        accountSelectedOption, setAccountSelectedOption
+    } = props;
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
     const [deleteAccountPassword, setDeleteAccountPassword] = useState('');
-    
-
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
-    useEffect(() => {
-        console.log(accountSelectedOption)
-    }, [accountSelectedOption])
-
-    
-
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    
-    const [languageLevel, setLanguageLevel] = useState('Beginner (A1 - A2)')
+    const [languageLevel, setLanguageLevel] = useState('Beginner (A1 - A2)');
 
     // Add language options
     const targetLanguages = [
@@ -39,8 +29,9 @@ export default function ProfileMode(props) {
         { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
         { code: 'fr', name: 'French', flag: '/flags/french.png' }
     ];
+
     const translationLanguages = [
-        { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png'},
+        { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png' },
         { code: 'en', name: 'English', flag: '/flags/english.png' },
         { code: 'de', name: 'German', flag: '/flags/german.png' },
         { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
@@ -52,7 +43,11 @@ export default function ProfileMode(props) {
         { code: 'a1-a2', name: 'Beginner (A1 - A2)' },
         { code: 'b1-b2', name: 'Intermediate (B1 - B2)' },
         { code: 'c1-c2', name: 'Advanced (C1 - C2)' }
-      ];
+    ];
+
+    useEffect(() => {
+        console.log(accountSelectedOption)
+    }, [accountSelectedOption]);
 
     const handleLogout = async () => {
         try {
@@ -60,8 +55,7 @@ export default function ProfileMode(props) {
         } catch (error) {
             console.error("Error signing out:", error);
         }
-    }
-
+    };
 
     const handleLanguageChange = async (newLanguage, type) => {
         try {
@@ -87,11 +81,9 @@ export default function ProfileMode(props) {
         }
     };
 
-
     const CustomLevelSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
         const selectRef = useRef(null);
-
 
         useEffect(() => {
             const handleClickOutside = (event) => {
@@ -105,7 +97,6 @@ export default function ProfileMode(props) {
                 document.removeEventListener('mousedown', handleClickOutside);
             };
         }, []);
-
 
         const handleLevelChange = async (newLevel) => {
             try {
@@ -156,12 +147,9 @@ export default function ProfileMode(props) {
         return () => setDeleteAccountPassword('');
     }, [showDeleteModal]);
 
-
     const CustomSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
         const selectRef = useRef(null);
-
-        
 
         useEffect(() => {
             const handleClickOutside = (event) => {
@@ -205,7 +193,6 @@ export default function ProfileMode(props) {
         );
       }
 
-
       const handleSavePersonalDetails = async () => {
         if (!tempUserEmail.trim() || !tempUserName.trim() || !tempUserLastName.trim()) {
             alert("Email, first name or last name can not be empty!");
@@ -243,10 +230,6 @@ export default function ProfileMode(props) {
             }
         }
     };
-    
-    
-    
-
 
     const handleChangePassword = async () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
@@ -262,7 +245,6 @@ export default function ProfileMode(props) {
         try {
             const user = auth.currentUser;
             if (!user) return;
-
 
             const credential = EmailAuthProvider.credential(user.email, currentPassword)
             await reauthenticateWithCredential(user, credential);
@@ -344,8 +326,6 @@ export default function ProfileMode(props) {
         }
     };
 
-
-
     const DeleteAccountModal = React.memo(() => {
         const [inputValue, setInputValue] = useState('');
         const inputRef = useRef(null);
@@ -353,7 +333,6 @@ export default function ProfileMode(props) {
     useEffect(() => {
         inputRef.current.focus();
     }, [deleteAccountPassword])
-
 
         return (
             <div
@@ -443,11 +422,6 @@ export default function ProfileMode(props) {
             </div>
         );
     });
-    
-    
-    
-    
-
 
     return (
         <div className='profile-mode'>
@@ -459,8 +433,6 @@ export default function ProfileMode(props) {
                 <h2>Account</h2>
             </div>
 
-            
-           
             <div className="profile-menu">
                 <div className="profile-menu-btn" onClick={() => setAccountSelectedOption('profile')}>
                     <span className='fa-regular fa-user'></span>

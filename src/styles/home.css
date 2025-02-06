@@ -1228,7 +1228,7 @@ img {
 
   .chat-history-item {
     display: flex;
-    gap: 20px;
+    gap: 5px;
     align-items: center;
     padding-inline: 12px;
     border-bottom: 1px solid #e4e4e4;
@@ -1240,11 +1240,18 @@ img {
     touch-action: manipulation;
 }
 
+.chat-history-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
 .chat-history-item button {
     background: none;
     border: none;
     cursor: pointer;
     padding: 8px;
+    padding-top: 12px;
 }
 
 .chat-history-item button span {

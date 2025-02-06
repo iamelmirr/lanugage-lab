@@ -1,14 +1,14 @@
 import Home from "./pages/Home"
-import NotificationModal from "./components/NotificationModal"
+import NotificationModal from "./components/overlay-components/NotificationModal"
 import React, { useState, useEffect } from "react"
 import LandingPage from "./pages/LandingPage"
 import Authentication from "./pages/Authentication"
-import Registration from "./components/Registration"
-import Login from "./components/Login"
+import Registration from "./components/auth/Registration"
+import Login from "./components/auth/Login"
 import { auth, db } from './utils/firebaseConfig'
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore'
 import { signInWithEmailLink, isSignInWithEmailLink, updateEmail } from "firebase/auth"
-import LoadingScreen from "./components/LoadingScreen"
+import LoadingScreen from "./components/overlay-components/LoadingScreen"
 
 
 function App() {

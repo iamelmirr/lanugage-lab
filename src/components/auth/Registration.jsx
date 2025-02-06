@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { auth, db, googleProvider } from '../utils/firebaseConfig';
+import { auth, db, googleProvider } from '../../utils/firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signInWithPopup } from 'firebase/auth';
+import React from 'react';
 
-export default function Registration(props) {
+const Registration = (props) => {
     const {  setIsAuthenticated, setIsRegistering, setIsLogingIn, formData, setFormData, userName, userLastName, userEmail, setUserEmail, setUserLastName, setUserName, selectMode, setSelectMode, setProgressScore, progressScore, progressLevel, setProgressLevel,  levelThresholds, tempUserEmail, setTempUserEmail, newUserEmail, setNewUserEmail, userPassword, setUserPassword, isAuthenticated, setUserData, setTargetLanguage, setTranslationLanguage, setTargetLanguageLevel, targetLanguageLevel, setLearningReason, setLearningGoal, savedChats, setSavedChats, progressPercentage, setProgressPercentage } = props
 
 
@@ -670,63 +671,65 @@ export default function Registration(props) {
 
 
     return (
-        <>
-        <div className="registration-container">
-        <img className='registration-logo' src="/header-logo.png" alt="" />
-            {step === -1 ? (
-                <div className="registration-content null-step">
-                    <div className='mobile-get-started-reg-div'>
-                        <img src="/aiimages/default-chat-mode.png" alt="chat-avatar" />
+        <div>
+            <div className="registration-container">
+            <img className='registration-logo' src="/header-logo.png" alt="" />
+                {step === -1 ? (
+                    <div className="registration-content null-step">
+                        <div className='mobile-get-started-reg-div'>
+                            <img src="/aiimages/default-chat-mode.png" alt="chat-avatar" />
+                        </div>
+                        <div className='get-started-info'>
+                        <div className='get-started-text'>    
+                        <h1>A Smarter Way to Learn a Language</h1>
+                        <p>Discover how AI can revolutionize your language learning experience with immersive techniques, engaging methods, and personalized teaching for maximum progress.</p>
+                        </div>
+                        <img className='teacherfullimg' src="/aiimages/default-chat-mode.png" alt="teacherfullimg" />
+                        <div className="action-buttons">
+                            <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
+                            <a className='reg-btn-action login-btn' href="/login" onClick={(e) =>                                            {e.preventDefault();
+                                    setIsLogingIn(true);
+                                    setIsRegistering(false);
+                                    }}>Log in</a>
+                        </div>
+                        <div className='absolute-logo-div'>
+                            <img src="/header-logo.png" alt="" />
+                        </div>
+                        <div className='border-div'></div>
+                        <a className='bottom-reg-a' href="/">            
+                            <p>© LanguageLab, Inc.</p>
+                        </a>
+                        </div>
+                        
                     </div>
-                    <div className='get-started-info'>
-                    <div className='get-started-text'>    
-                    <h1>A Smarter Way to Learn a Language</h1>
-                    <p>Discover how AI can revolutionize your language learning experience with immersive techniques, engaging methods, and personalized teaching for maximum progress.</p>
-                    </div>
-                    <img className='teacherfullimg' src="/aiimages/default-chat-mode.png" alt="teacherfullimg" />
-                    <div className="action-buttons">
-                        <button className='reg-btn-action registration-btn'  onClick={() => setStep(0)}>Get started</button>
-                        <a className='reg-btn-action login-btn' href="/login" onClick={(e) =>                                            {e.preventDefault();
-                                setIsLogingIn(true);
-                                setIsRegistering(false);
-                                }}>Log in</a>
-                    </div>
-                    <div className='absolute-logo-div'>
-                        <img src="/header-logo.png" alt="" />
-                    </div>
-                    <div className='border-div'></div>
-                    <a className='bottom-reg-a' href="/">            
-                        <p>© LanguageLab, Inc.</p>
-                    </a>
-                    </div>
-                    
-                </div>
-            ) : step === 0 ? ( 
-            <>    
-                <div className='header-auth-div registration'>
-                <img src="/header-logo.png" alt="" />
-                </div>
-                <div className="registration-content step-div">
-                <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
-                    {steps[step].component}
-                    {step < steps.length - 1}
-                </form>
-                </div>
-            </>    
-            ) : (
+                ) : step === 0 ? ( 
                 <>    
-                <div className='header-auth-div registration'>
-                <img src="/header-logo.png" alt="" />
-                </div>
-                <div className="registration-content step-div">
-                <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
-                    {steps[step].component}
-                    {step < steps.length - 1}
-                </form>
-                </div>
-            </>    
-            )}
+                    <div className='header-auth-div registration'>
+                    <img src="/header-logo.png" alt="" />
+                    </div>
+                    <div className="registration-content step-div">
+                    <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
+                        {steps[step].component}
+                        {step < steps.length - 1}
+                    </form>
+                    </div>
+                </>    
+                ) : (
+                    <>    
+                    <div className='header-auth-div registration'>
+                    <img src="/header-logo.png" alt="" />
+                    </div>
+                    <div className="registration-content step-div">
+                    <form className='registration-form' onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
+                        {steps[step].component}
+                        {step < steps.length - 1}
+                    </form>
+                    </div>
+                </>    
+                )}
+            </div>
         </div>
-        </>
     );
-}
+};
+
+export default Registration;

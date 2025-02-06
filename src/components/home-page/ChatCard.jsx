@@ -1,5 +1,4 @@
-import React from "react"
-
+import React from "react";
 
 const chatCards = [
     { 
@@ -58,44 +57,31 @@ const chatCards = [
         imageSrc: '/aiimages/scenario-mode.png',
         handleSelectedMode: 'scenario-modes'
     }
-]
+];
 
 export default function ChatCard(props) {
-
-    const {selectedMode, setSelectedMode, handleSelectedMode} = props
+    const { selectedMode, setSelectedMode, handleSelectedMode } = props;
 
     return (
         <> 
-        {chatCards.map((card, index) => {
-            return (
-                <div key={index} onClick={() => {
-                    handleSelectedMode(card.handleSelectedMode)
-                }} className="chat-card">
-                    <div className="chat-card-info">
-                        <h2>{card.label}</h2>
-                        <div className="card-tags">
-                            {card.tags.split(" ").map((tag, i) => {
-                                return (
-                                    <span key={i} className="tag">{tag}</span>
-                                )
-                            })}
-                        </div>
-                        <h4 className="card-desc">
-                            {card.desc}
-                        </h4>
-                        <p className="card-light-desc">{card.shortDesc}</p>
-
-                        <div className="hidden-div"></div>
-                        
-                        
+        {chatCards.map((card, index) => (
+            <div key={index} onClick={() => handleSelectedMode(card.handleSelectedMode)} className="chat-card">
+                <div className="chat-card-info">
+                    <h2>{card.label}</h2>
+                    <div className="card-tags">
+                        {card.tags.split(" ").map((tag, i) => (
+                            <span key={i} className="tag">{tag}</span>
+                        ))}
                     </div>
-
-                    <div className="chat-card-img">
-                        <img src={card.imageSrc} alt="" />
-                    </div>
+                    <h4 className="card-desc">{card.desc}</h4>
+                    <p className="card-light-desc">{card.shortDesc}</p>
+                    <div className="hidden-div"></div>
                 </div>
-            )
-        })}
+                <div className="chat-card-img">
+                    <img src={card.imageSrc} alt="" />
+                </div>
+            </div>
+        ))}
         </>
-    )
+    );
 }

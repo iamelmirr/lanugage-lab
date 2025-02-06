@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import Hero from "../components/Hero";
+import Header from "../components/landing-page/Header";
+import Hero from "../components/landing-page/Hero";
 import { useEffect, useRef } from "react";
 
 

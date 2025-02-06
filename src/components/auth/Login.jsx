@@ -4,11 +4,22 @@ import { signInWithEmailAndPassword, signInWithPopup, fetchSignInMethodsForEmail
 import { use } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 
+
+
+
+
+
 export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogingIn, setIsLoading }) {
+ 
+ 
+ 
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+
+
+
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
     const [isEmailSentOpen, setIsEmailSentOpen] = useState(false);
     const [errors, setErrors] = useState({
@@ -17,6 +28,11 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
     });
     const [showPassword, setShowPassword] = useState(false);
 
+    
+    
+    
+    // Data validation
+    
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) {
@@ -37,6 +53,10 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         }
         return '';
     };
+
+
+
+    // Login handling
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -69,56 +89,63 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
         }
     };
 
+
+
+
+
     const handleGoogleLogin = async (e) => {
         e.preventDefault();
         try {
             // First, get the Google account information without signing in
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
+            const result = await signInWithPopup(auth, googleProvider)
+            const user = result.user
 
             // Check if this email is already registered in your Firestore
             setIsLoading(true);
-            const userDocRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userDocRef);
+            const userDocRef = doc(db, "users", user.uid)
+            const userDoc = await getDoc(userDocRef)
 
             if (userDoc.exists()) {
                 // User exists in Firestore, proceed with login
-                setIsAuthenticated(true);
-                setIsRegistering(false);
-                setIsLogingIn(false);
+                setIsAuthenticated(true)
+                setIsRegistering(false)
+                setIsLogingIn(false)
             } else {
                 // User does not exist in Firestore, sign out and show an error
-                await auth.signOut();
+                await auth.signOut()
                 setErrors(prev => ({
                     ...prev,
                     email: 'Account exists but not fully set up. Please contact support.'
-                }));
+                }))
             }
         } catch (error) {
-            console.error("Google login error:", error);
+            console.error("Google login error:", error)
             if (error.code === 'auth/popup-closed-by-user') {
                 // User closed the popup, no need to show an error
-                return;
+                return
             } else if (error.code === 'auth/account-exists-with-different-credential') {
                 setErrors(prev => ({
                     ...prev,
                     email: 'An account already exists with this email address using a different sign-in method.'
-                }));
+                }))
             } else if (error.code === 'auth/network-request-failed') {
                 setErrors(prev => ({
                     ...prev,
                     email: 'Network error. Please check your internet connection and try again.'
-                }));
+                }))
             } else {
                 setErrors(prev => ({
                     ...prev,
                     email: 'An error occurred during Google login. Please try again.'
-                }));
+                }))
             }
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
     };
+
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -127,6 +154,12 @@ export default function Login({ setIsAuthenticated, setIsRegistering, setIsLogin
             [name]: value
         }));
     };
+
+
+
+
+
+    
 
     return isEmailSentOpen ? (
         <div className='login-wrapper'>

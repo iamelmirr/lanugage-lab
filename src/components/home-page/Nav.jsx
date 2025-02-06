@@ -27,6 +27,9 @@ const allChatModes = [
     'scenario-product-return', 'pronunciation-practice', 'interview'
 ];
 
+
+
+
 export default function Nav(props) {
     const { selectedMode, setSelectedMode, handleSelectedMode, handleTabChange, setShowOptionsModal, isChatCloseMode, setIsChatCloseModalVisible } = props;
 

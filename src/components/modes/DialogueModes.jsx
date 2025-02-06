@@ -64,12 +64,16 @@ const dialogueModesInfo = {
 
 
 
+
+
 export default function DialogueModes(props) {
     const {selectedMode, setSelectedMode, handleSelectedMode} = props
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    
 
     return (
         <div className="modes-page">

@@ -11,7 +11,14 @@ const Registration = (props) => {
     const [step, setStep] = useState(-1); // -1 represents the initial landing screen
     const [selectedLanguage, setSelectedLanguage] = useState('target language')
 
+
+    // Registration progress line animation
+
     const currentProgress = (step / 6) * 100
+
+
+
+    // Errors and data validation
 
     const [errors, setErrors] = useState({
         email: '',
@@ -19,9 +26,7 @@ const Registration = (props) => {
         confirmPassword: '',
         firstName: '',
         lastName: ''
-    });
-    
-    
+    });  
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -64,6 +69,9 @@ const Registration = (props) => {
         }
         return '';
     };
+
+
+
 
 
     const handleGoogleRegistration = async (googleUser) => {
@@ -123,6 +131,8 @@ const Registration = (props) => {
       };
 
 
+
+
       const handleGoogleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
@@ -134,15 +144,19 @@ const Registration = (props) => {
 
 
 
+
+
+    // Handle email registration 
+
     const handleRegistration = async (email, password) => {
 
         if (!emailRegex.test(email)) {
-            alert("Please enter a valid email address.");
+            
             return;
         }
     
         if (!passwordRegex.test(password)) {
-            alert("Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, and one number.");
+            
             return;
         }
 
@@ -154,8 +168,10 @@ const Registration = (props) => {
           console.log("User created:", userCredential);
 
 
+        // Send email verification
+
           await sendEmailVerification(userCredential.user, {
-            url: window.location.href, // Redirect URL after verification
+            url: window.location.href, 
             handleCodeInApp: true
           });
 
@@ -183,6 +199,8 @@ const Registration = (props) => {
               
             })
 
+
+            // Update profile after registration to have the data after registration, without having to reload the page
 
             await updateProfile(userCredential.user, {
               displayName: `${formData.firstName} ${formData.lastName}`
@@ -213,7 +231,7 @@ const Registration = (props) => {
                     
                     
                       
-                      console.log(userDoc)
+
             
                       
                     } else {
@@ -231,12 +249,17 @@ const Registration = (props) => {
         }
       }
 
+
+
     const handleInputChange = (name, value) => {
         setFormData(prevData => ({
             ...prevData,
             [name]: value,
         }));
     };
+
+
+
     
 
     const handleNextStep = () => {
@@ -247,13 +270,15 @@ const Registration = (props) => {
         }
     };
 
+
+
+
     const languages = [
         { code: 'en', name: 'English', flag: '/flags/english.png' },
         { code: 'es', name: 'Spanish', flag: '/flags/spanish.png' },
         { code: 'fr', name: 'French', flag: '/flags/french.png' },
         { code: 'de', name: 'German', flag: '/flags/german.png' },
         { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
-        // Add more languages here
     ];
 
     const translationLanguages = [
@@ -264,6 +289,9 @@ const Registration = (props) => {
         { code: 'it', name: 'Italian', flag: '/flags/italian.png' },
         { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png' }
     ];
+
+
+    // Registration steps
 
     const steps = [
         {
@@ -732,4 +760,4 @@ const Registration = (props) => {
     );
 };
 
-export default Registration;
+export default Registration

@@ -11,6 +11,8 @@ import { signInWithEmailLink, isSignInWithEmailLink, updateEmail } from "firebas
 import LoadingScreen from "./components/overlay-components/LoadingScreen"
 
 
+
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     
@@ -49,6 +51,18 @@ const [isNotificationModalVisible, setIsNotificationModalVisible] = useState()
 
 
 
+// Body class for styles
+
+useEffect(() => {
+  document.body.classList.toggle('authenticated', isAuthenticated);
+  document.body.classList.toggle('registering', isRegistering);
+  document.body.classList.toggle('logging-in', isLogingIn);
+}, [isAuthenticated, isRegistering, isLogingIn]);
+
+
+
+// Registration form data
+
 const [formData, setFormData] = useState({
   language: '',
   translationLanguage: '',
@@ -62,6 +76,9 @@ const [formData, setFormData] = useState({
 
 
 })
+
+
+// Progress level tresholds
  
 const levelThresholds = Array(100).fill(0).reduce((thresholds, _, index) => {
   if (index === 0) thresholds.push(0); // Level 1 starts at 0
@@ -69,20 +86,19 @@ const levelThresholds = Array(100).fill(0).reduce((thresholds, _, index) => {
   else if (index < 30) thresholds.push(thresholds[index - 1] + 20); // Levels 11–30: +10 points
   else if (index < 60) thresholds.push(thresholds[index - 1] + 30); // Levels 31–60: +20 points
   else thresholds.push(thresholds[index - 1] + 50); // Levels 61–100: +30 points
-  return thresholds;
+  return thresholds
 }, []);
 
 
-useEffect(() => {
-  document.body.classList.toggle('authenticated', isAuthenticated);
-  document.body.classList.toggle('registering', isRegistering);
-  document.body.classList.toggle('logging-in', isLogingIn);
-}, [isAuthenticated, isRegistering, isLogingIn]);
 
+// Calculate progress level
 
 const calculateLevel = (score) => {
   return levelThresholds.findIndex((threshold) => score < threshold) || 100;
 };
+
+
+// Update progress level every time it changes
 
 useEffect(() => {
   const newLevel = calculateLevel(progressScore);
@@ -111,6 +127,8 @@ useEffect(() => {
 
 
 
+// Check if user is logged in and authenticate him if he is, if he is not set isAuthenticated to false
+// Set user's data fetched from Firebase
 
 
 const [userData, setUserData] = useState(null);
@@ -147,16 +165,9 @@ useEffect(() => {
           setStreakCount(userDoc.data().streakCount || 0)
           setLongestStreak(userDoc.data().longestStreak || 0)
           setLastChatDate(userDoc.data().lastChatDate || null)
-          
-          
 
           
-          console.log(userDoc)
-
-          
-        } else {
-          console.log(`No user document found for UID: ${user.uid}`)
-        }
+        } 
       } catch (error) {
         console.error("Error fetching user data");
       }

@@ -56,6 +56,8 @@ const allDebateModes = [
 
 
 
+
+
 export default function DebateModes(props) {
     const {selectedMode, setSelectedMode, handleSelectedMode} = props
 

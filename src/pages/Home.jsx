@@ -14,6 +14,11 @@ import MobileModal from "../components/home-page/MobileModal";
 import CloseChatModal from "../components/chat/CloseChatModal";
 
 
+
+
+
+
+
 const Home = (props) => {
 
     
@@ -44,16 +49,6 @@ const Home = (props) => {
     const [feedback, setFeedback] = useState({severity: "", explanation: ""})
     const [isChatCloseModalVisible, setIsChatCloseModalVisible] = useState(false)
     const [chatCloseMode, isChatCloseMode] = useState('main')
-
-    const openChat = (mode) => {
-        setActiveChatMode(mode)
-        setShowChat(true)
-    }
-
-    const closeChat = () => {
-        setShowChat(false)
-        setActiveChatMode(null)
-    }
 
     const [activeTab, setActiveTab] = useState('chats')
 
@@ -1592,6 +1587,9 @@ const Home = (props) => {
     }
 
 
+
+    // show selected message in chat mode for feedback/translation
+
     useEffect(() => {
 
         if(selectedMessage !== null) {
@@ -1599,6 +1597,10 @@ const Home = (props) => {
         }
 
     }, [selectedMessage])
+
+
+
+    // reset values when selectedMode changed
 
     useEffect(() => {
 
@@ -1616,6 +1618,8 @@ const Home = (props) => {
     }, [selectedMode])
 
     
+
+
 
 
     const handleStartNewChat = async () => {
@@ -1653,6 +1657,10 @@ const Home = (props) => {
     ]
 
 
+
+
+
+
     
     return (
         <>
@@ -1688,4 +1696,4 @@ const Home = (props) => {
     )
 };
 
-export default Home;
+export default Home

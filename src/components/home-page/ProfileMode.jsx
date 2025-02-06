@@ -3,6 +3,11 @@ import { auth, db } from '../../utils/firebaseConfig';
 import { updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { updateProfile, updatePassword, updateEmail, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink, reauthenticateWithCredential, EmailAuthProvider, sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 
+
+
+
+
+
 export default function ProfileMode(props) {
     const {
         setSelectedMode, userName, setUserName, userLastName, setUserLastName, userEmail, setUserEmail,
@@ -10,7 +15,7 @@ export default function ProfileMode(props) {
         setIsAuthenticated, isAuthenticated, setFormData, setTargetLanguage, setTranslationLanguage,
         targetLanguage, translationLanguage, targetLanguageLevel, setTargetLanguageLevel,
         accountSelectedOption, setAccountSelectedOption
-    } = props;
+    } = props
 
     const [tempUserName, setTempUserName] = useState(userName);
     const [tempUserLastName, setTempUserLastName] = useState(userLastName);
@@ -21,7 +26,8 @@ export default function ProfileMode(props) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [languageLevel, setLanguageLevel] = useState('Beginner (A1 - A2)');
 
-    // Add language options
+    
+
     const targetLanguages = [
         { code: 'en', name: 'English', flag: '/flags/english.png' },
         { code: 'de', name: 'German', flag: '/flags/german.png' },
@@ -43,11 +49,11 @@ export default function ProfileMode(props) {
         { code: 'a1-a2', name: 'Beginner (A1 - A2)' },
         { code: 'b1-b2', name: 'Intermediate (B1 - B2)' },
         { code: 'c1-c2', name: 'Advanced (C1 - C2)' }
-    ];
+    ]
 
-    useEffect(() => {
-        console.log(accountSelectedOption)
-    }, [accountSelectedOption]);
+    
+
+    // logout handling
 
     const handleLogout = async () => {
         try {
@@ -56,6 +62,9 @@ export default function ProfileMode(props) {
             console.error("Error signing out:", error);
         }
     };
+
+
+
 
     const handleLanguageChange = async (newLanguage, type) => {
         try {
@@ -81,6 +90,11 @@ export default function ProfileMode(props) {
         }
     };
 
+
+
+    // custom level select
+
+
     const CustomLevelSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
         const selectRef = useRef(null);
@@ -97,6 +111,9 @@ export default function ProfileMode(props) {
                 document.removeEventListener('mousedown', handleClickOutside);
             };
         }, []);
+
+
+
 
         const handleLevelChange = async (newLevel) => {
             try {
@@ -118,6 +135,12 @@ export default function ProfileMode(props) {
                 console.error("Error updating level:", error);
             }
         };
+
+
+
+
+
+
         
         return (
             <div className="select-container" ref={selectRef}>
@@ -143,9 +166,16 @@ export default function ProfileMode(props) {
         );
     };
 
+
+
+
     useEffect(() => {
         return () => setDeleteAccountPassword('');
     }, [showDeleteModal]);
+
+
+
+    // custom select
 
     const CustomSelect = ({ options, value, onChange }) => {
         const [isOpen, setIsOpen] = useState(false);
@@ -193,6 +223,10 @@ export default function ProfileMode(props) {
         );
       }
 
+
+
+
+
       const handleSavePersonalDetails = async () => {
         if (!tempUserEmail.trim() || !tempUserName.trim() || !tempUserLastName.trim()) {
             alert("Email, first name or last name can not be empty!");
@@ -231,6 +265,11 @@ export default function ProfileMode(props) {
         }
     };
 
+
+
+
+
+
     const handleChangePassword = async () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
             alert("All fields are required");
@@ -255,7 +294,6 @@ export default function ProfileMode(props) {
                 password: newPassword,
             });
             
-            // Clear the fields
             setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');
@@ -265,6 +303,11 @@ export default function ProfileMode(props) {
             alert("Failed to update password. Make sure your current password is correct.");
         }
     };
+
+
+
+
+
 
     const handleForgotPassword = async () => {
         if (!userEmail) {
@@ -280,6 +323,13 @@ export default function ProfileMode(props) {
             alert("Failed to send reset email. Please try again.");
         }
     };
+
+
+
+
+
+
+
 
     const handleDeleteAccount = async () => {
         try {
@@ -325,6 +375,12 @@ export default function ProfileMode(props) {
             }
         }
     };
+
+
+
+
+
+    // Delete account modal
 
     const DeleteAccountModal = React.memo(() => {
         const [inputValue, setInputValue] = useState('');
@@ -422,6 +478,15 @@ export default function ProfileMode(props) {
             </div>
         );
     });
+
+
+
+
+
+
+
+
+    
 
     return (
         <div className='profile-mode'>

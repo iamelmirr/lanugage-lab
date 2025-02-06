@@ -34,6 +34,7 @@ export default function Chat(props) {
     
     
 
+
     const translationLanguages = [
         { code: 'hr', name: 'Croatian', flag: '/flags/croatian.png'},
         { code: 'en', name: 'English', flag: '/flags/english.png' },
@@ -43,12 +44,17 @@ export default function Chat(props) {
         { code: 'fr', name: 'French', flag: '/flags/french.png' }
     ];
 
+
+
     const levels = [
         { code: 'a1-a2', name: 'Beginner (A1 - A2)' },
         { code: 'b1-b2', name: 'Intermediate (B1 - B2)' },
         { code: 'c1-c2', name: 'Advanced (C1 - C2)' }
       ];
 
+
+
+    // Loading new or old chat on opening  
 
     useEffect(() => {
         if (!hasLoadedInitialChat) {
@@ -100,12 +106,20 @@ export default function Chat(props) {
         }}, [selectedMode]);
 
 
+
+    // If gender modal is needed to be showGenderModal, show it    
+
       useEffect(() => {
         if (selectedMode === 'date' && messages.length === 0) {
           // Show modal instead of first message
           setShowGenderModal(true)
         }      
       }, [selectedMode])
+
+
+
+
+
 
 
     const saveChat = async () => {
@@ -167,6 +181,9 @@ export default function Chat(props) {
         console.log("activeChat:", activeChat)
     };
 
+
+
+
       
 
     const updateChatTime = async () => {
@@ -179,7 +196,7 @@ export default function Chat(props) {
         console.log("longest streak:", longestStreak)
         console.log("last chat date:", lastChatDate)
     
-        // If chat time reaches 3 minutes (180 seconds) and hasn't been counted today
+        
         if (lastChatDate !== today) {
 
             console.log("started updateChatTime")
@@ -205,13 +222,13 @@ export default function Chat(props) {
                         lastChatDate: today,
                         
                     });
-                    console.log("Streak data updated successfully!");
+                    
                 } catch (error) {
                     console.error("Error updating streak data:", error);
                 }
             }
         }   else {
-            console.log("Message sent on the same day, no streak update needed.");
+            
         }
     };
       
@@ -255,16 +272,14 @@ const topicLabels = {
     const [isRecording, setIsRecording] = useState(false)
     const recognitionRef = useRef(null)
     const chatContainerRef = useRef(null)
-    
     const [currentAudio, setCurrentAudio] = useState(null)
-    
     const [translationMessage, setTranslationMessage] = useState('')
     
     
 
     
 
-      
+    //   chat loading logic
 
 
       const loadChat = (chatId) => {
@@ -280,7 +295,7 @@ const topicLabels = {
                 setTutorGender('female')
             } else if (chat.tutorName === 'Noah') {
                 setTutorGender('male')
-            } // Set messages after a brief delay
+            } 
             
         }, 0)
 
@@ -299,6 +314,8 @@ const topicLabels = {
 
 
 
+    // text to speech  
+
     const synthesizeSpeech = (text, voice = "en-US-JennyNeural") => {
 
         return new Promise((resolve, reject) => {
@@ -309,7 +326,7 @@ const topicLabels = {
             
             speechConfig.speechSynthesisVoiceName = voice;
             
-            // Update the SSML to include the VOICE tag
+            
             const ssmlText = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
                 <voice name="${voice}">
                     <prosody rate="${voiceSpeed}">${text}</prosody>
@@ -400,6 +417,11 @@ const topicLabels = {
             }
         };
 
+
+
+
+        // stop audio when user opens chat close modal
+
         useEffect(() => {
 
             if(isChatCloseModalVisible === true) {
@@ -414,6 +436,11 @@ const topicLabels = {
 
         }, [isChatCloseModalVisible])
 
+
+
+
+        // save chat after every message
+
         useEffect(() => {
             const lastMessage = messages[messages.length - 1];
             
@@ -423,6 +450,11 @@ const topicLabels = {
             } 
           }, [messages]);
 
+
+
+
+
+        // handle speech after every assistant's message
 
         useEffect(() => {
             const lastMessage = messages[messages.length - 1];
@@ -438,6 +470,13 @@ const topicLabels = {
         }, [messages])  
     
 
+
+
+
+
+
+
+    // logic for chat settings and custom selects  
 
 
     const handleLanguageChange = async (newLanguage, type) => {
@@ -570,6 +609,15 @@ const topicLabels = {
             );
         };
 
+
+
+
+
+
+
+    // gender selection modal for date chat mode
+
+
     const GenderSelectionModal = () => {
         
         return (
@@ -652,6 +700,13 @@ const topicLabels = {
       }; 
 
 
+
+
+
+
+    //   chat options modal
+
+
       const OptionsModal = () => (
         <>
           <div className="modal-overlay" onClick={(e) => { e.stopPropagation()
@@ -713,6 +768,9 @@ const topicLabels = {
       
 
 
+
+    // updating progress score after every 1 minute in chat
+
     useEffect(() => {
         const timer = setInterval(() => {
           
@@ -723,6 +781,12 @@ const topicLabels = {
         return () => clearInterval(timer);
       }, [])
 
+
+
+
+
+
+    //   audio if there is an existing message in the chat when chat opens
 
     useEffect(() => {
         const speechKey = import.meta.env.VITE_AZURE_SPEECH_KEY;
@@ -786,6 +850,9 @@ const topicLabels = {
 
     
 
+
+
+    // mute audio logic
     
 
     useEffect(() => {
@@ -801,10 +868,10 @@ const topicLabels = {
     }, [isMuted]);
     
     
-    useEffect(() => {
-        console.log(messages)
-    }, [messages])
     
+    
+
+    // scroll when new message is sent to the bottom of messages container
 
     useEffect(() => {
         
@@ -812,6 +879,10 @@ const topicLabels = {
             lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }, [messages])
+
+
+
+    // scroll even if chat is loading, just when user enters the chat mode
 
     useEffect(() => {
         if (messages.length > 0) {
@@ -822,6 +893,12 @@ const topicLabels = {
             }, 100); // Small delay to ensure the DOM updates before scrolling
         }
     }, [isChatLoading]); 
+
+
+
+
+
+    // speech recognition and speech to text
 
     
     const handleMicrophonePress = () => {
@@ -842,9 +919,10 @@ const topicLabels = {
 
 
 
+
     const handleRepeatMessage = async (messageText) => {
         if (isPlayingAudio) {
-            console.log("An audio is already playing. Skipping repeat.");
+            
             return;
         }
     
@@ -856,7 +934,7 @@ const topicLabels = {
             }
     
             if (isMuted) {
-                console.log("Muted. No audio will play.");
+                
                 return;
             }
     
@@ -901,6 +979,12 @@ const topicLabels = {
 
 
 
+
+
+
+
+    // getting message feedback from ai
+
     const handleGetMessageFeedback = async (message) => {
         if (message.sender !== "user") {return}
 
@@ -926,7 +1010,6 @@ const topicLabels = {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
-            console.log(data.choices[0]?.message?.content)
 
 
             const severityMatch = fullResponse.match(/Severity:\s*\[?(green|yellow|red)\]?/i);
@@ -935,8 +1018,6 @@ const topicLabels = {
             const severity = severityMatch ? severityMatch[1].toLowerCase() : "";
             const explanation = explanationMatch ? explanationMatch[1] : "";         
             
-            console.log("Severity:", severity)
-            console.log("Explanation:", explanation)
 
             setSelectedMessage({
                 text: message.text,
@@ -958,6 +1039,8 @@ const topicLabels = {
 
 
 
+
+    // send message logic
 
     const handleSendMessage = async (message) => {
         
@@ -1004,7 +1087,6 @@ const topicLabels = {
             const data = await response.json();
             const fullResponse = data.choices[0]?.message?.content || "";
 
-            console.log(data.choices[0]?.message?.content)
 
             const cleanedResponse = fullResponse.trim()           
             
@@ -1022,6 +1104,10 @@ const topicLabels = {
     };
 
 
+
+
+
+    // suggest answer logic
 
      const handleCreateSuggestedAnswer = async () => {
 
@@ -1057,9 +1143,7 @@ const topicLabels = {
 
             handleSuggestAnswer(suggestedResponse)
 
-            setSuggestedAnswer(suggestedResponse);
-            console.log("suggestedResponse:", suggestedResponse)
-            
+            setSuggestedAnswer(suggestedResponse); 
             
 
         } catch (error) {
@@ -1146,6 +1230,10 @@ const topicLabels = {
         }
     };
 
+
+
+    // send suggested answer
+
     const handleSuggestAnswer = async () => {
 
         const userMessage =  { sender: "user", text: suggestedAnswer };
@@ -1193,6 +1281,12 @@ const topicLabels = {
             setInputValue("");       
         
     }
+
+
+
+
+
+    // get another question asked by ai
 
     const handleAnotherQuestion = async () => {
 
@@ -1250,6 +1344,13 @@ const topicLabels = {
     }
 
 
+
+
+
+
+    // message translation
+
+
     const handleTranslateMessage = async (message) => {
         try {
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -1288,6 +1389,15 @@ const topicLabels = {
             console.error("Translation error:", error);
         }
     };
+
+
+    
+
+
+
+
+
+
 
 
     

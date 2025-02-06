@@ -10,17 +10,22 @@ export default function Main(props) {
         userName
     } = props;
 
+
+
     const sliderWrapperRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const [dragDistance, setDragDistance] = useState(0);
 
+
     const pointsToNextLevel = levelThresholds[progressLevel] - progressScore;
     const totalMessages = savedChats.reduce((total, chat) => total + chat.messages.length, 0);
 
+
+    // Scroll to top of the scrollable div when selectedMode is changed
+
     useEffect(() => {
-        // ...existing code...
         window.scrollTo(0, 0)
 
         const scrollableElements = document.querySelectorAll('.scrollable');
@@ -37,8 +42,12 @@ export default function Main(props) {
         }, 100);
     }, [selectedMode]);
 
+
+
+    // Slider wrapper
+
+
     useEffect(() => {
-        // ...existing code...
         if (sliderWrapperRef.current) {
             sliderWrapperRef.current.scrollLeft = 0;
         }
@@ -49,7 +58,6 @@ export default function Main(props) {
     }, [selectedMode]);
 
     const handleMouseDown = (e) => {
-        // ...existing code...
         setIsDragging(true);
         setStartX(e.pageX - sliderWrapperRef.current.offsetLeft);
         setScrollLeft(sliderWrapperRef.current.scrollLeft);
@@ -57,16 +65,13 @@ export default function Main(props) {
     };
 
     const handleMouseLeave = () => {
-        // ...existing code...
         setIsDragging(false);
     };
 
     const handleMouseUp = (e) => {
-        // ...existing code...
         setIsDragging(false);
 
         if (Math.abs(dragDistance) < 5) {
-            // If drag distance is less than 5px, consider it a click
             const sliderWrapper = sliderWrapperRef.current;
             const sliderItems = sliderWrapper.querySelectorAll(".slider-item-swipe");
 
@@ -78,7 +83,6 @@ export default function Main(props) {
                     e.clientY >= itemRect.top &&
                     e.clientY <= itemRect.bottom
                 ) {
-                    // Set selectedMode based on the clicked item's index
                     if (index === 0) {
                         setSelectedMode("explore");
                     } else if (index === 1) {
@@ -92,7 +96,6 @@ export default function Main(props) {
     };
 
     const handleMouseMove = (e) => {
-        // ...existing code...
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - sliderWrapperRef.current.offsetLeft;
@@ -102,7 +105,6 @@ export default function Main(props) {
     };
 
     const snapToNearest = () => {
-        // ...existing code...
         const sliderWrapper = sliderWrapperRef.current;
         const sliderItems = sliderWrapper.querySelectorAll(".slider-item-swipe");
         const itemWidth = sliderItems[0].offsetWidth;
@@ -117,23 +119,24 @@ export default function Main(props) {
         });
     };
 
+
+    // On mobile devices
+
     const handleTouchStart = (e) => {
-        // ...existing code...
         handleMouseDown(e.touches[0]);
     };
 
     const handleTouchMove = (e) => {
-        // ...existing code...
         handleMouseMove(e.touches[0]);
     };
 
     const handleTouchEnd = () => {
-        // ...existing code...
         handleMouseUp();
-    };
+    }
+
+
 
     useEffect(() => {
-        // ...existing code...
         const sliderWrapper = sliderWrapperRef.current;
         if (!sliderWrapper) return;
 
@@ -146,7 +149,13 @@ export default function Main(props) {
             sliderWrapper.removeEventListener("touchmove", handleTouchMove);
             sliderWrapper.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [isDragging, startX, scrollLeft]);
+    }, [isDragging, startX, scrollLeft])
+
+
+
+
+
+    
 
     return (
         <div className="main-div scrollable">

@@ -13,23 +13,25 @@ export default function LandingPage(props) {
     const sliderRef = useRef(null)
     const testimonialSliderRef = useRef(null);
 
+
+    // Sliders animations
+
     useEffect(() => {
-        const slider = testimonialSliderRef.current;
+        const slider = testimonialSliderRef.current
         if (slider) {
-            const sliderWidth = slider.scrollWidth / 2;
-            const animationDuration = sliderWidth / 20; // Adjust 20 to change speed (higher number = slower)
-            slider.style.animationDuration = `${animationDuration}s`;
+            const sliderWidth = slider.scrollWidth / 2
+            const animationDuration = sliderWidth / 20
+            slider.style.animationDuration = `${animationDuration}s`
         }
     }, []);
 
 
     useEffect(() => {
-        const slider = sliderRef.current;
+        const slider = sliderRef.current
         if (slider) {
-            const sliderWidth = slider.scrollWidth / 2; // Divide by 2 because content is duplicated
-            const animationDuration = sliderWidth / 50; // Adjust 50 to change speed
-
-            slider.style.animationDuration = `${animationDuration}s`;
+            const sliderWidth = slider.scrollWidth / 2
+            const animationDuration = sliderWidth / 50
+            slider.style.animationDuration = `${animationDuration}s`
         }
     }, []);
 

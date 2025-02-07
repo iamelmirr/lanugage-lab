@@ -1254,6 +1254,10 @@ img {
     padding-top: 12px;
 }
 
+.root-div {
+    width: 100%;
+}
+
 .chat-history-item button span {
     font-size: 16px;
 }

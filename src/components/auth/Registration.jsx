@@ -699,7 +699,7 @@ const Registration = (props) => {
 
 
     return (
-        <div>
+        <div className='root-div'>
             <div className="registration-container">
             <img className='registration-logo' src="/header-logo.png" alt="" />
                 {step === -1 ? (

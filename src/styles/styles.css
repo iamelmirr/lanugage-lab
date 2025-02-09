@@ -1276,6 +1276,7 @@ img {
     
 }
 
+
 .chat-history-img-wrapper::after {
     position: absolute;
     content: '';

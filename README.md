@@ -7,6 +7,8 @@ This project is licensed under the **Creative Commons BY-NC 4.0 License**.
 
 # LanguageLab - AI Language Learning Platform
 
+# https://language1ab.netlify.app/
+
 LanguageLab is an interactive language learning platform that leverages AI to provide personalized language tutoring experiences.
 
 ## Features

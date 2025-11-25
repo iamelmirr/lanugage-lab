@@ -37,7 +37,7 @@ const Home = (props) => {
     const [showGenderModal, setShowGenderModal] = useState(true)
     const [isChatInfoVisible, setIsChatInfoVisible] = useState(true)
     const [tutorName, setTutorName] = useState('John')
-    const [tutorImage, setTutorImage] = useState('./public/john.png')
+    const [tutorImage, setTutorImage] = useState('/john.png')
     const [messages, setMessages] = useState([])
     const [activeChat, setActiveChat] = useState(null) 
     const [tutorGender, setTutorGender] = useState(null) 

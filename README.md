@@ -38,7 +38,59 @@ LanguageLab is an interactive language learning platform that leverages AI to pr
 - React.js for frontend development
 - Firebase for authentication and data storage
 - Azure Speech Services for voice synthesis
-- OpenAI API for conversation generation
+- OpenAI API for conversation generation (via Netlify serverless functions)
+- Netlify for hosting and serverless backend
+
+## Environment Setup
+
+1. **Copy the example environment file:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **Fill in your API credentials** (see `.env.example` for all required variables)
+
+3. **Important Notes:**
+   - Do NOT use quotes around environment variable values
+   - The `.env.local` file is git-ignored for security
+   - See `DEPLOYMENT_GUIDE.md` for production deployment instructions
+
+### Required Environment Variables
+
+| Variable | Used for |
+| --- | --- |
+| `VITE_FIREBASE_APIKEY`, `VITE_AUTHDOMAIN`, `VITE_FIREBASE_PROJECTID`, `VITE_STORAGEBUCKET`, `VITE_MESSAGINGSENDERID`, `VITE_FIREBASE_APPID` | Firebase authentication and data storage |
+| `VITE_AZURE_SPEECH_KEY`, `VITE_AZURE_REGION` | Azure speech synthesis and recognition |
+| `VITE_OPENAI_API_KEY` | OpenAI API (used by serverless functions only) |
+| `VITE_AWS_ACCESS_KEY_ID`, `VITE_AWS_SECRET_ACCESS_KEY` | AWS SDK configuration |
+
+**Security Note:** OpenAI API calls are proxied through Netlify serverless functions (`netlify/functions/chat.js`) to keep your API key secure and avoid CORS issues.
+
+## Development
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+
+# Run with Vite only (OpenAI features won't work)
+npm run dev
+
+# Run with Netlify CLI (includes serverless functions)
+netlify dev
+```
+
+### Building for Production
+```bash
+npm run build
+```
+
+## Deployment
+
+See `DEPLOYMENT_GUIDE.md` for detailed instructions on:
+- Setting up Netlify environment variables
+- Configuring Firebase security rules
+- Troubleshooting CORS and authentication issues
 
 ## Usage
 

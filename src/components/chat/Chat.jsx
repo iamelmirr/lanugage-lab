@@ -9,6 +9,7 @@ window.Buffer = Buffer
 import { doc, updateDoc, getDoc, increment } from 'firebase/firestore';
 import { auth, db } from '../../utils/firebaseConfig';
 import * as speechSdk from 'microsoft-cognitiveservices-speech-sdk';
+import { callOpenAI } from '../../utils/openaiApi';
 import { use } from "react";
 
 
@@ -989,28 +990,10 @@ const topicLabels = {
         if (message.sender !== "user") {return}
 
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: `Take a look at my last message in ${targetLanguage} language and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation as if you are talking, address with you.] even if there are no mistakes and severity is green provide severity and explanation"` },
-                        
-                        { role: "user", content: message.text},
-                    ],
-                }),
-            });
-
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-            const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
-
-
+            const fullResponse = await callOpenAI([
+                { role: "system", content: `Take a look at my last message in ${targetLanguage} language and analyze it like a language teacher (grammar, vocabulary etc.). If there are no mistakes, then severity is 'green'. If there is not so important mistake(s), then severity is 'yellow'. If there is an important mistake(s), then severity is 'red'. Always, no matter what, write this: "Severity: [green, yellow or red] Explanation: [your explanation for the mistakes and your recommendations on how to fix it. Write the explanation as if you are talking, address with you.] even if there are no mistakes and severity is green provide severity and explanation"` },
+                { role: "user", content: message.text},
+            ]);
 
             const severityMatch = fullResponse.match(/Severity:\s*\[?(green|yellow|red)\]?/i);
             const explanationMatch = fullResponse.match(/Explanation:\s*([^\n]+)/i);
@@ -1063,30 +1046,14 @@ const topicLabels = {
         setInputValue("")
 
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: modeContext },
-                        ...messages.map((msg) => ({
-                            role: msg.sender === "assistant" ? "assistant" : "user",
-                            content: msg.text,
-                        })),
-                        { role: "user", content: message.text || inputValue },
-                    ],
-                }),
-            });
-
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-            const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
-
+            const fullResponse = await callOpenAI([
+                { role: "system", content: modeContext },
+                ...messages.map((msg) => ({
+                    role: msg.sender === "assistant" ? "assistant" : "user",
+                    content: msg.text,
+                })),
+                { role: "user", content: message.text || inputValue },
+            ]);
 
             const cleanedResponse = fullResponse.trim()           
             
@@ -1118,28 +1085,13 @@ const topicLabels = {
         setInputValue("")
 
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                     Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        ...messages.map((msg) => ({
-                            role: msg.sender === "assistant" ? "assistant" : "user",
-                            content: msg.text,
-                        })),
-                        { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: " ${lastAssistantMessage.text} "? Respond like the user only with the suggested response, nothing else. Don't aknowledge this message and don't say something like "Sure! I would respond with this:". Just answer with a straight response. Respond in ${targetLanguage} language, not any other language.` }
-                    ],
-                }),
-            });
-
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-            const dataResponse = await response.json();
-            const suggestedResponse = dataResponse.choices[0]?.message?.content || "";
+            const suggestedResponse = await callOpenAI([
+                ...messages.map((msg) => ({
+                    role: msg.sender === "assistant" ? "assistant" : "user",
+                    content: msg.text,
+                })),
+                { role: "user", content: `Based on this conversation, how would average human respond to this last assistant's message: " ${lastAssistantMessage.text} "? Respond like the user only with the suggested response, nothing else. Don't aknowledge this message and don't say something like "Sure! I would respond with this:". Just answer with a straight response. Respond in ${targetLanguage} language, not any other language.` }
+            ]);
 
             handleSuggestAnswer(suggestedResponse)
 
@@ -1189,32 +1141,10 @@ const topicLabels = {
         const modeContext = chatModes[selectedMode]?.context || "";
 
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: modeContext },
-                        { role: "user", content: userText },
-                    ],
-                }),
-            });
-
-            if (!response.ok) {
-                console.error(`Error: ${response.status} - ${response.statusText}`);
-                setMessages((prev) => [
-                    ...prev,
-                    { sender: "assistant", text: "Error: Unable to fetch response from AI." },
-                ]);
-                return;
-            }
-
-            const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
+            const fullResponse = await callOpenAI([
+                { role: "system", content: modeContext },
+                { role: "user", content: userText },
+            ]);
 
             const cleanedResponse = fullResponse.trim()
 
@@ -1226,7 +1156,10 @@ const topicLabels = {
 
         } catch (error) {
             console.error("Error fetching response:", error);
-            
+            setMessages((prev) => [
+                ...prev,
+                { sender: "assistant", text: "Error: Unable to fetch response from AI." },
+            ]);
         }
     };
 
@@ -1247,30 +1180,15 @@ const topicLabels = {
 
         const modeContext = chatModes[selectedMode]?.context || "";
 
-        
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: modeContext },
-                        ...messages.map((msg) => ({
-                            role: msg.sender === "assistant" ? "assistant" : "user",
-                            content: msg.text,
-                        })),
-                        { role: "user", content: suggestedAnswer },
-                    ],
-                }),
-            });
-
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-            const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
+        try {
+            const fullResponse = await callOpenAI([
+                { role: "system", content: modeContext },
+                ...messages.map((msg) => ({
+                    role: msg.sender === "assistant" ? "assistant" : "user",
+                    content: msg.text,
+                })),
+                { role: "user", content: suggestedAnswer },
+            ]);
 
             const cleanedResponse = fullResponse.trim()
 
@@ -1278,7 +1196,10 @@ const topicLabels = {
                 ...prev,
                 { sender: "assistant", text: cleanedResponse }
             ])
-            setInputValue("");       
+            setInputValue("");
+        } catch (error) {
+            console.error("Error fetching GPT response:", error);
+        }       
         
     }
 
@@ -1303,33 +1224,15 @@ const topicLabels = {
             return prev.slice(0, -1)
         })
 
-        
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: modeContext },
-                        ...messages.map((msg) => ({
-                            role: msg.sender === "assistant" ? "assistant" : "user",
-                            content: msg.text,
-                        })),
-                        { role: "user", content: userMessage.text },
-                    ],
-                }),
-            });
-
-            
-
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-
-            const data = await response.json();
-            const fullResponse = data.choices[0]?.message?.content || "";
-
+        try {
+            const fullResponse = await callOpenAI([
+                { role: "system", content: modeContext },
+                ...messages.map((msg) => ({
+                    role: msg.sender === "assistant" ? "assistant" : "user",
+                    content: msg.text,
+                })),
+                { role: "user", content: userMessage.text },
+            ]);
 
             const cleanedResponse = fullResponse.trim()
 
@@ -1340,6 +1243,9 @@ const topicLabels = {
             ])
 
             setInputValue("");
+        } catch (error) {
+            console.error("Error fetching GPT response:", error);
+        }
         
     }
 
@@ -1353,24 +1259,10 @@ const topicLabels = {
 
     const handleTranslateMessage = async (message) => {
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        { role: "system", content: `Translate the following text to ${translationLanguage}` },
-                        { role: "user", content: message.text }
-                    ],
-                }),
-            });
-    
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-            const data = await response.json();
-            const translation = data.choices[0]?.message?.content || "";
+            const translation = await callOpenAI([
+                { role: "system", content: `Translate the following text to ${translationLanguage}` },
+                { role: "user", content: message.text }
+            ]);
 
             setTranslationMessage(translation)
 

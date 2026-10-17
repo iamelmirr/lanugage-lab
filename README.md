@@ -1,108 +1,42 @@
-## 📜 License
-This project is licensed under the **Creative Commons BY-NC 4.0 License**.  
-**Commercial use is strictly prohibited** without permission.  
+# Language Lab
 
-🔗 [Read the full license](LICENSE)  
+An AI language tutor you talk to: speech in, speech out, with progress tracking.
+Practising a language out loud usually needs another person. This one needs a microphone.
 
+**Live:** [language1ab.netlify.app](https://language1ab.netlify.app)
 
-# LanguageLab - AI Language Learning Platform
+![Language Lab tutor screen with the conversation and microphone controls](docs/screenshot.jpg)
 
-# https://language1ab.netlify.app/
+## What it does
 
-LanguageLab is an interactive language learning platform that leverages AI to provide personalized language tutoring experiences.
+- **Five practice modes:** open chat, guided dialogues, roleplay of real situations, debates, and scenarios such as shopping or travelling
+- **Voice both ways:** speech recognition for what you say, speech synthesis for the tutor's replies
+- **Levels A1 to C2** and five languages: English, Spanish, French, German, Italian
+- **Progress:** levels, streaks and stats saved per account, plus inline translation when you get stuck
 
-## Features
+## How it works
 
-### Immersive Learning Modes
-- **Chat Mode**: Practice general conversations with AI tutors
-- **Dialogue Mode**: Engage in pre-scripted scenarios
-- **Roleplay Mode**: Simulate real-life situations
-- **Debate Mode**: Discuss various topics to improve argumentation skills
-- **Scenario Mode**: Practice specific situations like shopping or traveling
+- React (Vite) single-page app
+- OpenAI generates the tutor's side of the conversation. Calls go through a Netlify serverless function
+  (`netlify/functions/chat.js`), so the API key never reaches the browser
+- Azure Speech Services for speech-to-text and text-to-speech
+- Firebase for accounts and progress
+- Hosted on Netlify
 
-### Key Functionalities
-- Real-time voice synthesis for pronunciation practice
-- Multi-language support (English, Spanish, French, German, Italian)
-- Progress tracking and level system
-- Customizable learning paths
-- Translation support
-- Streak tracking for consistent learning
+## Run it locally
 
-### Learning Tools
-- Speech recognition for conversation practice
-- Instant feedback on language usage
-- Customizable difficulty levels (A1-A2, B1-B2, C1-C2)
-- Progress analytics and performance tracking
-
-## Technical Stack
-- React.js for frontend development
-- Firebase for authentication and data storage
-- Azure Speech Services for voice synthesis
-- OpenAI API for conversation generation (via Netlify serverless functions)
-- Netlify for hosting and serverless backend
-
-## Environment Setup
-
-1. **Copy the example environment file:**
-   ```bash
-   cp .env.example .env.local
-   ```
-
-2. **Fill in your API credentials** (see `.env.example` for all required variables)
-
-3. **Important Notes:**
-   - Do NOT use quotes around environment variable values
-   - The `.env.local` file is git-ignored for security
-   - See `DEPLOYMENT_GUIDE.md` for production deployment instructions
-
-### Required Environment Variables
-
-| Variable | Used for |
-| --- | --- |
-| `VITE_FIREBASE_APIKEY`, `VITE_AUTHDOMAIN`, `VITE_FIREBASE_PROJECTID`, `VITE_STORAGEBUCKET`, `VITE_MESSAGINGSENDERID`, `VITE_FIREBASE_APPID` | Firebase authentication and data storage |
-| `VITE_AZURE_SPEECH_KEY`, `VITE_AZURE_REGION` | Azure speech synthesis and recognition |
-| `VITE_OPENAI_API_KEY` | OpenAI API (used by serverless functions only) |
-| `VITE_AWS_ACCESS_KEY_ID`, `VITE_AWS_SECRET_ACCESS_KEY` | AWS SDK configuration |
-
-**Security Note:** OpenAI API calls are proxied through Netlify serverless functions (`netlify/functions/chat.js`) to keep your API key secure and avoid CORS issues.
-
-## Development
-
-### Local Development
 ```bash
-# Install dependencies
+cp .env.example .env.local   # fill in Firebase, Azure Speech and OpenAI credentials (no quotes)
 npm install
-
-# Run with Vite only (OpenAI features won't work)
-npm run dev
-
-# Run with Netlify CLI (includes serverless functions)
-netlify dev
+netlify dev                  # Vite plus the serverless function; plain `npm run dev` runs without the AI chat
 ```
 
-### Building for Production
-```bash
-npm run build
-```
-
-## Deployment
-
-See `DEPLOYMENT_GUIDE.md` for detailed instructions on:
-- Setting up Netlify environment variables
-- Configuring Firebase security rules
-- Troubleshooting CORS and authentication issues
-
-## Usage
-
-1. Create an account or log in
-2. Select your target language and proficiency level
-3. Choose a learning mode that matches your goals
-4. Start practicing with the AI tutor
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+The variables are listed in `.env.example`; deployment notes are in `DEPLOYMENT_GUIDE.md`.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[CC BY-NC 4.0](LICENSE): free to use and adapt with attribution, no commercial use without permission.
+
+---
+
+Built by [Elmir Beširović](https://itselmotech.com/elmir).
